@@ -24,5 +24,8 @@
   "dependencies": {
     "fauna-shell": "^0.11.0",
     "netlify-cli": "2.43.0"
+  },
+  "engines": {
+    "node": ">=12.14.1"
   }
 }
