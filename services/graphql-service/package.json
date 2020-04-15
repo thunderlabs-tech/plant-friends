@@ -7,16 +7,23 @@
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "typescript": "^3.8.3",
     "@types/node": "^13.11.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
+    "eslint": "^6.8.0",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^0.17.6"
+    "type-graphql": "^0.17.6",
+    "typescript": "^3.8.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/ws": "^7.2.3",
+    "graphql-yoga": "^1.18.3"
+  },
   "scripts": {
-    "lint": "prettier --check src/* && eslint src"
+    "lint": "prettier --check src/* && eslint src",
+    "build": "tsc",
+    "prebuild-schema": "yarn build",
+    "build-schema": "node out/bin/build-schema",
+    "watch": "tsc -w"
   }
 }
