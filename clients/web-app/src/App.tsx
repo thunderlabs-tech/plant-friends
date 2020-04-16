@@ -14,14 +14,19 @@ function makeN<Element>(n: number, maker: (i: number) => Element): Element[] {
   }
   return result;
 }
-function makePlant(attrs: Partial<Plant> & { id: string }): Plant {
+let idCounter = 0;
+function makePlant(attrs: Partial<Plant> = {}): Plant {
+  idCounter += 1;
   return {
-    name: 'Zabrina',
+    id: `${idCounter}`,
+    name: `Plant ${idCounter}`,
+    lastWateredAt: new Date(Date.UTC(2020, 3, 1)),
+    wateringPeriodInDays: 10,
     ...attrs,
   };
 }
 
-const plantData = makeN(4, (i) => makePlant({ id: i.toString(), name: `Plant ${i}` }));
+const plantData = [...makeN(2, () => makePlant()), ...makeN(2, (i) => makePlant({ wateringPeriodInDays: 30 }))];
 
 const App: React.FC = () => {
   const plants = useCollection<Plant>(plantData);
