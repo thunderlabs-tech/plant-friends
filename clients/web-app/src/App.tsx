@@ -1,10 +1,29 @@
 import React from 'react';
-import useAppState from './state/useAppState';
+import { Plant } from './state/dataTypes';
 import AppBar from '@material-ui/core/AppBar';
 import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container } from '@material-ui/core';
 import theme from './app/theme';
+import useCollection from './state/useCollection';
+
+function makeN<Element>(n: number, maker: (i: number) => Element): Element[] {
+  if (n <= 0) return [];
+  const result: Element[] = [];
+  for (let i = 0; i < n; i++) {
+    result.push(maker(i));
+  }
+  return result;
+}
+function makePlant(attrs: Partial<Plant> & { id: string }): Plant {
+  return {
+    name: 'Zabrina',
+    ...attrs,
+  };
+}
+
+const plantData = makeN(4, (i) => makePlant({ id: i.toString(), name: `Plant ${i}` }));
 
 const App: React.FC = () => {
+  const plants = useCollection<Plant>(plantData);
 
   return (
     <MuiThemeProvider theme={theme}>
