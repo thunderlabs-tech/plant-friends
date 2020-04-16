@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import useAppState from './state/useAppState';
+import AppBar from '@material-ui/core/AppBar';
+import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container } from '@material-ui/core';
+import theme from './app/theme';
 
-function App() {
+const App: React.FC = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={theme}>
+      <Container maxWidth="md">
+        <AppBar position="static" elevation={1}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" aria-label="menu">
+              <Icon>menu</Icon>
+            </IconButton>
+            <Typography variant="h6">Plant Friends</Typography>
+          </Toolbar>
+        </AppBar>
+      </Container>
+    </MuiThemeProvider>
   );
-}
+};
 
 export default App;
