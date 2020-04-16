@@ -19,14 +19,14 @@ type ExternalActionFn<State, ActionFn extends (currentState: State, ...restArgs:
   OmitFirstArg<ActionFn>
 >;
 
-type WrappedActions<State, Actions extends ActionFnType<State>> = {
+export type ActionDispatchers<State, Actions extends ActionFnType<State>> = {
   [Key in keyof Actions]: ExternalActionFn<State, Actions[Key]>;
 };
 
 function makeActionDispatchers<State, ActionFns extends ActionFnType<State>>(
   handlers: ActionFns,
   dispatch: React.Dispatch<ReducerActionObjects<State, ActionFns>>
-): WrappedActions<State, ActionFns> {
+): ActionDispatchers<State, ActionFns> {
   return mapValues(handlers, (actionFn, actionName) => {
     const externalAction: ExternalActionFn<State, typeof actionFn> = (...params) => {
       dispatch({
@@ -41,7 +41,7 @@ function makeActionDispatchers<State, ActionFns extends ActionFnType<State>>(
 export default function useAppState<State, ActionFns extends ActionFnType<State>>(
   initialState: State,
   initialActionHandlers: ActionFns
-): [State, WrappedActions<State, ActionFns>] {
+): [State, ActionDispatchers<State, ActionFns>] {
   const [handlers] = useState(initialActionHandlers);
 
   function reducer(currentState: State, action: ReducerActionObjects<State, ActionFns>): State {
@@ -52,5 +52,7 @@ export default function useAppState<State, ActionFns extends ActionFnType<State>
 
   const [internalState, dispatch] = useReducer(reducer, initialState); // TODO support lazy initialization
 
-  return [internalState, makeActionDispatchers(handlers, dispatch)];
+  const [actionDispatchers] = useState(() => makeActionDispatchers<State, ActionFns>(handlers, dispatch));
+
+  return [internalState, actionDispatchers];
 }
