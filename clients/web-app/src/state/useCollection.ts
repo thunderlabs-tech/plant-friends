@@ -1,5 +1,5 @@
 import useAppState from './useAppState';
-import LoadedIndicator from './loadedIndicators';
+import LoadedIndicator from './LoadedIndicator';
 
 export type Collection<Element> = { data: Element[]; loaded: LoadedIndicator };
 
