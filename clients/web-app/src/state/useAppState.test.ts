@@ -13,17 +13,18 @@ describe('useAppState()', () => {
 
   it('invokes action functions with the current state and any params', () => {
     const initialState = { a: 'b' };
-    const actions = {
-      testAction: jest.fn(),
+    const handlers = {
+      testAction1: jest.fn(),
     };
-    const { result } = renderHook(() => useAppState(initialState, actions));
+    const { result } = renderHook(() => useAppState(initialState, handlers));
 
     act(() => {
-      const [state, dispatch] = result.current;
-      dispatch({ type: 'testAction', params: [1, 2, 3] });
+      const [state, dispatchers] = result.current;
+      console.log('test 1');
+      dispatchers.testAction1(1, 2, 3);
     });
 
-    expect(actions.testAction).toHaveBeenCalledWith(initialState, 1, 2, 3);
+    expect(handlers.testAction1).toHaveBeenLastCalledWith(initialState, 1, 2, 3);
   });
 
   it('updates the current state with the result of the action', () => {
@@ -35,8 +36,8 @@ describe('useAppState()', () => {
     const { result } = renderHook(() => useAppState(initialState, actions));
 
     act(() => {
-      const [state, dispatch] = result.current;
-      dispatch({ type: 'testAction', params: [] });
+      const [state, actions] = result.current;
+      actions.testAction();
     });
 
     const [state] = result.current;
