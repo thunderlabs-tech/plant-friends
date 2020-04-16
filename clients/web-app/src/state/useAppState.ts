@@ -2,7 +2,7 @@ import mapValues from 'lodash/mapValues';
 import { useState, useReducer } from 'react';
 
 type ActionFnType<State> = {
-  [Key: string]: ((currentState: State, ...X: any) => State) | ((currentState: State) => State);
+  [Key: string]: (currentState: State, ...X: any) => State;
 };
 
 type OmitFirstArg<F extends (...args: any) => any> = F extends (firstArg: any, ...args: infer Params) => infer R
