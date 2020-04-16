@@ -3,6 +3,7 @@ import { Plant } from './state/dataTypes';
 import AppBar from '@material-ui/core/AppBar';
 import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container } from '@material-ui/core';
 import theme from './app/theme';
+import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
 
 function makeN<Element>(n: number, maker: (i: number) => Element): Element[] {
@@ -36,6 +37,8 @@ const App: React.FC = () => {
             <Typography variant="h6">Plant Friends</Typography>
           </Toolbar>
         </AppBar>
+
+        <PlantListScreen plants={plants} />
       </Container>
     </MuiThemeProvider>
   );
