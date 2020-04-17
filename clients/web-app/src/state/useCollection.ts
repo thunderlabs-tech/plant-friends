@@ -37,5 +37,4 @@ type CollectionActionFns<Elem> = {
 
 export type CollectionDispatchers<Elem> = ActionDispatchers<CollectionState<Elem>, CollectionActionFns<Elem>>;
 
-export type UpdateElement<Elem> = Collection<Elem>['dispatch']['updateElement'];
 // export type UpdateElement<Elem> = Collection<Elem>['dispatch']['updateElement'];
