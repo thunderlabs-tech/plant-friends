@@ -20,11 +20,18 @@ function setItem<T>(key: string, value: T, callback?: (err: any, value: T) => vo
   return localforage.setItem<T>(storageKey(key), value, callback);
 }
 
+async function getNextId(): Promise<string> {
+  const idCounter: number = (await getItem<number | undefined>('id-counter')) || 0;
+  const nextId = idCounter + 1;
+  setItem<number>('id-counter', nextId);
+  return nextId.toString();
+}
+
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
-  loadPlants: (): Promise<Plant[]> => {
-    return getItem<Plant[]>('plants');
+  loadPlants: async (): Promise<Plant[]> => {
+    return (await getItem<Plant[] | undefined>('plants')) || [];
   },
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
@@ -33,11 +40,20 @@ const persistence = {
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
-    const existingPlant = allPlants.findIndex((element) => element.id === plant.id);
+    const plantIndex = allPlants.findIndex((element) => element.id === plant.id);
 
-    if (!existingPlant) throw new Error(`Plant with ID ${plant.id} not found`);
+    if (plantIndex === -1) throw new Error(`Plant with ID ${plant.id} not found`);
 
-    const newPlants = [...allPlants.slice(0, existingPlant), plant, ...allPlants.slice(existingPlant + 1)];
+    const newPlants = [...allPlants.slice(0, plantIndex), plant, ...allPlants.slice(plantIndex + 1)];
+
+    return persistence.storePlants(newPlants);
+  },
+
+  createPlant: async (plantDescriptor: Omit<Plant, 'id'>): Promise<Plant[]> => {
+    const allPlants = await persistence.loadPlants();
+
+    const newPlant = { ...plantDescriptor, id: await getNextId() };
+    const newPlants = [...allPlants, newPlant];
 
     return persistence.storePlants(newPlants);
   },

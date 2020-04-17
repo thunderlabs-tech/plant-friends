@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container, CssBaseline } from '@material-ui/core';
+import { Toolbar, Typography, MuiThemeProvider, Container, CssBaseline } from '@material-ui/core';
 import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';

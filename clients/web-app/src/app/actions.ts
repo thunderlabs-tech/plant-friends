@@ -9,7 +9,19 @@ export async function waterPlant(plant: Plant, plantDispatch: Collection<Plant>[
   plantDispatch.setLoadingState(LoadingState.updating);
 
   const newPlants = await persistence.updatePlant(updatedPlant);
-
   plantDispatch.setData(newPlants);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+}
+
+export async function createPlant(
+  plant: Omit<Plant, 'id'>,
+  plantDispatch: Collection<Plant>['dispatch']
+): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const newPlants = await persistence.createPlant(plant);
+  plantDispatch.setData(newPlants);
+
   plantDispatch.setLoadingState(LoadingState.ready);
 }

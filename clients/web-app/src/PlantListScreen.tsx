@@ -14,7 +14,7 @@ import {
 import { Collection } from './state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt } from './data/Plant';
-import { waterPlant } from './app/actions';
+import { waterPlant, createPlant } from './app/actions';
 import NewPlantInput from './NewPlantInput';
 
 export type PlantListScreenProps = {
@@ -45,18 +45,18 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
   };
 
   const onAddNewPlant = (name: string) => {
-    console.log('add plant', name);
+    createPlant({ name, wateringTimes: [], wateringPeriodInDays: 10 }, plants.dispatch);
   };
 
   return (
-    <Container style={{ height: '100%' }}>
+    <Container>
       {unwateredPlants.length > 0 && (
         <List>
           {unwateredPlants.map((plant) => (
             <ListItem button key={plant.id}>
               <Tooltip title="Needs to be watered">
                 <ListItemIcon>
-                  <Icon color="primary">opacity</Icon>
+                  <Icon color="primary">format_color_reset_outlined</Icon>
                 </ListItemIcon>
               </Tooltip>
               <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
@@ -76,12 +76,10 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
         <List>
           {wateredPlants.map((plant) => (
             <ListItem button key={plant.id}>
+              <ListItemIcon>
+                <Icon color="primary">check</Icon>
+              </ListItemIcon>
               <ListItemText secondary={`Last watered ${formatTimeSinceWatered(plant)}`}>{plant.name}</ListItemText>
-              <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                <IconButton edge="end" aria-label="done">
-                  <Icon>check</Icon>
-                </IconButton>
-              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
