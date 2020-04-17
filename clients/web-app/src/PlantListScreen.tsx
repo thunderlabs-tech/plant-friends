@@ -15,6 +15,7 @@ import { Collection } from './state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt } from './data/Plant';
 import { waterPlant } from './app/actions';
+import NewPlantInput from './NewPlantInput';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -43,8 +44,12 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
     waterPlant({ ...plant, wateringTimes: [new Date(), ...plant.wateringTimes] }, plants.dispatch);
   };
 
+  const onAddNewPlant = (name: string) => {
+    console.log('add plant', name);
+  };
+
   return (
-    <Container>
+    <Container style={{ height: '100%' }}>
       {unwateredPlants.length > 0 && (
         <List>
           {unwateredPlants.map((plant) => (
@@ -81,6 +86,8 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
           ))}
         </List>
       )}
+
+      <NewPlantInput onAddNewPlant={onAddNewPlant} />
     </Container>
   );
 };
