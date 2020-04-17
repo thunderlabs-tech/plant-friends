@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container } from '@material-ui/core';
+import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container, CssBaseline } from '@material-ui/core';
 import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
@@ -22,16 +22,15 @@ const App: React.FC = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <Container maxWidth="md">
+      <CssBaseline />
+
+      <Container maxWidth="md" style={{ backgroundColor: '#ffffff', height: '100%' }} disableGutters>
         <AppBar position="static" elevation={1}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu">
-              <Icon>menu</Icon>
-            </IconButton>
             <Typography variant="h6">Plant Friends</Typography>
           </Toolbar>
         </AppBar>
-        {/* <Button onClick={seedDummyData}>Seed dummy data</Button> */}
+
         <PlantListScreen plants={plants} />
       </Container>
     </MuiThemeProvider>
