@@ -79,7 +79,7 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
               <ListItemIcon>
                 <Icon color="primary">check</Icon>
               </ListItemIcon>
-              <ListItemText secondary={`Last watered ${formatTimeSinceWatered(plant)}`}>{plant.name}</ListItemText>
+              <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
             </ListItem>
           ))}
         </List>
