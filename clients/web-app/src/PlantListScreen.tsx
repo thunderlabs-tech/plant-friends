@@ -3,19 +3,35 @@ import {
   List,
   ListItem,
   ListItemText,
-  Container,
   Divider,
   Icon,
   ListItemIcon,
   Tooltip,
   ListItemSecondaryAction,
   IconButton,
+  Box,
+  Container,
+  Paper,
 } from '@material-ui/core';
 import { Collection } from './state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt } from './data/Plant';
 import { waterPlant, createPlant } from './app/actions';
 import NewPlantInput from './NewPlantInput';
+
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      height: 'calc(100% - 64px)',
+    },
+    scrollableContainer: {
+      overflow: 'auto',
+    },
+  });
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -37,7 +53,7 @@ function formatTimeSinceWatered(plant: Plant) {
   return `Last watered ${date.toLocaleDateString()}`;
 }
 
-const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
+const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps> = ({ plants, classes }) => {
   const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWatering);
 
   const onWaterPlant = (plant: Plant) => {
@@ -49,45 +65,53 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
   };
 
   return (
-    <Container>
-      {unwateredPlants.length > 0 && (
-        <List>
-          {unwateredPlants.map((plant) => (
-            <ListItem button key={plant.id}>
-              <Tooltip title="Needs to be watered">
-                <ListItemIcon>
-                  <Icon color="primary">format_color_reset_outlined</Icon>
-                </ListItemIcon>
-              </Tooltip>
-              <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-              <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                <IconButton edge="end" aria-label="done">
-                  <Icon>check</Icon>
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      )}
+    <Box display="flex" flexDirection="column" className={classes.root}>
+      <Container maxWidth="md" disableGutters className={classes.scrollableContainer}>
+        <Paper>
+          {unwateredPlants.length > 0 && (
+            <List>
+              {unwateredPlants.map((plant) => (
+                <ListItem button key={plant.id}>
+                  <Tooltip title="Needs to be watered">
+                    <ListItemIcon>
+                      <Icon color="primary">format_color_reset_outlined</Icon>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                  <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                    <IconButton edge="end" aria-label="done">
+                      <Icon>check</Icon>
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          )}
 
-      {unwateredPlants.length > 0 && wateredPlants.length > 0 && <Divider />}
+          {unwateredPlants.length > 0 && wateredPlants.length > 0 && <Divider />}
 
-      {wateredPlants.length > 0 && (
-        <List>
-          {wateredPlants.map((plant) => (
-            <ListItem button key={plant.id}>
-              <ListItemIcon>
-                <Icon color="primary">check</Icon>
-              </ListItemIcon>
-              <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-            </ListItem>
-          ))}
-        </List>
-      )}
+          {wateredPlants.length > 0 && (
+            <List>
+              {wateredPlants.map((plant) => (
+                <ListItem button key={plant.id}>
+                  <ListItemIcon>
+                    <Icon color="primary">check</Icon>
+                  </ListItemIcon>
+                  <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Paper>
+      </Container>
 
-      <NewPlantInput onAddNewPlant={onAddNewPlant} />
-    </Container>
+      <Box flexGrow={1} />
+
+      <Container maxWidth="md" disableGutters>
+        <NewPlantInput onAddNewPlant={onAddNewPlant} />
+      </Container>
+    </Box>
   );
 };
 
-export default PlantListScreen;
+export default withStyles(styles)(PlantListScreen);

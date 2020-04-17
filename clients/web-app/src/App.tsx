@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, Typography, MuiThemeProvider, Container, CssBaseline } from '@material-ui/core';
+import { Toolbar, Typography, MuiThemeProvider, Container, CssBaseline, Paper, Box } from '@material-ui/core';
 import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
@@ -23,16 +23,17 @@ const App: React.FC = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-
-      <Container maxWidth="md" style={{ backgroundColor: '#ffffff', height: '100%' }} disableGutters>
+      <Box display="flex" flexDirection="column" width="100%" height="100%">
         <AppBar position="static" elevation={1}>
-          <Toolbar>
-            <Typography variant="h6">Plant Friends</Typography>
-          </Toolbar>
+          <Container maxWidth="md" disableGutters>
+            <Toolbar>
+              <Typography variant="h6">Plant Friends</Typography>
+            </Toolbar>
+          </Container>
         </AppBar>
 
         <PlantListScreen plants={plants} />
-      </Container>
+      </Box>
     </MuiThemeProvider>
   );
 };

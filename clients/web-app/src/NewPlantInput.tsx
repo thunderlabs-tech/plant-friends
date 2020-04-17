@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { IconButton, Icon, Box, TextField, InputAdornment } from '@material-ui/core';
+import { IconButton, Icon, Box, TextField, InputAdornment, Paper } from '@material-ui/core';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
@@ -15,6 +15,7 @@ const styles = (theme: Theme) =>
       paddingBottom: theme.spacing(1),
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(0.5),
+      width: '100%',
     },
     nameInput: {
       flexGrow: 1,
@@ -39,36 +40,39 @@ const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> =
   };
 
   return (
-    <Box component="form" display="flex" className={classes.root} onSubmit={onSubmit}>
-      <TextField
-        label="Name"
-        placeholder="Add plant"
-        variant="outlined"
-        id="newPlant-name"
-        autoFocus
-        name="newPlant-name"
-        value={nameValue}
-        onChange={useCallback((e) => setNameValue(e.currentTarget.value), [setNameValue])}
-        className={classes.nameInput}
-      />
-      <TextField
-        label="Water every"
-        id="newPlant-wateringPeriodInDays"
-        name="newPlant-wateringPeriodInDays"
-        variant="outlined"
-        value={wateringPeriodInDays}
-        type="number"
-        InputProps={{
-          endAdornment: <InputAdornment position="end">days</InputAdornment>,
-        }}
-        onChange={useCallback((e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10)), [
-          setWateringPeriodInDays,
-        ])}
-      />
-      <IconButton type="submit" className={classes.button}>
-        <Icon>add</Icon>
-      </IconButton>
-    </Box>
+    <Paper className={classes.root}>
+      <Box component="form" display="flex" onSubmit={onSubmit}>
+        <TextField
+          label="Name"
+          placeholder="Add plant"
+          variant="outlined"
+          id="newPlant-name"
+          autoFocus
+          name="newPlant-name"
+          value={nameValue}
+          onChange={useCallback((e) => setNameValue(e.currentTarget.value), [setNameValue])}
+          className={classes.nameInput}
+        />
+        <TextField
+          label="Water every"
+          id="newPlant-wateringPeriodInDays"
+          name="newPlant-wateringPeriodInDays"
+          variant="outlined"
+          value={wateringPeriodInDays}
+          type="number"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">days</InputAdornment>,
+          }}
+          onChange={useCallback((e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10)), [
+            setWateringPeriodInDays,
+          ])}
+          className={classes.wateringPeriodInput}
+        />
+        <IconButton type="submit" className={classes.button}>
+          <Icon>add</Icon>
+        </IconButton>
+      </Box>
+    </Paper>
   );
 };
 
