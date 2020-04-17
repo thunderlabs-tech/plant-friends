@@ -5,7 +5,7 @@ export type Plant = {
   wateringTimes: Date[];
 };
 
-export function lastWateredAt(plant: Plant): Date {
+export function lastWateredAt(plant: Plant): Date | undefined {
   const sortedTimes = plant.wateringTimes.sort((a, b) =>
     a.valueOf() < b.valueOf() ? 1 : a.valueOf() === b.valueOf() ? 0 : -1
   );

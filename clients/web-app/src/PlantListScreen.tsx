@@ -21,9 +21,19 @@ export type PlantListScreenProps = {
 };
 
 function needsWatering(plant: Plant, now = new Date(Date.now())) {
-  const timeSinceWatering = now.valueOf() - lastWateredAt(plant).valueOf();
+  const latestWatered = lastWateredAt(plant);
+  if (!latestWatered) return true;
+
+  const timeSinceWatering = now.valueOf() - latestWatered.valueOf();
   const wateringPeriodInMs = plant.wateringPeriodInDays * 24 * 60 * 60 * 1000;
+
   return timeSinceWatering > wateringPeriodInMs;
+}
+
+function formatTimeSinceWatered(plant: Plant) {
+  const date = lastWateredAt(plant);
+  if (!date) return `Never watered`;
+  return `Last watered ${date.toLocaleDateString()}`;
 }
 
 const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
@@ -44,9 +54,7 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
                   <Icon color="primary">opacity</Icon>
                 </ListItemIcon>
               </Tooltip>
-              <ListItemText secondary={`Last watered ${lastWateredAt(plant).toLocaleDateString()}`}>
-                {plant.name}
-              </ListItemText>
+              <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
               <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
                 <IconButton edge="end" aria-label="done">
                   <Icon>check</Icon>
@@ -63,9 +71,7 @@ const PlantListScreen: React.FC<PlantListScreenProps> = ({ plants }) => {
         <List>
           {wateredPlants.map((plant) => (
             <ListItem button key={plant.id}>
-              <ListItemText secondary={`Last watered ${lastWateredAt(plant).toLocaleDateString()}`}>
-                {plant.name}
-              </ListItemText>
+              <ListItemText secondary={`Last watered ${formatTimeSinceWatered(plant)}`}>{plant.name}</ListItemText>
               <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
                 <IconButton edge="end" aria-label="done">
                   <Icon>check</Icon>
