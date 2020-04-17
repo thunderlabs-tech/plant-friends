@@ -19,7 +19,7 @@ describe('useAppState()', () => {
     const { result } = renderHook(() => useAppState(initialState, handlers));
 
     act(() => {
-      const [state, dispatchers] = result.current;
+      const dispatchers = result.current[1];
       console.log('test 1');
       dispatchers.testAction1(1, 2, 3);
     });
@@ -36,7 +36,7 @@ describe('useAppState()', () => {
     const { result } = renderHook(() => useAppState(initialState, actions));
 
     act(() => {
-      const [state, actions] = result.current;
+      const actions = result.current[1];
       actions.testAction();
     });
 

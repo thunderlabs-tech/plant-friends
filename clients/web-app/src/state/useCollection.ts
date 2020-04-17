@@ -1,30 +1,22 @@
 import useAppState, { ActionDispatchers } from './useAppState';
-import LoadedIndicator from './LoadedIndicator';
-import castAs from '../utilities/lang/castAs';
+import LoadingState from './LoadingState';
 
 export type Collection<Elem> = {
   data: Elem[];
-  loaded: LoadedIndicator;
+  loadingState: LoadingState;
   dispatch: CollectionDispatchers<Elem>;
 };
 
 export default function useCollection<Elem>(
   initialData: Elem[] = [],
-  loaded: LoadedIndicator = 'notYetLoaded'
+  loadingState: LoadingState = LoadingState.notYetLoaded
 ): Collection<Elem> {
   const actionHandlers: CollectionActionFns<Elem> = {
-    loaded: (state, data: Elem[]) => ({ data, loaded: 'loaded' }),
-    updateElement: (state, element: Elem, updated: Elem) => {
-      const elementIndex = state.data.indexOf(element);
-      if (elementIndex === -1)
-        throw new Error('Element not present in collection. Only pass elements you got out of the collection');
-      const newElements = [...state.data.slice(0, elementIndex), updated, ...state.data.slice(elementIndex + 1)];
-      return { ...state, data: newElements };
-    },
-    networkUnavailable: (state) => ({ ...state, loaded: 'networkUnavailable' }),
+    setData: (state, data: Elem[]) => ({ ...state, data }),
+    setLoadingState: (state, loadingState: LoadingState) => ({ ...state, loadingState: loadingState }),
   };
 
-  const [state, dispatch] = useAppState({ data: initialData, loaded }, actionHandlers);
+  const [state, dispatch] = useAppState({ data: initialData, loadingState }, actionHandlers);
 
   // TODO: this is neat but performance will probably suffer because the returned object identity will always change
   return {
@@ -35,15 +27,15 @@ export default function useCollection<Elem>(
 
 export type CollectionState<Elem> = {
   data: Elem[];
-  loaded: LoadedIndicator;
+  loadingState: LoadingState;
 };
 
 type CollectionActionFns<Elem> = {
-  loaded: (state: CollectionState<Elem>, data: Elem[]) => CollectionState<Elem>;
-  networkUnavailable: (state: CollectionState<Elem>) => CollectionState<Elem>;
-  updateElement: (state: CollectionState<Elem>, element: Elem, updated: Elem) => CollectionState<Elem>;
+  setData: (state: CollectionState<Elem>, data: Elem[]) => CollectionState<Elem>;
+  setLoadingState: (state: CollectionState<Elem>, loadingState: LoadingState) => CollectionState<Elem>;
 };
 
 export type CollectionDispatchers<Elem> = ActionDispatchers<CollectionState<Elem>, CollectionActionFns<Elem>>;
 
 export type UpdateElement<Elem> = Collection<Elem>['dispatch']['updateElement'];
+// export type UpdateElement<Elem> = Collection<Elem>['dispatch']['updateElement'];

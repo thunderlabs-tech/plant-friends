@@ -1,35 +1,24 @@
-import React from 'react';
-import { Plant } from './state/dataTypes';
+import React, { useEffect } from 'react';
+
 import AppBar from '@material-ui/core/AppBar';
 import { Toolbar, IconButton, Typography, Icon, MuiThemeProvider, Container } from '@material-ui/core';
 import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
-
-function makeN<Element>(n: number, maker: (i: number) => Element): Element[] {
-  if (n <= 0) return [];
-  const result: Element[] = [];
-  for (let i = 0; i < n; i++) {
-    result.push(maker(i));
-  }
-  return result;
-}
-let idCounter = 0;
-function makePlant(attrs: Partial<Plant> = {}): Plant {
-  idCounter += 1;
-  return {
-    id: `${idCounter}`,
-    name: `Plant ${idCounter}`,
-    lastWateredAt: new Date(Date.UTC(2020, 3, 1)),
-    wateringPeriodInDays: 10,
-    ...attrs,
-  };
-}
-
-const plantData = [...makeN(2, () => makePlant()), ...makeN(2, (i) => makePlant({ wateringPeriodInDays: 30 }))];
+import { Plant } from './data/Plant';
+import persistence from './state/persistence';
+import LoadingState from './state/LoadingState';
 
 const App: React.FC = () => {
-  const plants = useCollection<Plant>(plantData);
+  const plants = useCollection<Plant>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      plants.dispatch.setData(await persistence.loadPlants());
+      plants.dispatch.setLoadingState(LoadingState.ready);
+    };
+    fetchData();
+  }, [plants.dispatch]);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -42,7 +31,7 @@ const App: React.FC = () => {
             <Typography variant="h6">Plant Friends</Typography>
           </Toolbar>
         </AppBar>
-
+        {/* <Button onClick={seedDummyData}>Seed dummy data</Button> */}
         <PlantListScreen plants={plants} />
       </Container>
     </MuiThemeProvider>
