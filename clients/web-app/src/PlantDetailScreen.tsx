@@ -13,6 +13,8 @@ import {
   IconButton,
   Icon,
   InputBase,
+  useTheme,
+  useMediaQuery,
 } from '@material-ui/core';
 import { Collection } from './state/useCollection';
 import { Plant } from './data/Plant';
@@ -70,6 +72,8 @@ const PlantDetailScreen: React.FC<
   const history = useHistory();
   const [name, setName] = useState(plant ? plant.name : '');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(plant ? plant.wateringPeriodInDays : 0);
+  const theme = useTheme();
+  const mdOrHigher = useMediaQuery(theme.breakpoints.up('md'));
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +119,7 @@ const PlantDetailScreen: React.FC<
               name="plant-name"
               className={classes.nameInput}
               value={name}
-              autoFocus
+              autoFocus={mdOrHigher}
               onChange={(e) => setName(e.currentTarget.value)}
               placeholder="Name"
             />

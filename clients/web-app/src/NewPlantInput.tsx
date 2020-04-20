@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { IconButton, Icon, Box, TextField, InputAdornment, Paper } from '@material-ui/core';
+import { IconButton, Icon, Box, TextField, InputAdornment, Paper, useTheme, useMediaQuery } from '@material-ui/core';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
@@ -33,6 +33,8 @@ const styles = (theme: Theme) =>
 const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> = ({ onAddNewPlant, classes }) => {
   const [name, setName] = useState('');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(7);
+  const theme = useTheme();
+  const mdOrHigher = useMediaQuery(theme.breakpoints.up('md'));
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +50,7 @@ const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> =
           placeholder="Add plant"
           variant="outlined"
           id="newPlant-name"
-          autoFocus
+          autoFocus={mdOrHigher}
           name="newPlant-name"
           value={name}
           onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
