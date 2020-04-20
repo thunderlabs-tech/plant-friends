@@ -15,6 +15,9 @@ import {
   InputBase,
   useTheme,
   useMediaQuery,
+  List,
+  ListItem,
+  Divider,
 } from '@material-ui/core';
 import { Collection } from './state/useCollection';
 import { Plant } from './data/Plant';
@@ -22,7 +25,7 @@ import { Plant } from './data/Plant';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { RouteChildrenProps, Link, useHistory } from 'react-router-dom';
-import { updatePlant } from './app/actions';
+import { updatePlant, waterPlant } from './app/actions';
 import { plantListRoute } from './app/routes';
 
 const styles = (theme: Theme) =>
@@ -74,6 +77,10 @@ const PlantDetailScreen: React.FC<
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(plant ? plant.wateringPeriodInDays : 0);
   const theme = useTheme();
   const mdOrHigher = useMediaQuery(theme.breakpoints.up('md'));
+
+  const onWaterNowClick = () => {
+    waterPlant(plant!, plants.dispatch);
+  };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,11 +148,33 @@ const PlantDetailScreen: React.FC<
                 id="plant-wateringPeriodInDays"
                 name="plant-wateringPeriodInDays"
                 value={wateringPeriodInDays}
+                variant="outlined"
                 fullWidth
                 type="number"
                 onChange={(e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))}
                 label="Watering Period in Days"
               />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Button startIcon={<Icon>opacity</Icon>} onClick={onWaterNowClick} color="primary">
+                Water Now
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+              {plant.wateringTimes.length > 0 ? (
+                <>
+                  <Typography>Watered at:</Typography>
+                  <List>
+                    {plant.wateringTimes.map((date, i) => {
+                      return <ListItem key={i}>{date.toLocaleDateString()}</ListItem>;
+                    })}
+                  </List>
+                </>
+              ) : (
+                'No watering times recorded'
+              )}
             </Grid>
           </Grid>
         </Paper>
