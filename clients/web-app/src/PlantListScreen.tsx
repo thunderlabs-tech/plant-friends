@@ -98,6 +98,13 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
                     <Icon color="primary">check</Icon>
                   </ListItemIcon>
                   <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                  <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                    <Tooltip title="Mark watered now">
+                      <IconButton edge="end" aria-label="done">
+                        <Icon>opacity</Icon>
+                      </IconButton>
+                    </Tooltip>
+                  </ListItemSecondaryAction>
                 </ListItem>
               ))}
             </List>
