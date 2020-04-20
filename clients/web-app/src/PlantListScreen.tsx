@@ -62,7 +62,7 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
   const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWatering);
 
   const onWaterPlant = (plant: Plant) => {
-    waterPlant({ ...plant, wateringTimes: [new Date(), ...plant.wateringTimes] }, plants.dispatch);
+    waterPlant(plant, plants.dispatch);
   };
 
   const onAddNewPlant = (plant: Omit<Plant, 'id'>) => {
