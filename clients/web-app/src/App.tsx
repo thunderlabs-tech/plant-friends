@@ -1,15 +1,35 @@
 import React, { useEffect } from 'react';
-
-import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, Typography, MuiThemeProvider, Container, CssBaseline, Paper, Box } from '@material-ui/core';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { MuiThemeProvider, CssBaseline, LinearProgress } from '@material-ui/core';
 import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
 import { Plant } from './data/Plant';
 import persistence from './state/persistence';
 import LoadingState from './state/LoadingState';
+import PlantDetailScreen from './PlantDetailScreen';
 
-const App: React.FC = () => {
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+
+const styles = (theme: Theme) =>
+  createStyles({
+    loadingSpinner: {
+      flexGrow: 1,
+    },
+    root: {
+      flexGrow: 1,
+      display: 'flex',
+    },
+    updating: {
+      opacity: 0.9,
+    },
+  });
+
+export type AppProps = WithStyles<typeof styles> & {};
+
+const App: React.FC<AppProps> = ({ classes }) => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {
@@ -23,19 +43,25 @@ const App: React.FC = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <Box display="flex" flexDirection="column" width="100%" height="100%">
-        <AppBar position="static" elevation={1}>
-          <Container maxWidth="md" disableGutters>
-            <Toolbar>
-              <Typography variant="h6">Plant Friends</Typography>
-            </Toolbar>
-          </Container>
-        </AppBar>
 
-        <PlantListScreen plants={plants} />
-      </Box>
+      {plants.loadingState === LoadingState.notYetLoaded ? (
+        <LinearProgress className={classes.loadingSpinner} />
+      ) : (
+        <div className={`${classes.root} ${plants.loadingState === LoadingState.updating ? classes.updating : ''}`}>
+          <Router>
+            <Switch>
+              <Route path="/plants/:id" exact>
+                {(props) => <PlantDetailScreen {...props} plants={plants} />}
+              </Route>
+              <Route path="/">
+                <PlantListScreen plants={plants} />
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+      )}
     </MuiThemeProvider>
   );
 };
 
-export default App;
+export default withStyles(styles)(App);

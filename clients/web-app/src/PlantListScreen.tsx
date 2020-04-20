@@ -12,6 +12,9 @@ import {
   Box,
   Container,
   Paper,
+  AppBar,
+  Toolbar,
+  Typography,
 } from '@material-ui/core';
 import { Collection } from './state/useCollection';
 import partition from 'lodash/partition';
@@ -22,6 +25,8 @@ import NewPlantInput from './NewPlantInput';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
+import { Link } from 'react-router-dom';
+import { plantDetailRoute } from './app/routes';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -65,58 +70,68 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
   };
 
   return (
-    <Box display="flex" flexDirection="column" className={classes.root}>
-      <Container maxWidth="md" disableGutters className={classes.scrollableContainer}>
-        <Paper>
-          {unwateredPlants.length > 0 && (
-            <List>
-              {unwateredPlants.map((plant) => (
-                <ListItem button key={plant.id}>
-                  <Tooltip title="Needs to be watered">
-                    <ListItemIcon>
-                      <Icon color="primary">format_color_reset_outlined</Icon>
-                    </ListItemIcon>
-                  </Tooltip>
-                  <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-                  <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                    <IconButton edge="end" aria-label="done">
-                      <Icon>check</Icon>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          )}
+    <Box display="flex" flexDirection="column" width="100%" height="100%">
+      <AppBar position="static" elevation={1}>
+        <Container maxWidth="md" disableGutters>
+          <Toolbar>
+            <Typography variant="h6">Plant Friends</Typography>
+          </Toolbar>
+        </Container>
+      </AppBar>
 
-          {unwateredPlants.length > 0 && wateredPlants.length > 0 && <Divider />}
-
-          {wateredPlants.length > 0 && (
-            <List>
-              {wateredPlants.map((plant) => (
-                <ListItem button key={plant.id}>
-                  <ListItemIcon>
-                    <Icon color="primary">check</Icon>
-                  </ListItemIcon>
-                  <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-                  <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                    <Tooltip title="Mark watered now">
-                      <IconButton edge="end" aria-label="done">
-                        <Icon>opacity</Icon>
-                      </IconButton>
+      <Box display="flex" flexDirection="column" className={classes.root}>
+        <Container maxWidth="md" disableGutters className={classes.scrollableContainer}>
+          <Paper>
+            {unwateredPlants.length > 0 && (
+              <List>
+                {unwateredPlants.map((plant) => (
+                  <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
+                    <Tooltip title="Needs to be watered">
+                      <ListItemIcon>
+                        <Icon color="primary">format_color_reset_outlined</Icon>
+                      </ListItemIcon>
                     </Tooltip>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </Paper>
-      </Container>
+                    <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                    <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                      <IconButton edge="end" aria-label="done">
+                        <Icon>check</Icon>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
 
-      <Box flexGrow={1} />
+            {unwateredPlants.length > 0 && wateredPlants.length > 0 && <Divider />}
 
-      <Container maxWidth="md" disableGutters>
-        <NewPlantInput onAddNewPlant={onAddNewPlant} />
-      </Container>
+            {wateredPlants.length > 0 && (
+              <List>
+                {wateredPlants.map((plant) => (
+                  <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
+                    <ListItemIcon>
+                      <Icon color="primary">check</Icon>
+                    </ListItemIcon>
+                    <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                    <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                      <Tooltip title="Mark watered now">
+                        <IconButton edge="end" aria-label="done">
+                          <Icon>opacity</Icon>
+                        </IconButton>
+                      </Tooltip>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </Paper>
+        </Container>
+
+        <Box flexGrow={1} />
+
+        <Container maxWidth="md" disableGutters>
+          <NewPlantInput onAddNewPlant={onAddNewPlant} />
+        </Container>
+      </Box>
     </Box>
   );
 };
