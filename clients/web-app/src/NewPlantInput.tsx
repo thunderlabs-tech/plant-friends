@@ -3,9 +3,10 @@ import { IconButton, Icon, Box, TextField, InputAdornment, Paper } from '@materi
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
+import { Plant } from './data/Plant';
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (name: string) => void;
+  onAddNewPlant: (plant: Omit<Plant, 'id'>) => void;
 };
 
 const styles = (theme: Theme) =>
@@ -30,13 +31,13 @@ const styles = (theme: Theme) =>
   });
 
 const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> = ({ onAddNewPlant, classes }) => {
-  const [nameValue, setNameValue] = useState('');
+  const [name, setName] = useState('');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(7);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddNewPlant(nameValue);
-    setNameValue('');
+    onAddNewPlant({ name, wateringPeriodInDays, wateringTimes: [] });
+    setName('');
   };
 
   return (
@@ -49,8 +50,8 @@ const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> =
           id="newPlant-name"
           autoFocus
           name="newPlant-name"
-          value={nameValue}
-          onChange={useCallback((e) => setNameValue(e.currentTarget.value), [setNameValue])}
+          value={name}
+          onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
           className={classes.nameInput}
         />
         <TextField

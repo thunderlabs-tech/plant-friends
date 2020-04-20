@@ -60,8 +60,8 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
     waterPlant({ ...plant, wateringTimes: [new Date(), ...plant.wateringTimes] }, plants.dispatch);
   };
 
-  const onAddNewPlant = (name: string) => {
-    createPlant({ name, wateringTimes: [], wateringPeriodInDays: 10 }, plants.dispatch);
+  const onAddNewPlant = (plant: Omit<Plant, 'id'>) => {
+    createPlant(plant, plants.dispatch);
   };
 
   return (
