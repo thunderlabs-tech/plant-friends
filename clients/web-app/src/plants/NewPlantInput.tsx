@@ -3,7 +3,7 @@ import { IconButton, Icon, Box, TextField, InputAdornment, Paper, useTheme, useM
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
-import { Plant } from './data/Plant';
+import { Plant } from '../data/Plant';
 
 export type NewPlantInputProps = {
   onAddNewPlant: (plant: Omit<Plant, 'id'>) => void;

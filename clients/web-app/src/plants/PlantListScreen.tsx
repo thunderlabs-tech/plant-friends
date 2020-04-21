@@ -16,17 +16,17 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { Collection } from './state/useCollection';
+import { Collection } from '../state/useCollection';
 import partition from 'lodash/partition';
-import { Plant, lastWateredAt } from './data/Plant';
-import { waterPlant, createPlant, refreshPlants } from './app/actions';
-import NewPlantInput from './NewPlantInput';
+import { Plant, lastWateredAt } from '../data/Plant';
+import { waterPlant, createPlant, refreshPlants } from '../app/actions';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
-import { plantDetailRoute } from './app/routes';
+import { plantDetailRoute } from '../app/routes';
+import NewPlantInput from './NewPlantInput';
 
 const styles = (theme: Theme) =>
   createStyles({

@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { MuiThemeProvider, CssBaseline, LinearProgress } from '@material-ui/core';
-import theme from './app/theme';
-import PlantListScreen from './PlantListScreen';
-import useCollection from './state/useCollection';
-import { Plant } from './data/Plant';
-import LoadingState from './state/LoadingState';
-import PlantDetailScreen from './PlantDetailScreen';
+import theme from './theme';
+import PlantListScreen from '../plants/PlantListScreen';
+import useCollection from '../state/useCollection';
+import { Plant } from '../data/Plant';
+import LoadingState from '../state/LoadingState';
+import PlantDetailScreen from '../plants/PlantDetailScreen';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
-import persistence from './state/persistence';
+import persistence from '../state/persistence';
 
 const styles = (theme: Theme) =>
   createStyles({
