@@ -33,8 +33,11 @@ const App: React.FC<AppProps> = ({ classes }) => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {
-    plants.dispatch.setData(await persistence.loadPlants());
-    plants.dispatch.setLoadingState(LoadingState.ready);
+    async function fetchData() {
+      plants.dispatch.setData(await persistence.loadPlants());
+      plants.dispatch.setLoadingState(LoadingState.ready);
+    }
+    fetchData();
   }, [plants.dispatch]);
 
   return (
