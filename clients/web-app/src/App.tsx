@@ -11,7 +11,7 @@ import PlantDetailScreen from './PlantDetailScreen';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
-import { refreshPlants } from './app/actions';
+import persistence from './state/persistence';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,7 +33,8 @@ const App: React.FC<AppProps> = ({ classes }) => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {
-    refreshPlants(plants.dispatch);
+    plants.dispatch.setData(await persistence.loadPlants());
+    plants.dispatch.setLoadingState(LoadingState.ready);
   }, [plants.dispatch]);
 
   return (
