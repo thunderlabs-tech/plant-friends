@@ -5,7 +5,6 @@ import {
   ListItemText,
   Divider,
   Icon,
-  ListItemIcon,
   Tooltip,
   ListItemSecondaryAction,
   IconButton,
@@ -15,6 +14,7 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  ListItemAvatar,
 } from '@material-ui/core';
 import { Collection } from '../state/useCollection';
 import partition from 'lodash/partition';
@@ -27,6 +27,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
 import { plantDetailRoute } from '../app/routes';
 import NewPlantInput from './NewPlantInput';
+import PlantAvatar from '../components/PlantAvatar';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -92,17 +93,17 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
               <List>
                 {unwateredPlants.map((plant) => (
                   <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
-                    <Tooltip title="Needs to be watered">
-                      <ListItemIcon>
-                        <Icon color="primary">format_color_reset_outlined</Icon>
-                      </ListItemIcon>
-                    </Tooltip>
+                    <ListItemAvatar>
+                      <PlantAvatar plant={plant} />
+                    </ListItemAvatar>
                     <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-                    <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                      <IconButton edge="end" aria-label="done">
-                        <Icon>check</Icon>
-                      </IconButton>
-                    </ListItemSecondaryAction>
+                    <Tooltip title="Needs to be watered">
+                      <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                        <IconButton edge="end" aria-label="done">
+                          <Icon>opacity</Icon>
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </Tooltip>
                   </ListItem>
                 ))}
               </List>
@@ -114,17 +115,10 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
               <List>
                 {wateredPlants.map((plant) => (
                   <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
-                    <ListItemIcon>
-                      <Icon color="primary">check</Icon>
-                    </ListItemIcon>
+                    <ListItemAvatar>
+                      <PlantAvatar plant={plant} />
+                    </ListItemAvatar>
                     <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-                    <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
-                      <Tooltip title="Mark watered now">
-                        <IconButton edge="end" aria-label="done">
-                          <Icon>opacity</Icon>
-                        </IconButton>
-                      </Tooltip>
-                    </ListItemSecondaryAction>
                   </ListItem>
                 ))}
               </List>
