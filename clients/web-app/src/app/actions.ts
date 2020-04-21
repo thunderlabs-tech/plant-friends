@@ -41,3 +41,8 @@ export async function updatePlant(
   plantDispatch.setLoadingState(LoadingState.ready);
   history.push(plantListRoute());
 }
+
+export async function refreshPlants(plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
+  plantDispatch.setData(await persistence.loadPlants());
+  plantDispatch.setLoadingState(LoadingState.ready);
+}
