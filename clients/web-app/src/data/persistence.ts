@@ -30,20 +30,59 @@ async function setIdCounter(nextId: number): Promise<number> {
 
 async function getNextId(): Promise<string> {
   const idCounter: number = await getIdCounter();
+
   const nextId = idCounter + 1;
   setIdCounter(nextId);
   return nextId.toString();
 }
 
+const NEXT_MIGRATION_INDEX_KEY = 'next-migration-index';
+const ID_COUNTER_KEY = 'id-counter';
+const PLANTS_KEY = 'plants';
+
+const migrations = Object.freeze([
+  async function initialStructure() {
+    await setItem(PLANTS_KEY, []);
+    await setItem(ID_COUNTER_KEY, 0);
+  },
+  async function addSunlightAndTemperatureNeeds() {
+    const plants = await getItem<Plant[]>(PLANTS_KEY);
+    const updatedPlants = plants.map((incompletePlant) => {
+      return {
+        sunTypeNeeded: undefined,
+        sunAmountNeededInHours: undefined,
+        temperatureMinimumInCelsius: undefined,
+        temperatureMaximumInCelsius: undefined,
+        ...incompletePlant,
+      };
+    });
+    await setItem(PLANTS_KEY, updatedPlants);
+  },
+]);
+
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
+  runMigrations: async (): Promise<void> => {
+    const plantsExist = (await getItem<Plant[] | undefined>(PLANTS_KEY)) !== undefined;
+    const nextMigrationIndex = (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || plantsExist ? 1 : 0;
+
+    if (nextMigrationIndex > migrations.length) return;
+
+    for (let i = nextMigrationIndex; i < migrations.length; i++) {
+      const nextMigration = migrations[i];
+      await nextMigration();
+    }
+
+    setItem(NEXT_MIGRATION_INDEX_KEY, migrations.length);
+  },
+
   loadPlants: async (): Promise<Plant[]> => {
-    return (await getItem<Plant[] | undefined>('plants')) || [];
+    return await getItem<Plant[]>(PLANTS_KEY);
   },
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
-    return setItem<Plant[]>('plants', plants);
+    return setItem<Plant[]>(PLANTS_KEY, plants);
   },
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {

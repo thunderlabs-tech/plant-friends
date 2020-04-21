@@ -28,6 +28,7 @@ const App: React.FC<AppProps> = () => {
 
   useEffect(() => {
     async function fetchData() {
+      await persistence.runMigrations();
       plants.dispatch.setData(await persistence.loadPlants());
       plants.dispatch.setLoadingState(LoadingState.ready);
     }
