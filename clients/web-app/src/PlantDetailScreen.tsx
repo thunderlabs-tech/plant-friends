@@ -17,7 +17,6 @@ import {
   useMediaQuery,
   List,
   ListItem,
-  Divider,
 } from '@material-ui/core';
 import { Collection } from './state/useCollection';
 import { Plant } from './data/Plant';

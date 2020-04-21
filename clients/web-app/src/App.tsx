@@ -5,7 +5,6 @@ import theme from './app/theme';
 import PlantListScreen from './PlantListScreen';
 import useCollection from './state/useCollection';
 import { Plant } from './data/Plant';
-import persistence from './state/persistence';
 import LoadingState from './state/LoadingState';
 import PlantDetailScreen from './PlantDetailScreen';
 

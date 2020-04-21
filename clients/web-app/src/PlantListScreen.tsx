@@ -19,7 +19,7 @@ import {
 import { Collection } from './state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt } from './data/Plant';
-import { waterPlant, createPlant } from './app/actions';
+import { waterPlant, createPlant, refreshPlants } from './app/actions';
 import NewPlantInput from './NewPlantInput';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
@@ -75,6 +75,12 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
         <Container maxWidth="md" disableGutters>
           <Toolbar>
             <Typography variant="h6">Plant Friends</Typography>
+
+            <Box flexGrow={1} />
+
+            <IconButton edge="end" color="inherit" onClick={() => refreshPlants(plants.dispatch)}>
+              <Icon>refresh</Icon>
+            </IconButton>
           </Toolbar>
         </Container>
       </AppBar>
