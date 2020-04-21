@@ -100,7 +100,7 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
                     <Tooltip title="Needs to be watered">
                       <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
                         <IconButton edge="end" aria-label="done">
-                          <Icon>opacity</Icon>
+                          <Icon color="primary">opacity</Icon>
                         </IconButton>
                       </ListItemSecondaryAction>
                     </Tooltip>
