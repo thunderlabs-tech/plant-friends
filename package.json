@@ -4,7 +4,8 @@
   "description": "Keep your plant friends happy",
   "main": "index.js",
   "scripts": {
-    "build": "cd clients/web-app && yarn build"
+    "build": "cd clients/web-app && yarn build",
+    "test": "cd clients/web-app && yarn test"
   },
   "repository": {
     "type": "git",
