@@ -16,19 +16,18 @@ import {
   Typography,
   ListItemAvatar,
 } from '@material-ui/core';
-import { Collection } from '../state/useCollection';
+import { Collection } from '../utilities/state/useCollection';
 import partition from 'lodash/partition';
-import { Plant, lastWateredAt, needsWater } from '../data/Plant';
-import { waterPlant, createPlant, refreshPlants } from '../app/actions';
+import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
+import { waterPlant, createPlant, refreshPlants } from '../data/actions';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
-import { plantDetailRoute } from '../app/routes';
-import NewPlantInput from './NewPlantInput';
+import { plantDetailRoute } from '../init/routes';
+import NewPlantInput from '../components/NewPlantInput';
 import PlantAvatar from '../components/PlantAvatar';
-import { formatNextWaterDate } from './formatNextWaterDate';
 
 const styles = (theme: Theme) =>
   createStyles({

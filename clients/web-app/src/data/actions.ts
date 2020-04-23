@@ -1,9 +1,9 @@
-import { Collection } from '../state/useCollection';
-import persistence from '../state/persistence';
-import LoadingState from '../state/LoadingState';
-import { Plant } from '../data/Plant';
+import { Collection } from '../utilities/state/useCollection';
+import persistence from './persistence';
+import LoadingState from '../utilities/state/LoadingState';
+import { Plant } from './Plant';
 import { useHistory } from 'react-router-dom';
-import { plantListRoute } from './routes';
+import { plantListRoute } from '../init/routes';
 
 export async function waterPlant(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
   const updatedPlant = { ...plant, wateringTimes: [new Date(), ...plant.wateringTimes] };

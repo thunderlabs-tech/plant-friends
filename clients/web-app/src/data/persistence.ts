@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { Plant } from '../data/Plant';
+import { Plant } from './Plant';
 
 localforage.config({
   name: 'plant-friends',

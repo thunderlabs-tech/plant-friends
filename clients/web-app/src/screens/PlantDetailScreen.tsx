@@ -18,15 +18,14 @@ import {
   List,
   ListItem,
 } from '@material-ui/core';
-import { Collection } from '../state/useCollection';
-import { Plant } from '../data/Plant';
+import { Collection } from '../utilities/state/useCollection';
+import { Plant, formatNextWaterDate } from '../data/Plant';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { RouteChildrenProps, Link, useHistory } from 'react-router-dom';
-import { updatePlant, waterPlant } from '../app/actions';
-import { plantListRoute } from '../app/routes';
-import { formatNextWaterDate } from './formatNextWaterDate';
+import { updatePlant, waterPlant } from '../data/actions';
+import { plantListRoute } from '../init/routes';
 
 const styles = (theme: Theme) =>
   createStyles({
