@@ -23,9 +23,10 @@ import { Plant, formatNextWaterDate } from '../data/Plant';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
-import { RouteChildrenProps, Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { updatePlant, waterPlant } from '../data/actions';
-import { plantListRoute } from '../init/routes';
+import { plantListUrl } from '../routes/PlantListRoute';
+import { PlantDetailRouteParams } from './PlantDetailRoute';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -60,16 +61,14 @@ const styles = (theme: Theme) =>
     },
   });
 
-type PlantDetailScreenRouteParams = { id: string };
-
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
 };
 
 const PlantDetailScreen: React.FC<
-  WithStyles<typeof styles> & RouteChildrenProps<PlantDetailScreenRouteParams> & PlantDetailScreenProps
-> = ({ plants, classes, match }) => {
-  const plant = plants.data.find((plantElement) => plantElement.id === match!.params.id);
+  WithStyles<typeof styles> & { params: PlantDetailRouteParams } & PlantDetailScreenProps
+> = ({ plants, classes, params }) => {
+  const plant = plants.data.find((plantElement) => plantElement.id === params.id);
 
   const history = useHistory();
   const [name, setName] = useState(plant ? plant.name : '');
@@ -115,7 +114,7 @@ const PlantDetailScreen: React.FC<
               edge="start"
               color="inherit"
               className={classes.backButton}
-              to={plantListRoute()}
+              to={plantListUrl()}
             >
               <Icon>close</Icon>
             </IconButton>

@@ -25,9 +25,10 @@ import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
-import { plantDetailRoute } from '../init/routes';
+import { plantDetailUrl } from '../routes/PlantDetailRoute';
 import NewPlantInput from '../components/NewPlantInput';
 import PlantAvatar from '../components/PlantAvatar';
+import { PlantListRouteParams } from './PlantListRoute';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -49,7 +50,9 @@ function formatTimeSinceWatered(plant: Plant) {
   return `Last watered ${date.toLocaleDateString()}`;
 }
 
-const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps> = ({ plants, classes }) => {
+const PlantListScreen: React.FC<
+  WithStyles<typeof styles> & PlantListScreenProps & { params: PlantListRouteParams }
+> = ({ plants, classes }) => {
   const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWater);
 
   const onWaterPlant = (plant: Plant) => {
@@ -82,7 +85,7 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
             {unwateredPlants.length > 0 && (
               <List>
                 {unwateredPlants.map((plant) => (
-                  <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
+                  <ListItem button key={plant.id} component={Link} to={plantDetailUrl(plant.id)}>
                     <ListItemAvatar>
                       <PlantAvatar plant={plant} />
                     </ListItemAvatar>
@@ -104,7 +107,7 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
             {wateredPlants.length > 0 && (
               <List>
                 {wateredPlants.map((plant) => (
-                  <ListItem button key={plant.id} component={Link} to={plantDetailRoute(plant.id)}>
+                  <ListItem button key={plant.id} component={Link} to={plantDetailUrl(plant.id)}>
                     <ListItemAvatar>
                       <PlantAvatar plant={plant} />
                     </ListItemAvatar>

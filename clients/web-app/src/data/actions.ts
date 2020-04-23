@@ -3,7 +3,7 @@ import persistence from './persistence';
 import LoadingState from '../utilities/state/LoadingState';
 import { Plant } from './Plant';
 import { useHistory } from 'react-router-dom';
-import { plantListRoute } from '../init/routes';
+import { plantListUrl } from '../routes/PlantListRoute';
 
 export async function waterPlant(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
   const updatedPlant = { ...plant, wateringTimes: [new Date(), ...plant.wateringTimes] };
@@ -39,7 +39,7 @@ export async function updatePlant(
   plantDispatch.setData(newPlants);
 
   plantDispatch.setLoadingState(LoadingState.ready);
-  history.push(plantListRoute());
+  history.push(plantListUrl());
 }
 
 export async function refreshPlants(plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
