@@ -28,6 +28,7 @@ import { Link } from 'react-router-dom';
 import { plantDetailRoute } from '../app/routes';
 import NewPlantInput from './NewPlantInput';
 import PlantAvatar from '../components/PlantAvatar';
+import { formatNextWaterDate } from './formatNextWaterDate';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -118,7 +119,7 @@ const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps
                     <ListItemAvatar>
                       <PlantAvatar plant={plant} />
                     </ListItemAvatar>
-                    <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
+                    <ListItemText secondary={formatNextWaterDate(plant)}>{plant.name}</ListItemText>
                   </ListItem>
                 ))}
               </List>

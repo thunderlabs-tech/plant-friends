@@ -26,6 +26,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import { RouteChildrenProps, Link, useHistory } from 'react-router-dom';
 import { updatePlant, waterPlant } from '../app/actions';
 import { plantListRoute } from '../app/routes';
+import { formatNextWaterDate } from './formatNextWaterDate';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -159,6 +160,10 @@ const PlantDetailScreen: React.FC<
               <Button startIcon={<Icon>opacity</Icon>} onClick={onWaterNowClick} color="primary">
                 Water Now
               </Button>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography>{formatNextWaterDate(plant)}</Typography>
             </Grid>
 
             <Grid item xs={12} md={3}>
