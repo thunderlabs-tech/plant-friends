@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 import { Collection } from '../state/useCollection';
 import partition from 'lodash/partition';
-import { Plant, lastWateredAt } from '../data/Plant';
+import { Plant, lastWateredAt, needsWater } from '../data/Plant';
 import { waterPlant, createPlant, refreshPlants } from '../app/actions';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
@@ -44,16 +44,6 @@ export type PlantListScreenProps = {
   plants: Collection<Plant>;
 };
 
-function needsWatering(plant: Plant, now = new Date(Date.now())) {
-  const latestWatered = lastWateredAt(plant);
-  if (!latestWatered) return true;
-
-  const timeSinceWatering = now.valueOf() - latestWatered.valueOf();
-  const wateringPeriodInMs = plant.wateringPeriodInDays * 24 * 60 * 60 * 1000;
-
-  return timeSinceWatering > wateringPeriodInMs;
-}
-
 function formatTimeSinceWatered(plant: Plant) {
   const date = lastWateredAt(plant);
   if (!date) return `Never watered`;
@@ -61,7 +51,7 @@ function formatTimeSinceWatered(plant: Plant) {
 }
 
 const PlantListScreen: React.FC<WithStyles<typeof styles> & PlantListScreenProps> = ({ plants, classes }) => {
-  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWatering);
+  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWater);
 
   const onWaterPlant = (plant: Plant) => {
     waterPlant(plant, plants.dispatch);
