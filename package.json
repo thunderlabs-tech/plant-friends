@@ -1,7 +1,7 @@
 {
   "name": "plant-friends",
   "version": "1.0.0",
-  "description": "Goals:",
+  "description": "Keep your plant friends happy",
   "main": "index.js",
   "scripts": {
     "build": "cd clients/web-app && yarn build"
