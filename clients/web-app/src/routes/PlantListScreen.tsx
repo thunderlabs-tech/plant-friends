@@ -91,7 +91,12 @@ const PlantListScreen: React.FC<
                     </ListItemAvatar>
                     <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
                     <Tooltip title="Needs to be watered">
-                      <ListItemSecondaryAction onClick={() => onWaterPlant(plant)}>
+                      <ListItemSecondaryAction
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onWaterPlant(plant);
+                        }}
+                      >
                         <IconButton edge="end" aria-label="done">
                           <Icon color="primary">opacity</Icon>
                         </IconButton>
