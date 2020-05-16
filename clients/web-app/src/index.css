@@ -1,10 +1,7 @@
 html,
 body,
 #root {
-  overflow-x: hidden;
   height: 100%;
-  flex-grow: 1;
-  display: flex;
 }
 
 body {
