@@ -56,51 +56,49 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
       }}
     >
       <Grid style={{ padding: 0 }}>
-        <GridRow>
-          <GridCell tablet={8} desktop={12}>
-            <Surface z={1}>
-              <List twoLine avatarList theme={['onSurface']}>
-                {unwateredPlants.length > 0 &&
-                  unwateredPlants.map((plant) => (
-                    <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
-                      <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                      <ListItemText>
-                        <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
-                        <ListItemSecondaryText>{formatTimeSinceWatered(plant)}</ListItemSecondaryText>
-                      </ListItemText>
-                      <ListItemMeta>
-                        <IconButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onWaterPlant(plant);
-                          }}
-                          icon="opacity"
-                        />
-                      </ListItemMeta>
-                    </ListItem>
-                  ))}
+        <GridCell tablet={8} desktop={12}>
+          <Surface z={1}>
+            <List twoLine avatarList theme={['onSurface']}>
+              {unwateredPlants.length > 0 &&
+                unwateredPlants.map((plant) => (
+                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                    <ListItemText>
+                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                      <ListItemSecondaryText>{formatTimeSinceWatered(plant)}</ListItemSecondaryText>
+                    </ListItemText>
+                    <ListItemMeta>
+                      <IconButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onWaterPlant(plant);
+                        }}
+                        icon="opacity"
+                      />
+                    </ListItemMeta>
+                  </ListItem>
+                ))}
 
-                {unwateredPlants.length > 0 && wateredPlants.length > 0 && <ListDivider />}
+              {unwateredPlants.length > 0 && wateredPlants.length > 0 && <ListDivider />}
 
-                {wateredPlants.length > 0 &&
-                  wateredPlants.map((plant) => (
-                    <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
-                      <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                      <ListItemText>
-                        <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
-                        <ListItemSecondaryText>{formatNextWaterDate(plant)}</ListItemSecondaryText>
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-              </List>
-            </Surface>
-          </GridCell>
-        </GridRow>
+              {wateredPlants.length > 0 &&
+                wateredPlants.map((plant) => (
+                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                    <ListItemText>
+                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                      <ListItemSecondaryText>{formatNextWaterDate(plant)}</ListItemSecondaryText>
+                    </ListItemText>
+                  </ListItem>
+                ))}
+            </List>
+          </Surface>
+        </GridCell>
 
-        <GridRow>
+        <GridCell phone={4} tablet={8} desktop={12}>
           <NewPlantInput onAddNewPlant={onAddNewPlant} />
-        </GridRow>
+        </GridCell>
       </Grid>
     </Layout>
   );
