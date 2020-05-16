@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { MuiThemeProvider, LinearProgress } from '@material-ui/core';
-import theme, { rmwcTheme } from './theme';
+import theme from './theme';
 import useCollection from '../utilities/state/useCollection';
 import { Plant } from '../data/Plant';
 import LoadingState from '../utilities/state/LoadingState';
+import '@rmwc/linear-progress/styles';
+import { LinearProgress } from '@rmwc/linear-progress';
 import '@rmwc/theme/styles';
 import { ThemeProvider } from '@rmwc/theme';
 
@@ -15,13 +16,6 @@ import RootRoute from '../routes/RootRoute';
 
 // const styles = () =>
 //   createStyles({
-//     loadingSpinner: {
-//       flexGrow: 1,
-//     },
-//     root: {
-//       // flexGrow: 1,
-//       // display: 'flex',
-//     },
 //     updating: {
 //       opacity: 0.9,
 //     },
@@ -41,22 +35,20 @@ const App: React.FC<AppProps> = () => {
   }, [plants.dispatch]);
 
   return (
-    <ThemeProvider options={rmwcTheme} wrap>
-      <MuiThemeProvider theme={theme}>
-        {plants.loadingState === LoadingState.notYetLoaded ? (
-          <LinearProgress style={{ width: '100%' }} />
-        ) : (
-          <Router>
-            <Switch
-              children={[
-                PlantDetailRoute({ plants: plants }),
-                PlantListRoute({ plants: plants }),
-                RootRoute({ plants: plants }),
-              ]}
-            />
-          </Router>
-        )}
-      </MuiThemeProvider>
+    <ThemeProvider options={theme}>
+      {plants.loadingState === LoadingState.notYetLoaded ? (
+        <LinearProgress style={{ width: '100%' }} />
+      ) : (
+        <Router>
+          <Switch
+            children={[
+              PlantDetailRoute({ plants: plants }),
+              PlantListRoute({ plants: plants }),
+              RootRoute({ plants: plants }),
+            ]}
+          />
+        </Router>
+      )}
     </ThemeProvider>
   );
 };
