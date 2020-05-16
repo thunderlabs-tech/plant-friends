@@ -1,35 +1,35 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { MuiThemeProvider, CssBaseline, LinearProgress } from '@material-ui/core';
-import theme from './theme';
+import { MuiThemeProvider, LinearProgress } from '@material-ui/core';
+import theme, { rmwcTheme } from './theme';
 import useCollection from '../utilities/state/useCollection';
 import { Plant } from '../data/Plant';
 import LoadingState from '../utilities/state/LoadingState';
+import '@rmwc/theme/styles';
+import { ThemeProvider } from '@rmwc/theme';
 
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import createStyles from '@material-ui/core/styles/createStyles';
 import persistence from '../data/persistence';
 import PlantDetailRoute from '../routes/PlantDetailRoute';
 import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
 
-const styles = () =>
-  createStyles({
-    loadingSpinner: {
-      flexGrow: 1,
-    },
-    root: {
-      flexGrow: 1,
-      display: 'flex',
-    },
-    updating: {
-      opacity: 0.9,
-    },
-  });
+// const styles = () =>
+//   createStyles({
+//     loadingSpinner: {
+//       flexGrow: 1,
+//     },
+//     root: {
+//       // flexGrow: 1,
+//       // display: 'flex',
+//     },
+//     updating: {
+//       opacity: 0.9,
+//     },
+//   });
 
-export type AppProps = WithStyles<typeof styles> & {};
+export type AppProps = {};
 
-const App: React.FC<AppProps> = ({ classes }) => {
+const App: React.FC<AppProps> = () => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {
@@ -41,13 +41,11 @@ const App: React.FC<AppProps> = ({ classes }) => {
   }, [plants.dispatch]);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-
-      {plants.loadingState === LoadingState.notYetLoaded ? (
-        <LinearProgress className={classes.loadingSpinner} />
-      ) : (
-        <div className={`${classes.root} ${plants.loadingState === LoadingState.updating ? classes.updating : ''}`}>
+    <ThemeProvider options={rmwcTheme} wrap>
+      <MuiThemeProvider theme={theme}>
+        {plants.loadingState === LoadingState.notYetLoaded ? (
+          <LinearProgress style={{ width: '100%' }} />
+        ) : (
           <Router>
             <Switch
               children={[
@@ -57,10 +55,10 @@ const App: React.FC<AppProps> = ({ classes }) => {
               ]}
             />
           </Router>
-        </div>
-      )}
-    </MuiThemeProvider>
+        )}
+      </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 
-export default withStyles(styles)(App);
+export default App;
