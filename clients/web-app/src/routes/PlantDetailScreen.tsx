@@ -20,6 +20,7 @@ import '@rmwc/list/styles';
 import { List, ListItem } from '@rmwc/list';
 
 import TextFieldStyles from '../components/TextField.module.css';
+import { useMediaQuery } from 'react-responsive';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -35,7 +36,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
   const [name, setName] = useState(plant ? plant.name : '');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(plant ? plant.wateringPeriodInDays : 0);
 
-  const mdOrHigher = false; //useMediaQuery(theme.breakpoints.up('md'));
+  const tabletOrHigher = useMediaQuery({ query: '(min-width: 600px)' });
 
   const onWaterNowClick = () => {
     waterPlant(plant!, plants.dispatch);
@@ -79,7 +80,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                     value={name}
                     label="Name"
                     className={TextFieldStyles.fullWidth}
-                    autoFocus={mdOrHigher}
+                    autoFocus={tabletOrHigher}
                     onChange={(e) => setName(e.currentTarget.value)}
                     placeholder="Name"
                   />
