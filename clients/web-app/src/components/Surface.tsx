@@ -9,7 +9,9 @@ export type SurfaceProps = Omit<ComponentProps<ElevationProps, React.HTMLProps<H
 const Surface: React.FC<SurfaceProps> = ({ children, className, ...elevationProps }) => {
   return (
     <Elevation {...elevationProps}>
-      <Theme use={['surface', 'onSurface']}>{children}</Theme>
+      <Theme tag="div" use={['surface', 'onSurface']}>
+        {children}
+      </Theme>
     </Elevation>
   );
 };

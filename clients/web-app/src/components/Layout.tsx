@@ -12,7 +12,7 @@ export type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children, appBar }) => {
   return (
     <div className={styles.root}>
-      <SimpleTopAppBar {...appBar} />
+      <SimpleTopAppBar {...appBar} theme={['primaryBg']} />
       <TopAppBarFixedAdjust />
 
       <div className={styles.childrenContainer}>{children}</div>
