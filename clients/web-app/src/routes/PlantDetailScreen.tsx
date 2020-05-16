@@ -44,7 +44,6 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('submit');
     updatePlant({ ...plant!, name, wateringPeriodInDays }, plants.dispatch, history);
   };
 
