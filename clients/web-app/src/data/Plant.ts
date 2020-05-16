@@ -35,7 +35,7 @@ export function needsWater(plant: Plant, now = Date.now()): boolean {
 
 export function formatNextWaterDate(plant: Plant) {
   const lastWateredAtDate = lastWateredAt(plant);
-  if (!lastWateredAtDate) return 'Water today';
+  if (!lastWateredAtDate) return 'Needs to be watered';
   const nextWaterDate = add(lastWateredAtDate, { days: plant.wateringPeriodInDays });
   return `Water next on ${nextWaterDate.toLocaleDateString()}`;
 }
