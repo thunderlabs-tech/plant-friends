@@ -70,14 +70,14 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
   }
 
   return (
-    <Layout
-      appBar={{
-        navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
-        actionItems: [{ icon: 'check', onClick: onSubmit }],
-        title: plant.name,
-      }}
-    >
-      <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
+      <Layout
+        appBar={{
+          navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+          actionItems: [{ icon: 'check', onClick: onSubmit }],
+          title: plant.name,
+        }}
+      >
         <Grid theme={['surface']}>
           <GridCell tablet={8} desktop={12}>
             <Surface>
@@ -137,8 +137,8 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
             </Surface>
           </GridCell>
         </Grid>
-      </form>
-    </Layout>
+      </Layout>
+    </form>
   );
 };
 
