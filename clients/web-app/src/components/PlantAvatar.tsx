@@ -2,7 +2,7 @@ import React from 'react';
 import { Plant } from '../data/Plant';
 import '@rmwc/avatar/styles';
 import { Avatar } from '@rmwc/avatar';
-import { ColorPalette, cyan, green, lightGreen, lime, grey } from '../utilities/ColorPalettes';
+import { ColorPalette, green, lightGreen, grey } from '../utilities/ColorPalettes';
 import getValue from '../utilities/lang/getValue';
 import getContrastTextColor from '../utilities/getContrastTextColor';
 
@@ -17,12 +17,7 @@ function notObsceneShades(color: ColorPalette): string[] {
   return shades.map((value) => getValue(color, value));
 }
 
-const availableColors = [
-  ...notObsceneShades(cyan),
-  ...notObsceneShades(green),
-  ...notObsceneShades(lightGreen),
-  ...notObsceneShades(lime),
-];
+const availableColors = [...notObsceneShades(green), ...notObsceneShades(lightGreen)];
 
 const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
   const plant = props.plant;
