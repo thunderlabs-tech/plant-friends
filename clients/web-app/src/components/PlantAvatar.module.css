@@ -1,0 +1,8 @@
+.PlantAvatar :global(.rmwc-avatar__text) {
+  font-family: var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+  color: inherit;
+}
+
+.PlantAvatar :global(.rmwc-avatar__text-inner) {
+  font-weight: 500;
+}
