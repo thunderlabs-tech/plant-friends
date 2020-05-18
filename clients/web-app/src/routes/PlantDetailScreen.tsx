@@ -26,6 +26,16 @@ export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
 };
 
+function formatWateringTime(date: Date): string {
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+}
+
 const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
   plants,
   params,
@@ -115,7 +125,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                       <Typography use="body1">Watered at:</Typography>
                       <List>
                         {plant.wateringTimes.map((date, i) => {
-                          return <ListItem key={i}>{date.toLocaleDateString()}</ListItem>;
+                          return <ListItem key={i}>{formatWateringTime(date)}</ListItem>;
                         })}
                       </List>
                     </>
