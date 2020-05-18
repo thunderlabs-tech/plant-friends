@@ -18,7 +18,7 @@ import {
 } from '@rmwc/list';
 import '@rmwc/icon-button/styles';
 import { IconButton } from '@rmwc/icon-button';
-import { GridRow, GridCell, Grid } from '@rmwc/grid';
+import { GridCell, Grid } from '@rmwc/grid';
 
 import { plantDetailUrl } from '../routes/PlantDetailRoute';
 import NewPlantInput from '../components/NewPlantInput';
