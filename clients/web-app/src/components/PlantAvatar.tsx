@@ -1,42 +1,47 @@
 import React from 'react';
 import { Plant } from '../data/Plant';
-import { Avatar, useTheme, Theme, Color } from '@material-ui/core';
-import * as colors from '@material-ui/core/colors';
+import '@rmwc/avatar/styles';
+import { Avatar } from '@rmwc/avatar';
+import { ColorPalette, cyan, green, lightGreen, lime, grey } from '../utilities/ColorPalettes';
 import getValue from '../utilities/lang/getValue';
+import getContrastTextColor from '../utilities/getContrastTextColor';
+
+import css from './PlantAvatar.module.css';
 
 export type PlantAvatarProps = {
   plant: Plant;
 };
 
-function notObsceneShades(color: Color): string[] {
+function notObsceneShades(color: ColorPalette): string[] {
   const shades = [100, 200, 300, 400, 500] as const;
   return shades.map((value) => getValue(color, value));
 }
 
 const availableColors = [
-  ...notObsceneShades(colors.cyan),
-  ...notObsceneShades(colors.green),
-  ...notObsceneShades(colors.lightGreen),
-  ...notObsceneShades(colors.lime),
+  ...notObsceneShades(cyan),
+  ...notObsceneShades(green),
+  ...notObsceneShades(lightGreen),
+  ...notObsceneShades(lime),
 ];
 
-function getAvatarStyle(theme: Theme, plant: Plant): {} | { color: string; backgroundColor: string } {
-  const colorIndex = parseInt(plant.id) || plant.id.codePointAt(0);
-  if (colorIndex === undefined) return {};
+const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
+  const plant = props.plant;
+  const colorIndex = parseInt(plant.id, 10) || 0;
 
-  const themeColor = availableColors[colorIndex % availableColors.length];
+  const backgroundColor = availableColors[colorIndex % availableColors.length];
+  const textColor = getContrastTextColor(backgroundColor, grey[800], grey[200]);
 
-  return {
-    color: theme.palette.getContrastText(themeColor),
-    backgroundColor: themeColor,
-  };
-}
-
-const PlantAvatar: React.SFC<PlantAvatarProps> = ({ plant }) => {
-  const initials = plant.name.slice(0, 1).toLocaleUpperCase();
-  const theme = useTheme();
-
-  return <Avatar style={getAvatarStyle(theme, plant)}>{initials}</Avatar>;
+  return (
+    <Avatar
+      className={css.PlantAvatar}
+      name={plant.name.toLocaleUpperCase()}
+      size="large"
+      style={{
+        backgroundColor,
+        color: textColor,
+      }}
+    />
+  );
 };
 
 export default PlantAvatar;

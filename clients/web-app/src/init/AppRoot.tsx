@@ -1,35 +1,29 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { MuiThemeProvider, CssBaseline, LinearProgress } from '@material-ui/core';
 import theme from './theme';
 import useCollection from '../utilities/state/useCollection';
 import { Plant } from '../data/Plant';
 import LoadingState from '../utilities/state/LoadingState';
+import '@rmwc/linear-progress/styles';
+import { LinearProgress } from '@rmwc/linear-progress';
+import '@rmwc/theme/styles';
+import { ThemeProvider } from '@rmwc/theme';
 
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import createStyles from '@material-ui/core/styles/createStyles';
 import persistence from '../data/persistence';
 import PlantDetailRoute from '../routes/PlantDetailRoute';
 import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
 
-const styles = () =>
-  createStyles({
-    loadingSpinner: {
-      flexGrow: 1,
-    },
-    root: {
-      flexGrow: 1,
-      display: 'flex',
-    },
-    updating: {
-      opacity: 0.9,
-    },
-  });
+// const styles = () =>
+//   createStyles({
+//     updating: {
+//       opacity: 0.9,
+//     },
+//   });
 
-export type AppProps = WithStyles<typeof styles> & {};
+export type AppProps = {};
 
-const App: React.FC<AppProps> = ({ classes }) => {
+const App: React.FC<AppProps> = () => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {
@@ -41,26 +35,22 @@ const App: React.FC<AppProps> = ({ classes }) => {
   }, [plants.dispatch]);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-
+    <ThemeProvider options={theme}>
       {plants.loadingState === LoadingState.notYetLoaded ? (
-        <LinearProgress className={classes.loadingSpinner} />
+        <LinearProgress style={{ width: '100%' }} />
       ) : (
-        <div className={`${classes.root} ${plants.loadingState === LoadingState.updating ? classes.updating : ''}`}>
-          <Router>
-            <Switch
-              children={[
-                PlantDetailRoute({ plants: plants }),
-                PlantListRoute({ plants: plants }),
-                RootRoute({ plants: plants }),
-              ]}
-            />
-          </Router>
-        </div>
+        <Router>
+          <Switch
+            children={[
+              PlantDetailRoute({ plants: plants }),
+              PlantListRoute({ plants: plants }),
+              RootRoute({ plants: plants }),
+            ]}
+          />
+        </Router>
       )}
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 
-export default withStyles(styles)(App);
+export default App;

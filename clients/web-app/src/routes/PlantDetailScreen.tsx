@@ -1,80 +1,52 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Container,
-  Paper,
-  AppBar,
-  Toolbar,
-  Typography,
-  Grid,
-  TextField,
-  Button,
-  Theme,
-  IconButton,
-  Icon,
-  InputBase,
-  useTheme,
-  useMediaQuery,
-  List,
-  ListItem,
-} from '@material-ui/core';
+import React, { useState, FormEvent } from 'react';
 import { Collection } from '../utilities/state/useCollection';
 import { Plant, formatNextWaterDate } from '../data/Plant';
 
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import createStyles from '@material-ui/core/styles/createStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { updatePlant, waterPlant } from '../data/actions';
 import { plantListUrl } from '../routes/PlantListRoute';
 import { PlantDetailRouteParams } from './PlantDetailRoute';
+import Layout from '../components/Layout';
+import Surface from '../components/Surface';
+import { GridCell, GridRow, Grid } from '@rmwc/grid';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    columnContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    contentContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-      alignItems: 'center',
-    },
-    scrollableContainer: {
-      overflow: 'auto',
-      padding: theme.spacing(2),
-      width: '100%',
-      maxWidth: theme.breakpoints.values.md,
-    },
-    bottomContainer: {
-      paddingBottom: theme.spacing(1),
-      paddingTop: theme.spacing(1),
-      display: 'flex',
-    },
-    nameInput: {
-      ...theme.typography.h6,
-      color: 'inherit',
-    },
-    backButton: {
-      marginRight: theme.spacing(1),
-    },
-  });
+import '@rmwc/typography/styles';
+import { Typography } from '@rmwc/typography';
+import '@rmwc/textfield/styles';
+import { TextField } from '@rmwc/textfield';
+import '@rmwc/button/styles';
+import { Button } from '@rmwc/button';
+import '@rmwc/list/styles';
+import { List, ListItem } from '@rmwc/list';
+
+import TextFieldStyles from '../components/TextField.module.css';
+import { useMediaQuery } from 'react-responsive';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
 };
 
-const PlantDetailScreen: React.FC<
-  WithStyles<typeof styles> & { params: PlantDetailRouteParams } & PlantDetailScreenProps
-> = ({ plants, classes, params }) => {
+function formatWateringTime(date: Date): string {
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+}
+
+const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
+  plants,
+  params,
+}) => {
   const plant = plants.data.find((plantElement) => plantElement.id === params.id);
 
   const history = useHistory();
   const [name, setName] = useState(plant ? plant.name : '');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(plant ? plant.wateringPeriodInDays : 0);
-  const theme = useTheme();
-  const mdOrHigher = useMediaQuery(theme.breakpoints.up('md'));
+
+  const tabletOrHigher = useMediaQuery({ query: '(min-width: 600px)' });
 
   const onWaterNowClick = () => {
     waterPlant(plant!, plants.dispatch);
@@ -82,107 +54,92 @@ const PlantDetailScreen: React.FC<
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('submit');
     updatePlant({ ...plant!, name, wateringPeriodInDays }, plants.dispatch, history);
   };
 
   if (!plant) {
     return (
-      <Box className={classes.columnContainer}>
-        <AppBar position="static" elevation={1}>
-          <Container maxWidth="md" disableGutters>
-            <Toolbar>
-              <Typography variant="h6">Plant Friends</Typography>
-            </Toolbar>
-          </Container>
-        </AppBar>
-
-        <Box display="flex" flexDirection="column" className={classes.contentContainer}>
-          Can't find that plant
-        </Box>
-      </Box>
+      <Layout appBar={{ title: 'Plant Friends' }}>
+        <Grid>
+          <GridCell>
+            <Typography use="body1">Can't find that plant</Typography>
+          </GridCell>
+        </Grid>
+      </Layout>
     );
   }
 
   return (
-    <Box className={classes.columnContainer} component="form" onSubmit={onSubmit}>
-      <AppBar position="static" elevation={1}>
-        <Container maxWidth="md" disableGutters>
-          <Toolbar>
-            <IconButton
-              component={Link}
-              edge="start"
-              color="inherit"
-              className={classes.backButton}
-              to={plantListUrl()}
-            >
-              <Icon>close</Icon>
-            </IconButton>
+    <form onSubmit={onSubmit}>
+      <Layout
+        appBar={{
+          navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+          actionItems: [{ icon: 'check', onClick: onSubmit }],
+          title: plant.name,
+        }}
+      >
+        <Grid theme={['surface']}>
+          <GridCell tablet={8} desktop={12}>
+            <Surface>
+              <GridRow>
+                <GridCell tablet={4}>
+                  <TextField
+                    id="plant-name"
+                    name="plant-name"
+                    value={name}
+                    label="Name"
+                    className={TextFieldStyles.fullWidth}
+                    autoFocus={tabletOrHigher}
+                    onChange={(e) => setName(e.currentTarget.value)}
+                    placeholder="Name"
+                  />
+                </GridCell>
 
-            <InputBase
-              id="plant-name"
-              name="plant-name"
-              className={classes.nameInput}
-              value={name}
-              autoFocus={mdOrHigher}
-              onChange={(e) => setName(e.currentTarget.value)}
-              placeholder="Name"
-            />
+                <GridCell tablet={4}>
+                  <TextField
+                    id="plant-wateringPeriodInDays"
+                    name="plant-wateringPeriodInDays"
+                    value={wateringPeriodInDays}
+                    className={TextFieldStyles.fullWidth}
+                    type="number"
+                    onChange={(e: FormEvent<HTMLInputElement>) =>
+                      setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))
+                    }
+                    label="Watering Period in Days"
+                  />
+                </GridCell>
 
-            <Box flexGrow={1} />
+                <GridCell tablet={8} style={{ textAlign: 'right' }}>
+                  <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
+                    Water Now
+                  </Button>
+                </GridCell>
 
-            <Button color="inherit" type="submit">
-              Save
-            </Button>
-          </Toolbar>
-        </Container>
-      </AppBar>
+                <GridCell tablet={8} desktop={12}>
+                  <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                </GridCell>
 
-      <Box className={classes.contentContainer}>
-        <Paper className={classes.scrollableContainer}>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <TextField
-                id="plant-wateringPeriodInDays"
-                name="plant-wateringPeriodInDays"
-                value={wateringPeriodInDays}
-                variant="outlined"
-                fullWidth
-                type="number"
-                onChange={(e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))}
-                label="Watering Period in Days"
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Button startIcon={<Icon>opacity</Icon>} onClick={onWaterNowClick} color="primary">
-                Water Now
-              </Button>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography>{formatNextWaterDate(plant)}</Typography>
-            </Grid>
-
-            <Grid item xs={12} md={3}>
-              {plant.wateringTimes.length > 0 ? (
-                <>
-                  <Typography>Watered at:</Typography>
-                  <List>
-                    {plant.wateringTimes.map((date, i) => {
-                      return <ListItem key={i}>{date.toLocaleDateString()}</ListItem>;
-                    })}
-                  </List>
-                </>
-              ) : (
-                'No watering times recorded'
-              )}
-            </Grid>
-          </Grid>
-        </Paper>
-      </Box>
-    </Box>
+                <GridCell tablet={8} desktop={12}>
+                  {plant.wateringTimes.length > 0 ? (
+                    <>
+                      <Typography use="body1">Watered at:</Typography>
+                      <List>
+                        {plant.wateringTimes.map((date, i) => {
+                          return <ListItem key={i}>{formatWateringTime(date)}</ListItem>;
+                        })}
+                      </List>
+                    </>
+                  ) : (
+                    'No watering times recorded'
+                  )}
+                </GridCell>
+              </GridRow>
+            </Surface>
+          </GridCell>
+        </Grid>
+      </Layout>
+    </form>
   );
 };
 
-export default withStyles(styles)(PlantDetailScreen);
+export default PlantDetailScreen;

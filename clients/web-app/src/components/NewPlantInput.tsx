@@ -1,40 +1,24 @@
 import React, { useState, useCallback } from 'react';
-import { IconButton, Icon, Box, TextField, InputAdornment, Paper, useTheme, useMediaQuery } from '@material-ui/core';
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
-import createStyles from '@material-ui/core/styles/createStyles';
 import { Plant } from '../data/Plant';
+import '@rmwc/textfield/styles';
+import { TextField } from '@rmwc/textfield';
+import '@rmwc/icon-button/styles';
+import { IconButton } from '@rmwc/icon-button';
+import { useMediaQuery } from 'react-responsive';
+import '@rmwc/button/styles';
+import { Button } from '@rmwc/button';
+
+import TextFieldStyles from '../components/TextField.module.css';
+import { GridCell, Grid } from '@rmwc/grid';
 
 export type NewPlantInputProps = {
   onAddNewPlant: (plant: Omit<Plant, 'id'>) => void;
 };
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(0.5),
-      width: '100%',
-    },
-    nameInput: {
-      flexGrow: 1,
-      marginRight: 8,
-    },
-    wateringPeriodInput: {
-      marginRight: 8,
-    },
-    button: {
-      flexBasis: 55,
-    },
-  });
-
-const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> = ({ onAddNewPlant, classes }) => {
+const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
   const [name, setName] = useState('');
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(7);
-  const theme = useTheme();
-  const mdOrHigher = useMediaQuery(theme.breakpoints.up('md'));
+  const isPhone = useMediaQuery({ query: '(max-width: 599px)' });
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,40 +27,45 @@ const NewPlantInput: React.SFC<WithStyles<typeof styles> & NewPlantInputProps> =
   };
 
   return (
-    <Paper className={classes.root}>
-      <Box component="form" display="flex" onSubmit={onSubmit}>
+    <Grid tag="form" onSubmit={onSubmit} style={{ paddingTop: 0 }}>
+      <GridCell phone={4} tablet={5} desktop={8}>
         <TextField
           label="Name"
           placeholder="Add plant"
-          variant="outlined"
           id="newPlant-name"
-          autoFocus={mdOrHigher}
+          autoFocus={!isPhone}
           name="newPlant-name"
           value={name}
           onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
-          className={classes.nameInput}
+          className={TextFieldStyles.fullWidth}
         />
+      </GridCell>
+
+      <GridCell phone={4} tablet={2} desktop={3}>
         <TextField
-          label="Water every"
+          label="Water every (days)"
           id="newPlant-wateringPeriodInDays"
           name="newPlant-wateringPeriodInDays"
-          variant="outlined"
           value={wateringPeriodInDays}
           type="number"
-          InputProps={{
-            endAdornment: <InputAdornment position="end">days</InputAdornment>,
-          }}
           onChange={useCallback((e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10)), [
             setWateringPeriodInDays,
           ])}
-          className={classes.wateringPeriodInput}
+          className={TextFieldStyles.fullWidth}
         />
-        <IconButton type="submit" className={classes.button}>
-          <Icon>add</Icon>
-        </IconButton>
-      </Box>
-    </Paper>
+      </GridCell>
+
+      <GridCell phone={4} tablet={1} desktop={1}>
+        {isPhone ? (
+          <Button type="submit" theme={['primaryBg', 'onPrimary']} style={{ width: '100%' }}>
+            Add Plant
+          </Button>
+        ) : (
+          <IconButton type="submit" icon="add" />
+        )}
+      </GridCell>
+    </Grid>
   );
 };
 
-export default withStyles(styles)(NewPlantInput);
+export default NewPlantInput;

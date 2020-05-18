@@ -1,33 +1,7 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProviderProps } from '@rmwc/theme';
 
-export const DEFAULT_SPACING = 16;
-export const yellow1 = '#ffa25c';
+const primaryColor = '#4287f5';
 
-const plantFriendsBlue = {
-  light: '#5eb4ff',
-  extraLight: '#75bcfa',
-  main: '#4287f5',
-  dark: '#00806a',
-  contrastText: '#ffffff',
-};
-
-export { plantFriendsBlue };
-
-export const monospaced = Object.freeze({
-  fontFamily: '"Roboto Mono", monospace',
-});
-
-const theme = createMuiTheme({
-  palette: {
-    primary: plantFriendsBlue,
-  },
-  overrides: {
-    MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: plantFriendsBlue.main,
-      },
-    },
-  },
-});
+const theme: ThemeProviderProps['options'] = { primary: primaryColor, primaryBg: primaryColor, background: '#fafafa' };
 
 export default theme;

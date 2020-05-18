@@ -1,44 +1,31 @@
 import React from 'react';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Icon,
-  Tooltip,
-  ListItemSecondaryAction,
-  IconButton,
-  Box,
-  Container,
-  Paper,
-  AppBar,
-  Toolbar,
-  Typography,
-  ListItemAvatar,
-} from '@material-ui/core';
 import { Collection } from '../utilities/state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
 import { waterPlant, createPlant, refreshPlants } from '../data/actions';
-
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
-import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
+
+import '@rmwc/list/styles';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemPrimaryText,
+  ListItemSecondaryText,
+  ListItemGraphic,
+  ListItemMeta,
+  ListDivider,
+} from '@rmwc/list';
+import '@rmwc/icon-button/styles';
+import { IconButton } from '@rmwc/icon-button';
+import { GridCell, Grid } from '@rmwc/grid';
+
 import { plantDetailUrl } from '../routes/PlantDetailRoute';
 import NewPlantInput from '../components/NewPlantInput';
 import PlantAvatar from '../components/PlantAvatar';
 import { PlantListRouteParams } from './PlantListRoute';
-
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      height: 'calc(100% - 64px)',
-    },
-    scrollableContainer: {
-      overflow: 'auto',
-    },
-  });
+import Surface from '../components/Surface';
+import Layout from '../components/Layout';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -50,9 +37,7 @@ function formatTimeSinceWatered(plant: Plant) {
   return `Last watered ${date.toLocaleDateString()}`;
 }
 
-const PlantListScreen: React.FC<
-  WithStyles<typeof styles> & PlantListScreenProps & { params: PlantListRouteParams }
-> = ({ plants, classes }) => {
+const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteParams }> = ({ plants }) => {
   const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWater);
 
   const onWaterPlant = (plant: Plant) => {
@@ -64,74 +49,60 @@ const PlantListScreen: React.FC<
   };
 
   return (
-    <Box display="flex" flexDirection="column" width="100%" height="100%">
-      <AppBar position="static" elevation={1}>
-        <Container maxWidth="md" disableGutters>
-          <Toolbar>
-            <Typography variant="h6">Plant Friends</Typography>
-
-            <Box flexGrow={1} />
-
-            <IconButton edge="end" color="inherit" onClick={() => refreshPlants(plants.dispatch)}>
-              <Icon>refresh</Icon>
-            </IconButton>
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      <Box display="flex" flexDirection="column" className={classes.root}>
-        <Container maxWidth="md" disableGutters className={classes.scrollableContainer}>
-          <Paper>
-            {unwateredPlants.length > 0 && (
-              <List>
-                {unwateredPlants.map((plant) => (
-                  <ListItem button key={plant.id} component={Link} to={plantDetailUrl(plant.id)}>
-                    <ListItemAvatar>
-                      <PlantAvatar plant={plant} />
-                    </ListItemAvatar>
-                    <ListItemText secondary={formatTimeSinceWatered(plant)}>{plant.name}</ListItemText>
-                    <Tooltip title="Needs to be watered">
-                      <ListItemSecondaryAction
+    <Layout
+      appBar={{
+        title: 'Plant Friends',
+        actionItems: [{ icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) }],
+      }}
+    >
+      <Grid style={{ padding: 0 }}>
+        <GridCell tablet={8} desktop={12}>
+          <Surface z={1}>
+            <List twoLine avatarList theme={['onSurface']}>
+              {unwateredPlants.length > 0 &&
+                unwateredPlants.map((plant) => (
+                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                    <ListItemText>
+                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                      <ListItemSecondaryText>{formatTimeSinceWatered(plant)}</ListItemSecondaryText>
+                    </ListItemText>
+                    <ListItemMeta>
+                      <IconButton
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           onWaterPlant(plant);
                         }}
-                      >
-                        <IconButton edge="end" aria-label="done">
-                          <Icon color="primary">opacity</Icon>
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </Tooltip>
+                        theme={['primary']}
+                        icon="opacity"
+                      />
+                    </ListItemMeta>
                   </ListItem>
                 ))}
-              </List>
-            )}
 
-            {unwateredPlants.length > 0 && wateredPlants.length > 0 && <Divider />}
+              {unwateredPlants.length > 0 && wateredPlants.length > 0 && <ListDivider />}
 
-            {wateredPlants.length > 0 && (
-              <List>
-                {wateredPlants.map((plant) => (
-                  <ListItem button key={plant.id} component={Link} to={plantDetailUrl(plant.id)}>
-                    <ListItemAvatar>
-                      <PlantAvatar plant={plant} />
-                    </ListItemAvatar>
-                    <ListItemText secondary={formatNextWaterDate(plant)}>{plant.name}</ListItemText>
+              {wateredPlants.length > 0 &&
+                wateredPlants.map((plant) => (
+                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                    <ListItemText>
+                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                      <ListItemSecondaryText>{formatNextWaterDate(plant)}</ListItemSecondaryText>
+                    </ListItemText>
                   </ListItem>
                 ))}
-              </List>
-            )}
-          </Paper>
-        </Container>
+            </List>
+          </Surface>
+        </GridCell>
 
-        <Box flexGrow={1} />
-
-        <Container maxWidth="md" disableGutters>
+        <GridCell phone={4} tablet={8} desktop={12}>
           <NewPlantInput onAddNewPlant={onAddNewPlant} />
-        </Container>
-      </Box>
-    </Box>
+        </GridCell>
+      </Grid>
+    </Layout>
   );
 };
 
-export default withStyles(styles)(PlantListScreen);
+export default PlantListScreen;
