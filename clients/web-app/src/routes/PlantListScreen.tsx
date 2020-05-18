@@ -74,6 +74,7 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
                           e.stopPropagation();
                           onWaterPlant(plant);
                         }}
+                        theme={['primary']}
                         icon="opacity"
                       />
                     </ListItemMeta>
