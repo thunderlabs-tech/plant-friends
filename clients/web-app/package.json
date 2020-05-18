@@ -3,7 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.9.10",
+    "@rmwc/avatar": "^6.0.14",
+    "@rmwc/button": "^6.0.14",
+    "@rmwc/elevation": "^6.1.0",
+    "@rmwc/grid": "^6.0.14",
+    "@rmwc/icon-button": "^6.0.14",
+    "@rmwc/linear-progress": "^6.0.14",
+    "@rmwc/list": "^6.0.14",
+    "@rmwc/textfield": "^6.1.0",
+    "@rmwc/theme": "^6.1.0",
+    "@rmwc/tooltip": "^6.0.14",
+    "@rmwc/top-app-bar": "^6.0.14",
+    "@rmwc/typography": "^6.0.14",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/react-hooks": "^3.2.1",
@@ -14,12 +25,15 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-responsive": "^8.0.2",
     "@types/react-router-dom": "^5.1.4",
+    "classnames": "^2.2.6",
     "date-fns": "^2.12.0",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-responsive": "^8.0.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-test-renderer": "^16.13.1",
@@ -48,5 +62,6 @@
   },
   "engines": {
     "node": ">=12.14.1"
-  }
+  },
+  "sideEffects": false
 }
