@@ -100,7 +100,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                 </GridCell>
 
                 <GridCell tablet={8} style={{ textAlign: 'right' }}>
-                  <Button icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
+                  <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
                     Water Now
                   </Button>
                 </GridCell>
