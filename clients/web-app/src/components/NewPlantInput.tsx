@@ -4,7 +4,6 @@ import '@rmwc/textfield/styles';
 import { TextField } from '@rmwc/textfield';
 import '@rmwc/icon-button/styles';
 import { IconButton } from '@rmwc/icon-button';
-import Surface from './Surface';
 import { useMediaQuery } from 'react-responsive';
 import '@rmwc/button/styles';
 import { Button } from '@rmwc/button';
@@ -28,46 +27,44 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
   };
 
   return (
-    <Surface>
-      <Grid tag="form" onSubmit={onSubmit} style={{ width: '100%', paddingTop: 0 }}>
-        <GridCell phone={4} tablet={5} desktop={8}>
-          <TextField
-            label="Name"
-            placeholder="Add plant"
-            id="newPlant-name"
-            autoFocus={!isPhone}
-            name="newPlant-name"
-            value={name}
-            onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
-            className={TextFieldStyles.fullWidth}
-          />
-        </GridCell>
+    <Grid tag="form" onSubmit={onSubmit} style={{ paddingTop: 0 }}>
+      <GridCell phone={4} tablet={5} desktop={8}>
+        <TextField
+          label="Name"
+          placeholder="Add plant"
+          id="newPlant-name"
+          autoFocus={!isPhone}
+          name="newPlant-name"
+          value={name}
+          onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
+          className={TextFieldStyles.fullWidth}
+        />
+      </GridCell>
 
-        <GridCell phone={4} tablet={2} desktop={3}>
-          <TextField
-            label="Water every (days)"
-            id="newPlant-wateringPeriodInDays"
-            name="newPlant-wateringPeriodInDays"
-            value={wateringPeriodInDays}
-            type="number"
-            onChange={useCallback((e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10)), [
-              setWateringPeriodInDays,
-            ])}
-            className={TextFieldStyles.fullWidth}
-          />
-        </GridCell>
+      <GridCell phone={4} tablet={2} desktop={3}>
+        <TextField
+          label="Water every (days)"
+          id="newPlant-wateringPeriodInDays"
+          name="newPlant-wateringPeriodInDays"
+          value={wateringPeriodInDays}
+          type="number"
+          onChange={useCallback((e) => setWateringPeriodInDays(parseInt(e.currentTarget.value, 10)), [
+            setWateringPeriodInDays,
+          ])}
+          className={TextFieldStyles.fullWidth}
+        />
+      </GridCell>
 
-        <GridCell phone={4} tablet={1} desktop={1}>
-          {isPhone ? (
-            <Button type="submit" theme={['primaryBg', 'onPrimary']} style={{ width: '100%' }}>
-              Add Plant
-            </Button>
-          ) : (
-            <IconButton type="submit" icon="add" />
-          )}
-        </GridCell>
-      </Grid>
-    </Surface>
+      <GridCell phone={4} tablet={1} desktop={1}>
+        {isPhone ? (
+          <Button type="submit" theme={['primaryBg', 'onPrimary']} style={{ width: '100%' }}>
+            Add Plant
+          </Button>
+        ) : (
+          <IconButton type="submit" icon="add" />
+        )}
+      </GridCell>
+    </Grid>
   );
 };
 
