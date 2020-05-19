@@ -3,7 +3,7 @@ import { Collection } from '../utilities/state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
 import { waterPlant, createPlant, refreshPlants } from '../data/actions';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import '@rmwc/list/styles';
 import {

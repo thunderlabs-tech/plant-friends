@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 
 import '@rmwc/list/styles';
 import '@rmwc/icon-button/styles';
-import { GridCell, Grid, GridRow } from '@rmwc/grid';
+import { GridCell, Grid } from '@rmwc/grid';
 import { DataManagementRouteParams } from './DataManagementRoute';
 import Surface from '../components/Surface';
 import Layout from '../components/Layout';
