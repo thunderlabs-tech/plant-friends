@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef, ChangeEvent } from 'react';
 import { Collection } from '../utilities/state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
-import { waterPlant, createPlant, refreshPlants } from '../data/actions';
+import { waterPlant, createPlant, refreshPlants, batchCreatePlants } from '../data/actions';
 import { Link } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
@@ -28,6 +28,7 @@ import { PlantListRouteParams } from './PlantListRoute';
 import Surface from '../components/Surface';
 import Layout from '../components/Layout';
 import generateCSV from '../data/generateCSV';
+import parseCSV from '../data/parseCSV';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -55,11 +56,30 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
     createPlant(plant, plants.dispatch);
   };
 
+  const requestCsv = () => {
+    inputRef.current!.click();
+  };
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (!files) return;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const csvContent = await file.text();
+      batchCreatePlants(parseCSV(csvContent), plants.dispatch);
+    }
+  };
+
   return (
     <Layout
       appBar={{
         title: 'Plant Friends',
         actionItems: [
+          {
+            icon: 'cloud_upload',
+            onClick: requestCsv,
+          },
           {
             icon: 'cloud_download',
             onClick: () => downloadCsv(plants.data),
@@ -68,6 +88,13 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
         ],
       }}
     >
+      <input
+        ref={inputRef}
+        type="file"
+        accept="text/csv"
+        style={{ position: 'absolute', left: -10000 }}
+        onChange={onUploadInputChange}
+      />
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
           <Surface z={1}>
