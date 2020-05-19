@@ -47,3 +47,15 @@ export async function refreshPlants(plantDispatch: Collection<Plant>['dispatch']
   plantDispatch.setData(await persistence.loadPlants());
   plantDispatch.setLoadingState(LoadingState.ready);
 }
+
+export async function batchCreatePlants(
+  plants: Omit<Plant, 'id'>[],
+  plantDispatch: Collection<Plant>['dispatch']
+): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const newPlants = await persistence.batchCreatePlants(plants);
+  plantDispatch.setData(newPlants);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+}

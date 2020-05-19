@@ -20,10 +20,18 @@ function setItem<T>(key: string, value: T, callback?: (err: any, value: T) => vo
   return localforage.setItem<T>(storageKey(key), value, callback);
 }
 
+async function getIdCounter(): Promise<number> {
+  return (await getItem<number | undefined>('id-counter')) || 0;
+}
+
+async function setIdCounter(nextId: number): Promise<number> {
+  return setItem<number>('id-counter', nextId);
+}
+
 async function getNextId(): Promise<string> {
-  const idCounter: number = (await getItem<number | undefined>('id-counter')) || 0;
+  const idCounter: number = await getIdCounter();
   const nextId = idCounter + 1;
-  setItem<number>('id-counter', nextId);
+  setIdCounter(nextId);
   return nextId.toString();
 }
 
@@ -56,6 +64,20 @@ const persistence = {
     const newPlants = [...allPlants, newPlant];
 
     return persistence.storePlants(newPlants);
+  },
+
+  batchCreatePlants: async (plantDescriptors: Omit<Plant, 'id'>[]): Promise<Plant[]> => {
+    const allPlants = await persistence.loadPlants();
+    let idCounter = await getIdCounter();
+
+    const newPlants: Plant[] = plantDescriptors.map((plantDescriptor) => {
+      idCounter += 1;
+      return { ...plantDescriptor, id: idCounter.toString() };
+    });
+
+    await setIdCounter(idCounter);
+
+    return persistence.storePlants([...allPlants, ...newPlants]);
   },
 };
 export type Persistence = typeof persistence;
