@@ -33,7 +33,6 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
           label="Name"
           placeholder="Add plant"
           id="newPlant-name"
-          autoFocus={!isPhone}
           name="newPlant-name"
           value={name}
           onChange={useCallback((e) => setName(e.currentTarget.value), [setName])}
