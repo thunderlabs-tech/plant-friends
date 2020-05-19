@@ -73,6 +73,10 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
     }
   };
 
+  const onTextCSVInputChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+    batchCreatePlants(parseCSV(e.currentTarget.value), plants.dispatch);
+  };
+
   return (
     <Layout
       appBar={{
@@ -105,6 +109,7 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
           <Surface z={1}>
+            <textarea onChange={onTextCSVInputChange} />
             <List twoLine avatarList theme={['onSurface']}>
               {unwateredPlants.length > 0 &&
                 unwateredPlants.map((plant) => (
