@@ -4,6 +4,7 @@ import partition from 'lodash/partition';
 import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
 import { waterPlant, createPlant, refreshPlants } from '../data/actions';
 import { Link } from 'react-router-dom';
+import { saveAs } from 'file-saver';
 
 import '@rmwc/list/styles';
 import {
@@ -26,6 +27,7 @@ import PlantAvatar from '../components/PlantAvatar';
 import { PlantListRouteParams } from './PlantListRoute';
 import Surface from '../components/Surface';
 import Layout from '../components/Layout';
+import generateCSV from '../data/generateCSV';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -35,6 +37,11 @@ function formatTimeSinceWatered(plant: Plant) {
   const date = lastWateredAt(plant);
   if (!date) return `Never watered`;
   return `Last watered ${date.toLocaleDateString()}`;
+}
+
+function downloadCsv(plants: Plant[]) {
+  const csvContent = generateCSV(plants);
+  saveAs(csvContent, 'Plant Friends data.csv');
 }
 
 const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteParams }> = ({ plants }) => {
@@ -52,7 +59,13 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
     <Layout
       appBar={{
         title: 'Plant Friends',
-        actionItems: [{ icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) }],
+        actionItems: [
+          {
+            icon: 'cloud_download',
+            onClick: () => downloadCsv(plants.data),
+          },
+          { icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) },
+        ],
       }}
     >
       <Grid style={{ padding: 0 }}>
