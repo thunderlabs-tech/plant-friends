@@ -15,6 +15,7 @@ import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
 import DeadPlantListRoute from '../routes/DeadPlantListRoute';
 import DeadPlantDetailRoute from '../routes/DeadPlantDetailRoute';
+import DataManagementRoute from '../routes/DataManagementRoute';
 
 export type AppProps = {};
 
@@ -43,6 +44,7 @@ const App: React.FC<AppProps> = () => {
               PlantListRoute({ plants }),
               DeadPlantListRoute({ plants }),
               DeadPlantDetailRoute({ plants }),
+              DataManagementRoute({ plants: plants }),
               RootRoute({ plants }),
             ]}
           />
