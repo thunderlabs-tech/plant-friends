@@ -123,7 +123,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                   {plant.wateringTimes.length > 0 ? (
                     <>
                       <Typography use="body1">Watered at:</Typography>
-                      <List>
+                      <List nonInteractive>
                         {plant.wateringTimes.map((date, i) => {
                           return <ListItem key={i}>{formatWateringTime(date)}</ListItem>;
                         })}
