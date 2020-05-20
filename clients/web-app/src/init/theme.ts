@@ -1,6 +1,6 @@
 import { ThemeProviderProps } from '@rmwc/theme';
 
-const primaryColor = '#10c586';
+export const primaryColor = '#10c586';
 const secondaryColor = '#c5104f';
 
 const theme: ThemeProviderProps['options'] = {

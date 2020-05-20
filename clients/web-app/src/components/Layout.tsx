@@ -3,6 +3,7 @@ import '@rmwc/top-app-bar/styles';
 import { SimpleTopAppBar, TopAppBarFixedAdjust, SimpleTopAppBarProps } from '@rmwc/top-app-bar';
 import '@rmwc/grid/styles';
 import { ComponentProps } from '@rmwc/types';
+import { primaryColor } from '../init/theme';
 import styles from './Layout.module.css';
 
 export type LayoutProps = {
@@ -13,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children, appBar }) => {
   return (
     <div className={styles.root}>
       <SimpleTopAppBar {...appBar} theme={['primaryBg']} />
-      <TopAppBarFixedAdjust />
+      <TopAppBarFixedAdjust style={{ backgroundColor: primaryColor }} />
 
       <div className={styles.childrenContainer}>{children}</div>
     </div>
