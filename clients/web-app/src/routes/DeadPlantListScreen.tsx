@@ -1,0 +1,68 @@
+import React from 'react';
+import { Collection } from '../utilities/state/useCollection';
+import { Plant, formatTimeOfDeath } from '../data/Plant';
+import { Link } from 'react-router-dom';
+
+import '@rmwc/list/styles';
+import { List, ListItem, ListItemText, ListItemPrimaryText, ListItemSecondaryText, ListItemGraphic } from '@rmwc/list';
+import '@rmwc/icon-button/styles';
+import { GridCell, Grid } from '@rmwc/grid';
+
+import { plantDetailUrl } from './PlantDetailRoute';
+import PlantAvatar from '../components/PlantAvatar';
+import { DeadPlantListRouteParams } from './DeadPlantListRoute';
+import Surface from '../components/Surface';
+import Layout from '../components/Layout';
+import { plantListUrl } from './PlantListRoute';
+import { Typography } from '@rmwc/typography';
+
+import css from './DeadPlantListScreen.module.css';
+
+export type DeadPlantListScreenProps = {
+  deadPlants: Collection<Plant>;
+};
+
+// TO DO: hook up back link from details view to graveyard - use route structure to differentiate
+
+const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPlantListRouteParams }> = ({
+  deadPlants,
+}) => {
+  return (
+    <Layout
+      appBar={{
+        title: 'Graveyard',
+        navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+      }}
+    >
+      <Grid style={{ padding: 0 }}>
+        <GridCell tablet={8} desktop={12}>
+          <Surface z={1}>
+            {deadPlants.data.length > 0 && (
+              <List twoLine avatarList theme={['onSurface']}>
+                {deadPlants.data.map((plant) => (
+                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                    <ListItemText>
+                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                      <ListItemSecondaryText>{formatTimeOfDeath(plant)}</ListItemSecondaryText>
+                    </ListItemText>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+
+            {deadPlants.data.length === 0 && (
+              <Typography tag="div" use="caption" className={css.emptyMessage}>
+                The graveyard is empty.
+                <br />
+                Eerie...
+              </Typography>
+            )}
+          </Surface>
+        </GridCell>
+      </Grid>
+    </Layout>
+  );
+};
+
+export default DeadPlantListScreen;
