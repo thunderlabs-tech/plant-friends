@@ -62,6 +62,10 @@ const persistence = {
     return await getItem<Plant[]>(DEAD_PLANTS_KEY);
   },
 
+  storeDeadPlants: (plants: Plant[]): Promise<Plant[]> => {
+    return setItem<Plant[]>(DEAD_PLANTS_KEY, plants);
+  },
+
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
     const plantIndex = allPlants.findIndex((element) => element.id === plant.id);
@@ -73,13 +77,40 @@ const persistence = {
     return persistence.storePlants(newPlants);
   },
 
-  createPlant: async (plantDescriptor: Omit<Plant, 'id'>): Promise<Plant[]> => {
+  removePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
 
-    const newPlant = { ...plantDescriptor, id: await getNextId() };
-    const newPlants = [...allPlants, newPlant];
+    const newPlants = allPlants.filter((element) => element.id !== plant.id);
 
     return persistence.storePlants(newPlants);
+  },
+
+  addPlant: async (plant: Plant): Promise<Plant[]> => {
+    const allPlants = await persistence.loadPlants();
+
+    const newPlants = [...allPlants, plant];
+
+    return persistence.storePlants(newPlants);
+  },
+
+  createPlant: async (plantDescriptor: Omit<Plant, 'id'>): Promise<Plant[]> => {
+    const newPlant = { ...plantDescriptor, id: await getNextId() };
+    return persistence.addPlant(newPlant);
+  },
+
+  addDeadPlant: async (plant: Plant): Promise<Plant[]> => {
+    const deadPlants = await persistence.loadDeadPlants();
+    const newDeadPlants = [...deadPlants, plant];
+
+    return persistence.storeDeadPlants(newDeadPlants);
+  },
+
+  removeDeadPlant: async (plant: Plant): Promise<Plant[]> => {
+    const allDeadPlants = await persistence.loadDeadPlants();
+
+    const newDeadPlants = allDeadPlants.filter((element) => element.id !== plant.id);
+
+    return persistence.storeDeadPlants(newDeadPlants);
   },
 
   batchCreatePlants: async (plantDescriptors: Omit<Plant, 'id'>[]): Promise<Plant[]> => {
