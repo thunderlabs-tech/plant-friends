@@ -45,19 +45,6 @@ const migrations = Object.freeze([
     await setItem(PLANTS_KEY, []);
     await setItem(ID_COUNTER_KEY, 0);
   },
-  async function addSunlightAndTemperatureNeeds() {
-    const plants = await getItem<Plant[]>(PLANTS_KEY);
-    const updatedPlants = plants.map((incompletePlant) => {
-      return {
-        sunTypeNeeded: undefined,
-        sunAmountNeededInHours: undefined,
-        temperatureMinimumInCelsius: undefined,
-        temperatureMaximumInCelsius: undefined,
-        ...incompletePlant,
-      };
-    });
-    await setItem(PLANTS_KEY, updatedPlants);
-  },
 ]);
 
 const persistence = {
