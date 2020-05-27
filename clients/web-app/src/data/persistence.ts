@@ -46,7 +46,7 @@ const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
+    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
