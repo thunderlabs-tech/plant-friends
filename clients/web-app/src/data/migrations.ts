@@ -7,16 +7,22 @@ export async function runMigrations({
   setItem,
   PLANTS_KEY,
   ID_COUNTER_KEY,
+  DEAD_PLANTS_KEY,
 }: {
   getItem: getItem;
   setItem: setItem;
   PLANTS_KEY: string;
   ID_COUNTER_KEY: string;
+  DEAD_PLANTS_KEY: string;
 }): Promise<void> {
   const migrations = Object.freeze([
     async function createInitialStructure() {
       await setItem(ID_COUNTER_KEY, 0);
       await setItem(PLANTS_KEY, []);
+    },
+
+    async function addDeadPlants() {
+      await setItem(DEAD_PLANTS_KEY, []);
     },
   ]);
 

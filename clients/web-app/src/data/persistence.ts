@@ -41,12 +41,13 @@ async function getNextId(): Promise<string> {
 
 const ID_COUNTER_KEY = 'id-counter';
 const PLANTS_KEY = 'plants';
+const DEAD_PLANTS_KEY = 'dead-plants';
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
+    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY, DEAD_PLANTS_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
