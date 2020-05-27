@@ -13,6 +13,7 @@ import persistence from '../data/persistence';
 import PlantDetailRoute from '../routes/PlantDetailRoute';
 import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
+import DeadPlantListRoute from '../routes/DeadPlantListRoute';
 
 export type AppProps = {};
 
@@ -41,9 +42,10 @@ const App: React.FC<AppProps> = () => {
         <Router>
           <Switch
             children={[
-              PlantDetailRoute({ plants: plants }),
-              PlantListRoute({ plants: plants }),
-              RootRoute({ plants: plants }),
+              PlantDetailRoute({ plants, deadPlants }),
+              PlantListRoute({ plants }),
+              DeadPlantListRoute({ deadPlants }),
+              RootRoute({ plants }),
             ]}
           />
         </Router>

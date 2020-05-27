@@ -1,8 +1,6 @@
 import React from 'react';
 
-import PlantDetailScreen from './PlantDetailScreen';
-import { Plant } from '../data/Plant';
-import { Collection } from '../utilities/state/useCollection';
+import PlantDetailScreen, { PlantDetailScreenProps } from './PlantDetailScreen';
 import { Route, RouteComponentProps } from 'react-router-dom';
 
 export type PlantDetailRouteParams = { id: string };
@@ -11,13 +9,13 @@ export function plantDetailUrl(plantId: string): string {
   return `/plants/${plantId}`;
 }
 
-export default function PlantDetailRoute(appState: { plants: Collection<Plant> }) {
+export default function PlantDetailRoute(props: PlantDetailScreenProps) {
   return (
     <Route
       exact
       path="/plants/:id"
-      render={(props: RouteComponentProps<PlantDetailRouteParams>) => {
-        return <PlantDetailScreen params={props.match.params} {...appState} />;
+      render={(routeProps: RouteComponentProps<PlantDetailRouteParams>) => {
+        return <PlantDetailScreen params={routeProps.match.params} {...props} />;
       }}
     />
   );

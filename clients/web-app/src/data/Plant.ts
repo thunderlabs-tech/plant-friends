@@ -44,3 +44,9 @@ export function formatNextWaterDate(plant: Plant) {
   const nextWaterDate = add(lastWateredAtDate, { days: plant.wateringPeriodInDays });
   return `Water next on ${nextWaterDate.toLocaleDateString()}`;
 }
+
+export function formatTimeOfDeath(plant: Plant) {
+  if (!plant.timeOfDeath) return `Still going strong`;
+  // TO DO: add `createdAt` and format epitaph as "June 2020 - July 2020"
+  return `Died ${plant.timeOfDeath.toLocaleDateString()}`;
+}

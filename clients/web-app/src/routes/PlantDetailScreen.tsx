@@ -1,9 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 import { Collection } from '../utilities/state/useCollection';
-import { Plant, formatNextWaterDate } from '../data/Plant';
+import { Plant, formatNextWaterDate, formatTimeOfDeath } from '../data/Plant';
 
 import { Link, useHistory } from 'react-router-dom';
-import { updatePlant, waterPlant } from '../data/actions';
+import { updatePlant, waterPlant, moveToGraveyard, restoreFromGraveyard } from '../data/actions';
 import { plantListUrl } from '../routes/PlantListRoute';
 import { PlantDetailRouteParams } from './PlantDetailRoute';
 import Layout from '../components/Layout';
@@ -24,6 +24,7 @@ import { useMediaQuery } from 'react-responsive';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
+  deadPlants: Collection<Plant>;
 };
 
 function formatWateringTime(date: Date): string {
@@ -38,9 +39,15 @@ function formatWateringTime(date: Date): string {
 
 const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
   plants,
+  deadPlants,
   params,
 }) => {
-  const plant = plants.data.find((plantElement) => plantElement.id === params.id);
+  let plant = plants.data.find((plantElement) => plantElement.id === params.id);
+  if (!plant) {
+    plant = deadPlants.data.find((plantElement) => plantElement.id === params.id);
+  }
+
+  const isPlantAlive = plant && !plant.timeOfDeath;
 
   const history = useHistory();
   const [name, setName] = useState(plant ? plant.name : '');
@@ -50,6 +57,15 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
   const onWaterNowClick = () => {
     waterPlant(plant!, plants.dispatch);
+  };
+
+  const onMoveToGraveyardClick = async () => {
+    await moveToGraveyard(plant!, plants.dispatch, deadPlants.dispatch);
+    history.push(plantListUrl());
+  };
+
+  const onResurrectClick = async () => {
+    restoreFromGraveyard(plant!, plants.dispatch, deadPlants.dispatch);
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -110,13 +126,28 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                 </GridCell>
 
                 <GridCell tablet={8} style={{ textAlign: 'right' }}>
-                  <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
-                    Water Now
-                  </Button>
+                  {isPlantAlive ? (
+                    <>
+                      <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
+                        Water Now
+                      </Button>
+                      <Button tag="a" icon="delete" onClick={onMoveToGraveyardClick} theme={['primary']}>
+                        Move to Graveyard
+                      </Button>
+                    </>
+                  ) : (
+                    <Button tag="a" icon="delete" onClick={onResurrectClick} theme={['primary']}>
+                      Resurrect
+                    </Button>
+                  )}
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
-                  <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                  {isPlantAlive ? (
+                    <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                  ) : (
+                    <Typography use="body1">{formatTimeOfDeath(plant)}</Typography>
+                  )}
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
