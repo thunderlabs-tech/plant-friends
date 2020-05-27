@@ -1,5 +1,6 @@
 import localforage from 'localforage';
 import { Plant } from './Plant';
+import { runMigrations } from './migrations';
 
 localforage.config({
   name: 'plant-friends',
@@ -12,10 +13,12 @@ function storageKey(key: string): string {
   return `${namespace}-${key}`;
 }
 
+export type getItem = <T>(key: string, callback?: (err: any, value: T) => void) => Promise<T>;
 function getItem<T>(key: string, callback?: (err: any, value: T) => void): Promise<T> {
   return localforage.getItem<T>(storageKey(key), callback);
 }
 
+export type setItem = <T>(key: string, value: T, callback?: (err: any, value: T) => void) => Promise<T>;
 function setItem<T>(key: string, value: T, callback?: (err: any, value: T) => void): Promise<T> {
   return localforage.setItem<T>(storageKey(key), value, callback);
 }
@@ -36,32 +39,14 @@ async function getNextId(): Promise<string> {
   return nextId.toString();
 }
 
-const NEXT_MIGRATION_INDEX_KEY = 'next-migration-index';
 const ID_COUNTER_KEY = 'id-counter';
 const PLANTS_KEY = 'plants';
-
-const migrations = Object.freeze([
-  async function initialStructure() {
-    await setItem(PLANTS_KEY, []);
-    await setItem(ID_COUNTER_KEY, 0);
-  },
-]);
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    const plantsExist = (await getItem<Plant[] | undefined>(PLANTS_KEY)) !== undefined;
-    const nextMigrationIndex = (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || plantsExist ? 1 : 0;
-
-    if (nextMigrationIndex > migrations.length) return;
-
-    for (let i = nextMigrationIndex; i < migrations.length; i++) {
-      const nextMigration = migrations[i];
-      await nextMigration();
-    }
-
-    setItem(NEXT_MIGRATION_INDEX_KEY, migrations.length);
+    runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
