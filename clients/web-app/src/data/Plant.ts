@@ -9,6 +9,7 @@ export type Plant = {
   sunAmountNeededInHours?: number;
   temperatureMinimumInCelsius?: number;
   temperatureMaximumInCelsius?: number;
+  timeOfDeath?: Date;
 };
 
 export function lastWateredAt(plant: Plant): Date | undefined {
