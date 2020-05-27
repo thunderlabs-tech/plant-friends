@@ -58,6 +58,10 @@ const persistence = {
     return setItem<Plant[]>(PLANTS_KEY, plants);
   },
 
+  loadDeadPlants: async (): Promise<Plant[]> => {
+    return await getItem<Plant[]>(DEAD_PLANTS_KEY);
+  },
+
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
     const plantIndex = allPlants.findIndex((element) => element.id === plant.id);
