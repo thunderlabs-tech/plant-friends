@@ -14,13 +14,6 @@ import PlantDetailRoute from '../routes/PlantDetailRoute';
 import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
 
-// const styles = () =>
-//   createStyles({
-//     updating: {
-//       opacity: 0.9,
-//     },
-//   });
-
 export type AppProps = {};
 
 const App: React.FC<AppProps> = () => {
