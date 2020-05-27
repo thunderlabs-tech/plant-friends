@@ -18,15 +18,20 @@ export type AppProps = {};
 
 const App: React.FC<AppProps> = () => {
   const plants = useCollection<Plant>();
+  const deadPlants = useCollection<Plant>();
 
   useEffect(() => {
     async function fetchData() {
       await persistence.runMigrations();
+
       plants.dispatch.setData(await persistence.loadPlants());
       plants.dispatch.setLoadingState(LoadingState.ready);
+
+      deadPlants.dispatch.setData(await persistence.loadDeadPlants());
+      deadPlants.dispatch.setLoadingState(LoadingState.ready);
     }
     fetchData();
-  }, [plants.dispatch]);
+  }, [plants.dispatch, deadPlants.dispatch]);
 
   return (
     <ThemeProvider options={theme}>
