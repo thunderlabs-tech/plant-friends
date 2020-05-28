@@ -4,7 +4,15 @@ import { Plant, formatTimeOfDeath } from '../data/Plant';
 import { Link } from 'react-router-dom';
 
 import '@rmwc/list/styles';
-import { List, ListItem, ListItemText, ListItemPrimaryText, ListItemSecondaryText, ListItemGraphic } from '@rmwc/list';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemPrimaryText,
+  ListItemSecondaryText,
+  ListItemGraphic,
+  ListItemMeta,
+} from '@rmwc/list';
 import '@rmwc/icon-button/styles';
 import { GridCell, Grid } from '@rmwc/grid';
 
@@ -17,6 +25,8 @@ import { Typography } from '@rmwc/typography';
 
 import css from './DeadPlantListScreen.module.css';
 import { deadPlantDetailUrl } from './DeadPlantDetailRoute';
+import { IconButton } from '@rmwc/icon-button';
+import { restoreFromGraveyard } from '../data/actions';
 
 export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
@@ -24,6 +34,10 @@ export type DeadPlantListScreenProps = {
 
 const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPlantListRouteParams }> = ({ plants }) => {
   const deadPlants = plants.data.filter((plant) => plant.timeOfDeath !== undefined);
+
+  const onResurrectClick = (plant: Plant) => {
+    restoreFromGraveyard(plant!, plants.dispatch);
+  };
 
   return (
     <Layout
@@ -44,6 +58,17 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPla
                       <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
                       <ListItemSecondaryText>{formatTimeOfDeath(plant)}</ListItemSecondaryText>
                     </ListItemText>
+                    <ListItemMeta>
+                      <IconButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onResurrectClick(plant);
+                        }}
+                        theme={['primary']}
+                        icon="restore_from_trash"
+                      />
+                    </ListItemMeta>
                   </ListItem>
                 ))}
               </List>

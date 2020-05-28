@@ -139,7 +139,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                       </Button>
                     </>
                   ) : (
-                    <Button tag="a" icon="delete" onClick={onResurrectClick} theme={['primary']}>
+                    <Button tag="a" icon="restore_from_trash" onClick={onResurrectClick} theme={['primary']}>
                       Resurrect
                     </Button>
                   )}
