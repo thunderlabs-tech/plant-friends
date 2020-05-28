@@ -101,6 +101,10 @@ const persistence = {
 
     return persistence.storePlants([...allPlants, ...newPlants]);
   },
+
+  deleteAll: async () => {
+    return Promise.all([persistence.storePlants([]), setIdCounter(0)]);
+  },
 };
 export type Persistence = typeof persistence;
 

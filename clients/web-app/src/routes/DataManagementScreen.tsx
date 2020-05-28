@@ -1,7 +1,7 @@
 import React, { useRef, ChangeEvent, useState } from 'react';
 import { Collection } from '../utilities/state/useCollection';
 import { Plant } from '../data/Plant';
-import { batchCreatePlants } from '../data/actions';
+import { batchCreatePlants, deleteAllData } from '../data/actions';
 import { saveAs } from 'file-saver';
 
 import '@rmwc/list/styles';
@@ -62,6 +62,10 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
     }
   };
 
+  const onDeleteAllClick = () => {
+    deleteAllData(plants.dispatch, history);
+  };
+
   return (
     <Layout
       appBar={{
@@ -120,6 +124,20 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
               </GridCell>
             </>
           )}
+
+          <GridCell tablet={8} desktop={12}>
+            <hr />
+          </GridCell>
+
+          <GridCell tablet={8} desktop={12}>
+            <Button onClick={onDeleteAllClick} icon="delete_sweep">
+              Delete All Data
+            </Button>
+            <br />
+            <Typography use="caption">This will delete all Plant Friends data from this device</Typography>
+            <br />
+            <Typography use="caption">WARNING! You can't undo this!</Typography>
+          </GridCell>
         </Grid>
       </Surface>
     </Layout>

@@ -81,3 +81,12 @@ export async function restoreFromGraveyard(plant: Plant, plantDispatch: Collecti
 
   plantDispatch.setLoadingState(LoadingState.ready);
 }
+
+export async function deleteAllData(
+  plantDispatch: Collection<Plant>['dispatch'],
+  history: ReturnType<typeof useHistory>
+): Promise<void> {
+  await persistence.deleteAll();
+  plantDispatch.setData([]);
+  history.push('/');
+}
