@@ -111,7 +111,7 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
                   placeholder="Name"
                 />
                 <Typography use="caption">
-                  Unfortunately your browser doesn't support a CSV file upload. Use this input to paste CSV data instead
+                  Unfortunately your device doesn't support CSV file upload. Use this input to paste CSV data instead
                 </Typography>
                 <br />
                 <Button onClick={onParseCSVClick} icon="cloud_upload">
