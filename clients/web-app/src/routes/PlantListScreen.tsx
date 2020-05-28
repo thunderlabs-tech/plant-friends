@@ -1,10 +1,9 @@
-import React, { useRef, ChangeEvent } from 'react';
+import React from 'react';
 import { Collection } from '../utilities/state/useCollection';
 import partition from 'lodash/partition';
 import { Plant, lastWateredAt, needsWater, formatNextWaterDate } from '../data/Plant';
-import { waterPlant, createPlant, refreshPlants, batchCreatePlants } from '../data/actions';
+import { waterPlant, createPlant, refreshPlants } from '../data/actions';
 import { Link } from 'react-router-dom';
-import { saveAs } from 'file-saver';
 
 import '@rmwc/list/styles';
 import {
@@ -27,9 +26,8 @@ import PlantAvatar from '../components/PlantAvatar';
 import { PlantListRouteParams } from './PlantListRoute';
 import Surface from '../components/Surface';
 import Layout from '../components/Layout';
-import generateCSV from '../data/generateCSV';
-import parseCSV from '../data/parseCSV';
 import { deadPlantListUrl } from './DeadPlantListRoute';
+import { dataManagementUrl } from './DataManagementRoute';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -39,11 +37,6 @@ function formatTimeSinceWatered(plant: Plant) {
   const date = lastWateredAt(plant);
   if (!date) return `Never watered`;
   return `Last watered ${date.toLocaleDateString()}`;
-}
-
-function downloadCsv(plants: Plant[]) {
-  const csvContent = generateCSV(plants);
-  saveAs(csvContent, 'Plant Friends data.csv');
 }
 
 const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteParams }> = ({ plants }) => {
@@ -58,21 +51,6 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
     createPlant(plant, plants.dispatch);
   };
 
-  const requestCsv = () => {
-    inputRef.current!.click();
-  };
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
-    if (!files) return;
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const csvContent = await file.text();
-      batchCreatePlants(parseCSV(csvContent), plants.dispatch);
-    }
-  };
-
   return (
     <Layout
       appBar={{
@@ -84,24 +62,14 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
             to: deadPlantListUrl(),
           },
           {
-            icon: 'cloud_upload_outlined',
-            onClick: requestCsv,
-          },
-          {
-            icon: 'cloud_download',
-            onClick: () => downloadCsv(livePlants),
+            icon: 'cloud_queue',
+            tag: Link,
+            to: dataManagementUrl(),
           },
           { icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) },
         ],
       }}
     >
-      <input
-        ref={inputRef}
-        type="file"
-        accept="text/csv"
-        style={{ position: 'absolute', left: -10000 }}
-        onChange={onUploadInputChange}
-      />
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
           <Surface z={1}>

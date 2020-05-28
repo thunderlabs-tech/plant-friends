@@ -51,13 +51,15 @@ export async function refreshPlants(plantDispatch: Collection<Plant>['dispatch']
 export async function batchCreatePlants(
   plants: Omit<Plant, 'id'>[],
   plantDispatch: Collection<Plant>['dispatch']
-): Promise<void> {
+): Promise<Plant[]> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
   const newPlants = await persistence.batchCreatePlants(plants);
   plantDispatch.setData(newPlants);
 
   plantDispatch.setLoadingState(LoadingState.ready);
+
+  return newPlants;
 }
 
 export async function moveToGraveyard(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
@@ -78,4 +80,13 @@ export async function restoreFromGraveyard(plant: Plant, plantDispatch: Collecti
   plantDispatch.setData(newPlants);
 
   plantDispatch.setLoadingState(LoadingState.ready);
+}
+
+export async function deleteAllData(
+  plantDispatch: Collection<Plant>['dispatch'],
+  history: ReturnType<typeof useHistory>
+): Promise<void> {
+  await persistence.deleteAll();
+  plantDispatch.setData([]);
+  history.push('/');
 }
