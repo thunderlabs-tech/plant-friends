@@ -59,3 +59,23 @@ export async function batchCreatePlants(
 
   plantDispatch.setLoadingState(LoadingState.ready);
 }
+
+export async function moveToGraveyard(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const updatedPlant = { ...plant, timeOfDeath: new Date() };
+  const newPlants = await persistence.updatePlant(updatedPlant);
+  plantDispatch.setData(newPlants);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+}
+
+export async function restoreFromGraveyard(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const updatedPlant = { ...plant, timeOfDeath: undefined };
+  const newPlants = await persistence.updatePlant(updatedPlant);
+  plantDispatch.setData(newPlants);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+}

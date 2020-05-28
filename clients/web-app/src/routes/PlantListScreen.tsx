@@ -29,6 +29,7 @@ import Surface from '../components/Surface';
 import Layout from '../components/Layout';
 import generateCSV from '../data/generateCSV';
 import parseCSV from '../data/parseCSV';
+import { deadPlantListUrl } from './DeadPlantListRoute';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -46,7 +47,8 @@ function downloadCsv(plants: Plant[]) {
 }
 
 const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteParams }> = ({ plants }) => {
-  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWater);
+  const livePlants = plants.data.filter((plant) => !plant.timeOfDeath);
+  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(livePlants, needsWater);
 
   const onWaterPlant = (plant: Plant) => {
     waterPlant(plant, plants.dispatch);
@@ -77,12 +79,17 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
         title: 'Plant Friends',
         actionItems: [
           {
-            icon: 'cloud_upload',
+            icon: 'delete_outlined',
+            tag: Link,
+            to: deadPlantListUrl(),
+          },
+          {
+            icon: 'cloud_upload_outlined',
             onClick: requestCsv,
           },
           {
             icon: 'cloud_download',
-            onClick: () => downloadCsv(plants.data),
+            onClick: () => downloadCsv(livePlants),
           },
           { icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) },
         ],

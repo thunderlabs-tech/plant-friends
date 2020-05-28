@@ -13,13 +13,8 @@ import persistence from '../data/persistence';
 import PlantDetailRoute from '../routes/PlantDetailRoute';
 import PlantListRoute from '../routes/PlantListRoute';
 import RootRoute from '../routes/RootRoute';
-
-// const styles = () =>
-//   createStyles({
-//     updating: {
-//       opacity: 0.9,
-//     },
-//   });
+import DeadPlantListRoute from '../routes/DeadPlantListRoute';
+import DeadPlantDetailRoute from '../routes/DeadPlantDetailRoute';
 
 export type AppProps = {};
 
@@ -28,6 +23,8 @@ const App: React.FC<AppProps> = () => {
 
   useEffect(() => {
     async function fetchData() {
+      await persistence.runMigrations();
+
       plants.dispatch.setData(await persistence.loadPlants());
       plants.dispatch.setLoadingState(LoadingState.ready);
     }
@@ -42,9 +39,11 @@ const App: React.FC<AppProps> = () => {
         <Router>
           <Switch
             children={[
-              PlantDetailRoute({ plants: plants }),
-              PlantListRoute({ plants: plants }),
-              RootRoute({ plants: plants }),
+              PlantDetailRoute({ plants }),
+              PlantListRoute({ plants }),
+              DeadPlantListRoute({ plants }),
+              DeadPlantDetailRoute({ plants }),
+              RootRoute({ plants }),
             ]}
           />
         </Router>

@@ -1,10 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 import { Collection } from '../utilities/state/useCollection';
-import { Plant, formatNextWaterDate } from '../data/Plant';
+import { Plant, formatNextWaterDate, formatTimeOfDeath } from '../data/Plant';
 
 import { Link, useHistory } from 'react-router-dom';
-import { updatePlant, waterPlant } from '../data/actions';
-import { plantListUrl } from '../routes/PlantListRoute';
+import { updatePlant, waterPlant, moveToGraveyard, restoreFromGraveyard } from '../data/actions';
 import { PlantDetailRouteParams } from './PlantDetailRoute';
 import Layout from '../components/Layout';
 import Surface from '../components/Surface';
@@ -21,9 +20,12 @@ import { List, ListItem } from '@rmwc/list';
 
 import TextFieldStyles from '../components/TextField.module.css';
 import { useMediaQuery } from 'react-responsive';
+import { deadPlantListUrl } from './DeadPlantListRoute';
+import { plantListUrl } from './PlantListRoute';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
+  deadPlantRoute?: boolean;
 };
 
 function formatWateringTime(date: Date): string {
@@ -39,6 +41,7 @@ function formatWateringTime(date: Date): string {
 const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
   plants,
   params,
+  deadPlantRoute,
 }) => {
   const plant = plants.data.find((plantElement) => plantElement.id === params.id);
 
@@ -52,6 +55,14 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
     waterPlant(plant!, plants.dispatch);
   };
 
+  const onMoveToGraveyardClick = async () => {
+    await moveToGraveyard(plant!, plants.dispatch);
+  };
+
+  const onResurrectClick = async () => {
+    restoreFromGraveyard(plant!, plants.dispatch);
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updatePlant({ ...plant!, name, wateringPeriodInDays }, plants.dispatch, history);
@@ -59,7 +70,13 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
   if (!plant) {
     return (
-      <Layout appBar={{ title: 'Plant Friends' }}>
+      <Layout
+        appBar={{
+          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
+          actionItems: [{ icon: 'check', onClick: onSubmit }],
+          title: 'Plant Friends',
+        }}
+      >
         <Grid>
           <GridCell>
             <Typography use="body1">Can't find that plant</Typography>
@@ -69,11 +86,13 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
     );
   }
 
+  const isPlantAlive = !plant.timeOfDeath;
+
   return (
     <form onSubmit={onSubmit}>
       <Layout
         appBar={{
-          navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
           actionItems: [{ icon: 'check', onClick: onSubmit }],
           title: plant.name,
         }}
@@ -110,13 +129,28 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                 </GridCell>
 
                 <GridCell tablet={8} style={{ textAlign: 'right' }}>
-                  <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
-                    Water Now
-                  </Button>
+                  {isPlantAlive ? (
+                    <>
+                      <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
+                        Water Now
+                      </Button>
+                      <Button tag="a" icon="delete" onClick={onMoveToGraveyardClick} theme={['primary']}>
+                        Move to Graveyard
+                      </Button>
+                    </>
+                  ) : (
+                    <Button tag="a" icon="restore_from_trash" onClick={onResurrectClick} theme={['primary']}>
+                      Resurrect
+                    </Button>
+                  )}
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
-                  <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                  {isPlantAlive ? (
+                    <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                  ) : (
+                    <Typography use="body1">{formatTimeOfDeath(plant)}</Typography>
+                  )}
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
