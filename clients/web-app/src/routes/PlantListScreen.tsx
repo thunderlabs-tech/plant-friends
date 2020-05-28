@@ -62,7 +62,7 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
             to: deadPlantListUrl(),
           },
           {
-            icon: 'cloud_download',
+            icon: 'cloud_queue',
             tag: Link,
             to: dataManagementUrl(),
           },
