@@ -54,9 +54,12 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
     history.push(plantListUrl());
   };
 
-  const onParseCSVClick = () => {
+  const onParseCSVClick = async () => {
     try {
-      batchCreatePlants(parseCSV(csvData), plants.dispatch);
+      const newPlants = await batchCreatePlants(parseCSV(csvData), plants.dispatch);
+
+      alert(`${newPlants.length} plants added`);
+      history.push(plantListUrl());
     } catch (error) {
       alert(`Could not parse CSV data`);
     }
