@@ -5,10 +5,6 @@ export type Plant = {
   name: string;
   wateringPeriodInDays: number;
   wateringTimes: Date[];
-  sunTypeNeeded?: 'direct' | 'shady';
-  sunAmountNeededInHours?: number;
-  temperatureMinimumInCelsius?: number;
-  temperatureMaximumInCelsius?: number;
   timeOfDeath?: Date;
 };
 
