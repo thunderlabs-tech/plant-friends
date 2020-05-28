@@ -21,10 +21,12 @@ import { List, ListItem } from '@rmwc/list';
 
 import TextFieldStyles from '../components/TextField.module.css';
 import { useMediaQuery } from 'react-responsive';
+import { deadPlantListUrl } from './DeadPlantListRoute';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
   deadPlants: Collection<Plant>;
+  deadPlantRoute?: boolean;
 };
 
 function formatWateringTime(date: Date): string {
@@ -41,11 +43,11 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
   plants,
   deadPlants,
   params,
+  deadPlantRoute,
 }) => {
-  let plant = plants.data.find((plantElement) => plantElement.id === params.id);
-  if (!plant) {
-    plant = deadPlants.data.find((plantElement) => plantElement.id === params.id);
-  }
+  const plant = deadPlantRoute
+    ? deadPlants.data.find((plantElement) => plantElement.id === params.id)
+    : plants.data.find((plantElement) => plantElement.id === params.id);
 
   const isPlantAlive = plant && !plant.timeOfDeath;
 
@@ -89,7 +91,7 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
     <form onSubmit={onSubmit}>
       <Layout
         appBar={{
-          navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+          navigationIcon: { icon: 'close', tag: Link, to: deadPlantListUrl() },
           actionItems: [{ icon: 'check', onClick: onSubmit }],
           title: plant.name,
         }}

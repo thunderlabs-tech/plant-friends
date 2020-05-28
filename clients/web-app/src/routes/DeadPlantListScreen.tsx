@@ -8,7 +8,6 @@ import { List, ListItem, ListItemText, ListItemPrimaryText, ListItemSecondaryTex
 import '@rmwc/icon-button/styles';
 import { GridCell, Grid } from '@rmwc/grid';
 
-import { plantDetailUrl } from './PlantDetailRoute';
 import PlantAvatar from '../components/PlantAvatar';
 import { DeadPlantListRouteParams } from './DeadPlantListRoute';
 import Surface from '../components/Surface';
@@ -17,6 +16,7 @@ import { plantListUrl } from './PlantListRoute';
 import { Typography } from '@rmwc/typography';
 
 import css from './DeadPlantListScreen.module.css';
+import { deadPlantDetailUrl } from './DeadPlantDetailRoute';
 
 export type DeadPlantListScreenProps = {
   deadPlants: Collection<Plant>;
@@ -40,7 +40,7 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPla
             {deadPlants.data.length > 0 && (
               <List twoLine avatarList theme={['onSurface']}>
                 {deadPlants.data.map((plant) => (
-                  <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
+                  <ListItem key={plant.id} tag={Link} to={deadPlantDetailUrl(plant.id)}>
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>
                       <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
