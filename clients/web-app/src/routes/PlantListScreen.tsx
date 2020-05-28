@@ -29,6 +29,7 @@ import Surface from '../components/Surface';
 import Layout from '../components/Layout';
 import generateCSV from '../data/generateCSV';
 import parseCSV from '../data/parseCSV';
+import { deadPlantListUrl } from './DeadPlantListRoute';
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -78,7 +79,12 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
         title: 'Plant Friends',
         actionItems: [
           {
-            icon: 'cloud_upload',
+            icon: 'delete_outlined',
+            tag: Link,
+            to: deadPlantListUrl(),
+          },
+          {
+            icon: 'cloud_upload_outlined',
             onClick: requestCsv,
           },
           {
