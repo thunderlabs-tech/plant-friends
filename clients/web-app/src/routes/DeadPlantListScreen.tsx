@@ -19,27 +19,27 @@ import css from './DeadPlantListScreen.module.css';
 import { deadPlantDetailUrl } from './DeadPlantDetailRoute';
 
 export type DeadPlantListScreenProps = {
-  deadPlants: Collection<Plant>;
+  plants: Collection<Plant>;
 };
 
 // TO DO: hook up back link from details view to graveyard - use route structure to differentiate
 
-const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPlantListRouteParams }> = ({
-  deadPlants,
-}) => {
+const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPlantListRouteParams }> = ({ plants }) => {
+  const deadPlants = plants.data.filter((plant) => plant.timeOfDeath !== undefined);
+
   return (
     <Layout
       appBar={{
         title: 'Graveyard',
-        navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
+        navigationIcon: { icon: 'arrow_back', tag: Link, to: plantListUrl() },
       }}
     >
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
           <Surface z={1}>
-            {deadPlants.data.length > 0 && (
+            {deadPlants.length > 0 && (
               <List twoLine avatarList theme={['onSurface']}>
-                {deadPlants.data.map((plant) => (
+                {deadPlants.map((plant) => (
                   <ListItem key={plant.id} tag={Link} to={deadPlantDetailUrl(plant.id)}>
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>
@@ -51,7 +51,7 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPla
               </List>
             )}
 
-            {deadPlants.data.length === 0 && (
+            {deadPlants.length === 0 && (
               <Typography tag="div" use="caption" className={css.emptyMessage}>
                 The graveyard is empty.
                 <br />

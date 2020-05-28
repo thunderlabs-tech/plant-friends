@@ -60,41 +60,22 @@ export async function batchCreatePlants(
   plantDispatch.setLoadingState(LoadingState.ready);
 }
 
-export async function moveToGraveyard(
-  plant: Plant,
-  plantsDispatch: Collection<Plant>['dispatch'],
-  deadPlantsDispatch: Collection<Plant>['dispatch']
-): Promise<void> {
-  plantsDispatch.setLoadingState(LoadingState.updating);
-  deadPlantsDispatch.setLoadingState(LoadingState.updating);
-
-  const newPlants = await persistence.removePlant(plant);
-  plantsDispatch.setData(newPlants);
+export async function moveToGraveyard(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
 
   const updatedPlant = { ...plant, timeOfDeath: new Date() };
-  const newDeadPlants = await persistence.addDeadPlant(updatedPlant);
-  deadPlantsDispatch.setData(newDeadPlants);
+  const newPlants = await persistence.updatePlant(updatedPlant);
+  plantDispatch.setData(newPlants);
 
-  plantsDispatch.setLoadingState(LoadingState.ready);
-  deadPlantsDispatch.setLoadingState(LoadingState.ready);
+  plantDispatch.setLoadingState(LoadingState.ready);
 }
 
-export async function restoreFromGraveyard(
-  plant: Plant,
-  plantsDispatch: Collection<Plant>['dispatch'],
-  deadPlantsDispatch: Collection<Plant>['dispatch']
-): Promise<void> {
-  plantsDispatch.setLoadingState(LoadingState.updating);
-  deadPlantsDispatch.setLoadingState(LoadingState.updating);
-
-  const newDeadPlants = await persistence.removeDeadPlant(plant);
-  deadPlantsDispatch.setData(newDeadPlants);
+export async function restoreFromGraveyard(plant: Plant, plantDispatch: Collection<Plant>['dispatch']): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
 
   const updatedPlant = { ...plant, timeOfDeath: undefined };
+  const newPlants = await persistence.updatePlant(updatedPlant);
+  plantDispatch.setData(newPlants);
 
-  const newPlants = await persistence.addPlant(updatedPlant);
-  plantsDispatch.setData(newPlants);
-
-  plantsDispatch.setLoadingState(LoadingState.ready);
-  deadPlantsDispatch.setLoadingState(LoadingState.ready);
+  plantDispatch.setLoadingState(LoadingState.ready);
 }

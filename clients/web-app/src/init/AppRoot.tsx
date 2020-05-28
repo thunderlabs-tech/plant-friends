@@ -20,7 +20,6 @@ export type AppProps = {};
 
 const App: React.FC<AppProps> = () => {
   const plants = useCollection<Plant>();
-  const deadPlants = useCollection<Plant>();
 
   useEffect(() => {
     async function fetchData() {
@@ -28,12 +27,9 @@ const App: React.FC<AppProps> = () => {
 
       plants.dispatch.setData(await persistence.loadPlants());
       plants.dispatch.setLoadingState(LoadingState.ready);
-
-      deadPlants.dispatch.setData(await persistence.loadDeadPlants());
-      deadPlants.dispatch.setLoadingState(LoadingState.ready);
     }
     fetchData();
-  }, [plants.dispatch, deadPlants.dispatch]);
+  }, [plants.dispatch]);
 
   return (
     <ThemeProvider options={theme}>
@@ -43,10 +39,10 @@ const App: React.FC<AppProps> = () => {
         <Router>
           <Switch
             children={[
-              PlantDetailRoute({ plants, deadPlants }),
+              PlantDetailRoute({ plants }),
               PlantListRoute({ plants }),
-              DeadPlantListRoute({ deadPlants }),
-              DeadPlantDetailRoute({ plants, deadPlants }),
+              DeadPlantListRoute({ plants }),
+              DeadPlantDetailRoute({ plants }),
               RootRoute({ plants }),
             ]}
           />

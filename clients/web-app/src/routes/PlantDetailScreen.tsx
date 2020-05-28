@@ -4,7 +4,6 @@ import { Plant, formatNextWaterDate, formatTimeOfDeath } from '../data/Plant';
 
 import { Link, useHistory } from 'react-router-dom';
 import { updatePlant, waterPlant, moveToGraveyard, restoreFromGraveyard } from '../data/actions';
-import { plantListUrl } from '../routes/PlantListRoute';
 import { PlantDetailRouteParams } from './PlantDetailRoute';
 import Layout from '../components/Layout';
 import Surface from '../components/Surface';
@@ -22,10 +21,10 @@ import { List, ListItem } from '@rmwc/list';
 import TextFieldStyles from '../components/TextField.module.css';
 import { useMediaQuery } from 'react-responsive';
 import { deadPlantListUrl } from './DeadPlantListRoute';
+import { plantListUrl } from './PlantListRoute';
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
-  deadPlants: Collection<Plant>;
   deadPlantRoute?: boolean;
 };
 
@@ -41,15 +40,10 @@ function formatWateringTime(date: Date): string {
 
 const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
   plants,
-  deadPlants,
   params,
   deadPlantRoute,
 }) => {
-  const plant = deadPlantRoute
-    ? deadPlants.data.find((plantElement) => plantElement.id === params.id)
-    : plants.data.find((plantElement) => plantElement.id === params.id);
-
-  const isPlantAlive = plant && !plant.timeOfDeath;
+  const plant = plants.data.find((plantElement) => plantElement.id === params.id);
 
   const history = useHistory();
   const [name, setName] = useState(plant ? plant.name : '');
@@ -62,12 +56,11 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
   };
 
   const onMoveToGraveyardClick = async () => {
-    await moveToGraveyard(plant!, plants.dispatch, deadPlants.dispatch);
-    history.push(plantListUrl());
+    await moveToGraveyard(plant!, plants.dispatch);
   };
 
   const onResurrectClick = async () => {
-    restoreFromGraveyard(plant!, plants.dispatch, deadPlants.dispatch);
+    restoreFromGraveyard(plant!, plants.dispatch);
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -77,7 +70,13 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
   if (!plant) {
     return (
-      <Layout appBar={{ title: 'Plant Friends' }}>
+      <Layout
+        appBar={{
+          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
+          actionItems: [{ icon: 'check', onClick: onSubmit }],
+          title: 'Plant Friends',
+        }}
+      >
         <Grid>
           <GridCell>
             <Typography use="body1">Can't find that plant</Typography>
@@ -87,11 +86,13 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
     );
   }
 
+  const isPlantAlive = !plant.timeOfDeath;
+
   return (
     <form onSubmit={onSubmit}>
       <Layout
         appBar={{
-          navigationIcon: { icon: 'close', tag: Link, to: deadPlantListUrl() },
+          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
           actionItems: [{ icon: 'check', onClick: onSubmit }],
           title: plant.name,
         }}

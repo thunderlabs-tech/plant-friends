@@ -46,7 +46,8 @@ function downloadCsv(plants: Plant[]) {
 }
 
 const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteParams }> = ({ plants }) => {
-  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(plants.data, needsWater);
+  const livePlants = plants.data.filter((plant) => !plant.timeOfDeath);
+  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(livePlants, needsWater);
 
   const onWaterPlant = (plant: Plant) => {
     waterPlant(plant, plants.dispatch);
@@ -82,7 +83,7 @@ const PlantListScreen: React.FC<PlantListScreenProps & { params: PlantListRouteP
           },
           {
             icon: 'cloud_download',
-            onClick: () => downloadCsv(plants.data),
+            onClick: () => downloadCsv(livePlants),
           },
           { icon: 'refresh', onClick: () => refreshPlants(plants.dispatch) },
         ],

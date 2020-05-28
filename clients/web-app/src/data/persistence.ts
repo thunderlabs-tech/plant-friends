@@ -41,13 +41,12 @@ async function getNextId(): Promise<string> {
 
 const ID_COUNTER_KEY = 'id-counter';
 const PLANTS_KEY = 'plants';
-const DEAD_PLANTS_KEY = 'dead-plants';
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY, DEAD_PLANTS_KEY });
+    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
@@ -56,14 +55,6 @@ const persistence = {
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
     return setItem<Plant[]>(PLANTS_KEY, plants);
-  },
-
-  loadDeadPlants: async (): Promise<Plant[]> => {
-    return await getItem<Plant[]>(DEAD_PLANTS_KEY);
-  },
-
-  storeDeadPlants: (plants: Plant[]): Promise<Plant[]> => {
-    return setItem<Plant[]>(DEAD_PLANTS_KEY, plants);
   },
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
@@ -76,7 +67,6 @@ const persistence = {
 
     return persistence.storePlants(newPlants);
   },
-
   removePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
 
@@ -96,21 +86,6 @@ const persistence = {
   createPlant: async (plantDescriptor: Omit<Plant, 'id'>): Promise<Plant[]> => {
     const newPlant = { ...plantDescriptor, id: await getNextId() };
     return persistence.addPlant(newPlant);
-  },
-
-  addDeadPlant: async (plant: Plant): Promise<Plant[]> => {
-    const deadPlants = await persistence.loadDeadPlants();
-    const newDeadPlants = [...deadPlants, plant];
-
-    return persistence.storeDeadPlants(newDeadPlants);
-  },
-
-  removeDeadPlant: async (plant: Plant): Promise<Plant[]> => {
-    const allDeadPlants = await persistence.loadDeadPlants();
-
-    const newDeadPlants = allDeadPlants.filter((element) => element.id !== plant.id);
-
-    return persistence.storeDeadPlants(newDeadPlants);
   },
 
   batchCreatePlants: async (plantDescriptors: Omit<Plant, 'id'>[]): Promise<Plant[]> => {
