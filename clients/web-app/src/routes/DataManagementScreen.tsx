@@ -17,7 +17,7 @@ import { Button } from '@rmwc/button';
 import TextFieldStyles from '../components/TextField.module.css';
 import { Typography } from '@rmwc/typography';
 import { plantListUrl } from './PlantListRoute';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export type DataManagementScreenProps = {
   plants: Collection<Plant>;
@@ -27,6 +27,7 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
   plants,
 }) => {
   const [csvData, setCsvData] = useState('');
+  const history = useHistory();
 
   function onDownloadCsvClick() {
     const csvContent = generateCSV(plants.data);
@@ -41,11 +42,16 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
   const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
     if (!files) return;
+
+    let newPlants: Plant[] = [];
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const csvContent = await file.text();
-      batchCreatePlants(parseCSV(csvContent), plants.dispatch);
+      newPlants = newPlants.concat(await batchCreatePlants(parseCSV(csvContent), plants.dispatch));
     }
+
+    alert(`${newPlants.length} plants added`);
+    history.push(plantListUrl());
   };
 
   const onParseCSVClick = () => {
