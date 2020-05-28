@@ -22,8 +22,6 @@ export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
 };
 
-// TO DO: hook up back link from details view to graveyard - use route structure to differentiate
-
 const DeadPlantListScreen: React.FC<DeadPlantListScreenProps & { params: DeadPlantListRouteParams }> = ({ plants }) => {
   const deadPlants = plants.data.filter((plant) => plant.timeOfDeath !== undefined);
 
