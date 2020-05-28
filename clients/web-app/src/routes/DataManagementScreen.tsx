@@ -72,8 +72,8 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
   return (
     <Layout
       appBar={{
-        navigationIcon: { icon: 'close', tag: Link, to: plantListUrl() },
-        title: 'Plant Friends',
+        navigationIcon: { icon: 'arrow_back', tag: Link, to: plantListUrl() },
+        title: 'Data Management',
       }}
     >
       <input
