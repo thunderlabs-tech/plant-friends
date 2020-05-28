@@ -21,7 +21,6 @@ export async function runMigrations({
   ]);
 
   const nextMigrationIndex = (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
-  if (nextMigrationIndex > migrations.length) return;
 
   for (let i = nextMigrationIndex; i < migrations.length; i++) {
     const nextMigration = migrations[i];
