@@ -9,7 +9,7 @@ export function deadPlantDetailUrl(plantId: string): string {
   return `/graveyard/${plantId}`;
 }
 
-export default function DeadPlantDetailRoute(props: PlantDetailScreenProps) {
+const DeadPlantDetailRoute: React.FC<PlantDetailScreenProps> = (props) => {
   return (
     <Route
       exact
@@ -25,4 +25,6 @@ export default function DeadPlantDetailRoute(props: PlantDetailScreenProps) {
       }}
     />
   );
-}
+};
+
+export default DeadPlantDetailRoute;

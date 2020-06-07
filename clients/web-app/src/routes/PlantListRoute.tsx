@@ -7,13 +7,15 @@ import { Route, RouteComponentProps } from "react-router-dom";
 
 export type PlantListRouteParams = Record<string, string | undefined>;
 
+export type PlantListRouteProps = {
+  plants: Collection<Plant>;
+};
+
 export function plantListUrl(): string {
   return `/`;
 }
 
-export default function PlantListRoute(appState: {
-  plants: Collection<Plant>;
-}) {
+const PlantListRoute: React.FC<PlantListRouteProps> = (appState) => {
   return (
     <Route
       exact
@@ -23,4 +25,6 @@ export default function PlantListRoute(appState: {
       }}
     />
   );
-}
+};
+
+export default PlantListRoute;

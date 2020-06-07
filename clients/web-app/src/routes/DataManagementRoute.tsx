@@ -7,13 +7,15 @@ import { Route, RouteComponentProps } from "react-router-dom";
 
 export type DataManagementRouteParams = Record<string, string | undefined>;
 
+export type DataManagementRouteProps = {
+  plants: Collection<Plant>;
+};
+
 export function dataManagementUrl(): string {
   return `/data-management`;
 }
 
-export default function DataManagementRoute(appState: {
-  plants: Collection<Plant>;
-}) {
+const DataManagementRoute: React.FC<DataManagementRouteProps> = (appState) => {
   return (
     <Route
       exact
@@ -25,4 +27,6 @@ export default function DataManagementRoute(appState: {
       }}
     />
   );
-}
+};
+
+export default DataManagementRoute;

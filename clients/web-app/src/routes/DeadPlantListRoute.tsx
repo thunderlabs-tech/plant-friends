@@ -9,7 +9,7 @@ export function deadPlantListUrl(): string {
   return `/graveyard`;
 }
 
-export default function DeadPlantListRoute(props: DeadPlantListScreenProps) {
+const DeadPlantListRoute: React.FC<DeadPlantListScreenProps> = (props) => {
   return (
     <Route
       exact
@@ -21,4 +21,6 @@ export default function DeadPlantListRoute(props: DeadPlantListScreenProps) {
       }}
     />
   );
-}
+};
+
+export default DeadPlantListRoute;

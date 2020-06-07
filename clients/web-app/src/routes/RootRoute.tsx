@@ -5,11 +5,15 @@ import { Collection } from "../utilities/state/useCollection";
 import { Route } from "react-router-dom";
 import PlantListScreen from "./PlantListScreen";
 
-export function rootRouteUrl() {
+export type RootRouteProps = {
+  plants: Collection<Plant>;
+};
+
+export function rootRouteUrl(): string {
   return "/";
 }
 
-export default function RootRoute(appState: { plants: Collection<Plant> }) {
+const RootRoute: React.FC<RootRouteProps> = (appState) => {
   return (
     <Route
       exact
@@ -19,4 +23,6 @@ export default function RootRoute(appState: { plants: Collection<Plant> }) {
       )}
     />
   );
-}
+};
+
+export default RootRoute;

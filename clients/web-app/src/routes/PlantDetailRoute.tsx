@@ -9,7 +9,7 @@ export function plantDetailUrl(plantId: string): string {
   return `/plants/${plantId}`;
 }
 
-export default function PlantDetailRoute(props: PlantDetailScreenProps) {
+const PlantDetailRoute: React.FC<PlantDetailScreenProps> = (props) => {
   return (
     <Route
       exact
@@ -21,4 +21,6 @@ export default function PlantDetailRoute(props: PlantDetailScreenProps) {
       }}
     />
   );
-}
+};
+
+export default PlantDetailRoute;
