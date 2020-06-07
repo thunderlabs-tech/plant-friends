@@ -13,11 +13,11 @@ on:
     paths:
       - 'clients/web-app/**.*'
 
-jobs:
-  defaults:
-    run:
-      working-directory: clients/web-app
+defaults:
+  run:
+    working-directory: clients/web-app
 
+jobs:
   build:
     runs-on: ubuntu-latest
 
