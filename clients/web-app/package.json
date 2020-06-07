@@ -52,7 +52,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-test-renderer": "^16.13.1",
-    "typescript": "^3.9.0-beta"
+    "typescript": "^3.9.5"
   },
   "eslintConfig": {
     "extends": [
