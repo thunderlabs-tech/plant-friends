@@ -17,7 +17,6 @@ import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 
 import PlantAvatar from "../components/PlantAvatar";
-import { DeadPlantListRouteParams } from "./DeadPlantListRoute";
 import Surface from "../components/Surface";
 import Layout from "../components/Layout";
 import { plantListUrl } from "./PlantListRoute";
@@ -32,9 +31,7 @@ export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
 };
 
-const DeadPlantListScreen: React.FC<
-  DeadPlantListScreenProps & { params: DeadPlantListRouteParams }
-> = ({ plants }) => {
+const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({ plants }) => {
   const deadPlants = plants.data.filter(
     (plant) => plant.timeOfDeath !== undefined,
   );

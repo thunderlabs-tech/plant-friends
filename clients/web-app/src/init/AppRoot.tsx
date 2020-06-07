@@ -17,9 +17,7 @@ import DeadPlantListRoute from "../routes/DeadPlantListRoute";
 import DeadPlantDetailRoute from "../routes/DeadPlantDetailRoute";
 import DataManagementRoute from "../routes/DataManagementRoute";
 
-export type AppRootProps = {};
-
-const AppRoot: React.FC<AppRootProps> = () => {
+const AppRoot: React.FC = () => {
   const plants = useCollection<Plant>();
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { Plant } from "../data/Plant";
 import { Collection } from "../utilities/state/useCollection";
 import { Route, RouteComponentProps } from "react-router-dom";
 
-export type PlantListRouteParams = {};
+export type PlantListRouteParams = Record<string, string | undefined>;
 
 export function plantListUrl(): string {
   return `/`;
