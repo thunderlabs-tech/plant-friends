@@ -1,3 +1,9 @@
+## Principles / Conventions
+
+- Keep the UI tree shallow
+- Keep configuration in package.json
+- Avoid merge commits, but preserve meaningful commit history
+
 ## File Structure
 
 - `components/`
@@ -6,10 +12,10 @@
   - Data structures, actions and utilities related to application state and persistence
 - `init/`
   - Application initialization and configuration elements
-- `screens/`
-  - A "screen" is the root component rendered on a route, responsible for orchestrating and laying out its children. Root components get special privileges: they're passed application state and actions as props, which they can expose to their children
-  - This directory is organized according to the route navigation structure
-- `services/`
-  - Stateful logical units, i.e. things which need to be created and initialized, and which have associated logic and actions you can invoke on the.
+- `routes/`
+  - Every route should have 2 corresponding files: Route.tsx and Screen.tsx
+  - New routes need to be included in init/AppRoot.tsx
+  - Route.tsx defines the url and the corresponding component to be rendered at that url.
+  - Screen.tsx is the root component rendered on a route, responsible for orchestrating and laying out its children. Root components get special privileges: they're passed application state and actions as props, which they can expose to their children
 - `utilities/`
   - Stateless, reusable functions and type definitions
