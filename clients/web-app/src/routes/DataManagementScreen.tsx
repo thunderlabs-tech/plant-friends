@@ -104,7 +104,7 @@ const DataManagementScreen: React.FC<
             <hr />
           </GridCell>
 
-          {Blob.prototype.hasOwnProperty("text") ? (
+          {Object.prototype.hasOwnProperty.call(Blob, "text") ? (
             <GridCell tablet={8} desktop={12}>
               <Button onClick={requestCsvFile} icon="cloud_upload">
                 Upload Data CSV
