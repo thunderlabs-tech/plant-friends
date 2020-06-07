@@ -29,5 +29,6 @@ jobs:
           node-version: 14.x
       - run: yarn install --frozen-lockfile
       - run: yarn prettier-check
+      - run: yarn eslint
       - run: yarn test
       - run: yarn build
