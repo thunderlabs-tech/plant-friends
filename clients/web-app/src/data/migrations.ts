@@ -1,4 +1,4 @@
-import { getItem, setItem } from './persistence';
+import { getItemType, setItemType } from './persistence';
 
 const NEXT_MIGRATION_INDEX_KEY = 'next-migration-index';
 
@@ -8,8 +8,8 @@ export async function runMigrations({
   PLANTS_KEY,
   ID_COUNTER_KEY,
 }: {
-  getItem: getItem;
-  setItem: setItem;
+  getItem: getItemType;
+  setItem: setItemType;
   PLANTS_KEY: string;
   ID_COUNTER_KEY: string;
 }): Promise<void> {

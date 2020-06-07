@@ -13,12 +13,12 @@ function storageKey(key: string): string {
   return `${namespace}-${key}`;
 }
 
-export type getItem = <T>(key: string, callback?: (err: any, value: T) => void) => Promise<T>;
+export type getItemType = <T>(key: string, callback?: (err: any, value: T) => void) => Promise<T>;
 function getItem<T>(key: string, callback?: (err: any, value: T) => void): Promise<T> {
   return localforage.getItem<T>(storageKey(key), callback);
 }
 
-export type setItem = <T>(key: string, value: T, callback?: (err: any, value: T) => void) => Promise<T>;
+export type setItemType = <T>(key: string, value: T, callback?: (err: any, value: T) => void) => Promise<T>;
 function setItem<T>(key: string, value: T, callback?: (err: any, value: T) => void): Promise<T> {
   return localforage.setItem<T>(storageKey(key), value, callback);
 }
