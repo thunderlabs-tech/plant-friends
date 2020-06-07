@@ -33,6 +33,7 @@
     "file-saver": "^2.0.2",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
+    "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-responsive": "^8.0.3",
