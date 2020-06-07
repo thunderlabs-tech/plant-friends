@@ -10,6 +10,14 @@ We use Yarn to manage multiple projects in one repository (known as "workspaces"
 
 See the README in individual workspaces for project-specific info.
 
+## Principles / Conventions
+
+- Keep the UI tree shallow
+- Keep configuration in package.json
+- Avoid merge commits, but preserve meaningful commit history
+- Don't enable linter warnings - either make it an error or disable the rule
+- Resolve console errors immediately
+
 ## CI & CD
 
 Continuous integration is managed using Github workflows. See [`.github/workflows`](.github/workflows).

@@ -1,9 +1,3 @@
-## Principles / Conventions
-
-- Keep the UI tree shallow
-- Keep configuration in package.json
-- Avoid merge commits, but preserve meaningful commit history
-
 ## File Structure
 
 - `components/`
