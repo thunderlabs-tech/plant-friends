@@ -20,7 +20,6 @@ describe("useAppState()", () => {
 
     act(() => {
       const dispatchers = result.current[1];
-      console.log("test 1");
       dispatchers.testAction1(1, 2, 3);
     });
 
