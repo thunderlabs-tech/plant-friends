@@ -1,12 +1,17 @@
-import React from 'react';
-import { Plant } from '../data/Plant';
-import '@rmwc/avatar/styles';
-import { Avatar } from '@rmwc/avatar';
-import { ColorPalette, green, lightGreen, grey } from '../utilities/ColorPalettes';
-import getValue from '../utilities/lang/getValue';
-import getContrastTextColor from '../utilities/getContrastTextColor';
+import React from "react";
+import { Plant } from "../data/Plant";
+import "@rmwc/avatar/styles";
+import { Avatar } from "@rmwc/avatar";
+import {
+  ColorPalette,
+  green,
+  lightGreen,
+  grey,
+} from "../utilities/ColorPalettes";
+import getValue from "../utilities/lang/getValue";
+import getContrastTextColor from "../utilities/getContrastTextColor";
 
-import css from './PlantAvatar.module.css';
+import css from "./PlantAvatar.module.css";
 
 export type PlantAvatarProps = {
   plant: Plant;
@@ -17,7 +22,10 @@ function notObsceneShades(color: ColorPalette): string[] {
   return shades.map((value) => getValue(color, value));
 }
 
-const availableColors = [...notObsceneShades(green), ...notObsceneShades(lightGreen)];
+const availableColors = [
+  ...notObsceneShades(green),
+  ...notObsceneShades(lightGreen),
+];
 
 const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
   const plant = props.plant;

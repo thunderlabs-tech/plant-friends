@@ -1,27 +1,32 @@
-import React, { useState, FormEvent } from 'react';
-import { Collection } from '../utilities/state/useCollection';
-import { Plant, formatNextWaterDate, formatTimeOfDeath } from '../data/Plant';
+import React, { useState, FormEvent } from "react";
+import { Collection } from "../utilities/state/useCollection";
+import { Plant, formatNextWaterDate, formatTimeOfDeath } from "../data/Plant";
 
-import { Link, useHistory } from 'react-router-dom';
-import { updatePlant, waterPlant, moveToGraveyard, restoreFromGraveyard } from '../data/actions';
-import { PlantDetailRouteParams } from './PlantDetailRoute';
-import Layout from '../components/Layout';
-import Surface from '../components/Surface';
-import { GridCell, GridRow, Grid } from '@rmwc/grid';
+import { Link, useHistory } from "react-router-dom";
+import {
+  updatePlant,
+  waterPlant,
+  moveToGraveyard,
+  restoreFromGraveyard,
+} from "../data/actions";
+import { PlantDetailRouteParams } from "./PlantDetailRoute";
+import Layout from "../components/Layout";
+import Surface from "../components/Surface";
+import { GridCell, GridRow, Grid } from "@rmwc/grid";
 
-import '@rmwc/typography/styles';
-import { Typography } from '@rmwc/typography';
-import '@rmwc/textfield/styles';
-import { TextField } from '@rmwc/textfield';
-import '@rmwc/button/styles';
-import { Button } from '@rmwc/button';
-import '@rmwc/list/styles';
-import { List, ListItem } from '@rmwc/list';
+import "@rmwc/typography/styles";
+import { Typography } from "@rmwc/typography";
+import "@rmwc/textfield/styles";
+import { TextField } from "@rmwc/textfield";
+import "@rmwc/button/styles";
+import { Button } from "@rmwc/button";
+import "@rmwc/list/styles";
+import { List, ListItem } from "@rmwc/list";
 
-import TextFieldStyles from '../components/TextField.module.css';
-import { useMediaQuery } from 'react-responsive';
-import { deadPlantListUrl } from './DeadPlantListRoute';
-import { plantListUrl } from './PlantListRoute';
+import TextFieldStyles from "../components/TextField.module.css";
+import { useMediaQuery } from "react-responsive";
+import { deadPlantListUrl } from "./DeadPlantListRoute";
+import { plantListUrl } from "./PlantListRoute";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -30,26 +35,28 @@ export type PlantDetailScreenProps = {
 
 function formatWateringTime(date: Date): string {
   return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
   });
 }
 
-const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDetailScreenProps> = ({
-  plants,
-  params,
-  deadPlantRoute,
-}) => {
-  const plant = plants.data.find((plantElement) => plantElement.id === params.id);
+const PlantDetailScreen: React.FC<
+  { params: PlantDetailRouteParams } & PlantDetailScreenProps
+> = ({ plants, params, deadPlantRoute }) => {
+  const plant = plants.data.find(
+    (plantElement) => plantElement.id === params.id,
+  );
 
   const history = useHistory();
-  const [name, setName] = useState(plant ? plant.name : '');
-  const [wateringPeriodInDays, setWateringPeriodInDays] = useState(plant ? plant.wateringPeriodInDays : 0);
+  const [name, setName] = useState(plant ? plant.name : "");
+  const [wateringPeriodInDays, setWateringPeriodInDays] = useState(
+    plant ? plant.wateringPeriodInDays : 0,
+  );
 
-  const tabletOrHigher = useMediaQuery({ query: '(min-width: 600px)' });
+  const tabletOrHigher = useMediaQuery({ query: "(min-width: 600px)" });
 
   const onWaterNowClick = () => {
     waterPlant(plant!, plants.dispatch);
@@ -65,16 +72,24 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updatePlant({ ...plant!, name, wateringPeriodInDays }, plants.dispatch, history);
+    updatePlant(
+      { ...plant!, name, wateringPeriodInDays },
+      plants.dispatch,
+      history,
+    );
   };
 
   if (!plant) {
     return (
       <Layout
         appBar={{
-          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
-          actionItems: [{ icon: 'check', onClick: onSubmit }],
-          title: 'Plant Friends',
+          navigationIcon: {
+            icon: "close",
+            tag: Link,
+            to: deadPlantRoute ? deadPlantListUrl() : plantListUrl(),
+          },
+          actionItems: [{ icon: "check", onClick: onSubmit }],
+          title: "Plant Friends",
         }}
       >
         <Grid>
@@ -92,12 +107,16 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
     <form onSubmit={onSubmit}>
       <Layout
         appBar={{
-          navigationIcon: { icon: 'close', tag: Link, to: deadPlantRoute ? deadPlantListUrl() : plantListUrl() },
-          actionItems: [{ icon: 'check', onClick: onSubmit }],
+          navigationIcon: {
+            icon: "close",
+            tag: Link,
+            to: deadPlantRoute ? deadPlantListUrl() : plantListUrl(),
+          },
+          actionItems: [{ icon: "check", onClick: onSubmit }],
           title: plant.name,
         }}
       >
-        <Grid theme={['surface']}>
+        <Grid theme={["surface"]}>
           <GridCell tablet={8} desktop={12}>
             <Surface>
               <GridRow>
@@ -122,24 +141,41 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                     className={TextFieldStyles.fullWidth}
                     type="number"
                     onChange={(e: FormEvent<HTMLInputElement>) =>
-                      setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))
+                      setWateringPeriodInDays(
+                        parseInt(e.currentTarget.value, 10),
+                      )
                     }
                     label="Watering Period in Days"
                   />
                 </GridCell>
 
-                <GridCell tablet={8} style={{ textAlign: 'right' }}>
+                <GridCell tablet={8} style={{ textAlign: "right" }}>
                   {isPlantAlive ? (
                     <>
-                      <Button tag="a" icon="opacity" onClick={onWaterNowClick} theme={['primary']}>
+                      <Button
+                        tag="a"
+                        icon="opacity"
+                        onClick={onWaterNowClick}
+                        theme={["primary"]}
+                      >
                         Water Now
                       </Button>
-                      <Button tag="a" icon="delete" onClick={onMoveToGraveyardClick} theme={['primary']}>
+                      <Button
+                        tag="a"
+                        icon="delete"
+                        onClick={onMoveToGraveyardClick}
+                        theme={["primary"]}
+                      >
                         Move to Graveyard
                       </Button>
                     </>
                   ) : (
-                    <Button tag="a" icon="restore_from_trash" onClick={onResurrectClick} theme={['primary']}>
+                    <Button
+                      tag="a"
+                      icon="restore_from_trash"
+                      onClick={onResurrectClick}
+                      theme={["primary"]}
+                    >
                       Resurrect
                     </Button>
                   )}
@@ -147,9 +183,13 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
 
                 <GridCell tablet={8} desktop={12}>
                   {isPlantAlive ? (
-                    <Typography use="body1">{formatNextWaterDate(plant)}</Typography>
+                    <Typography use="body1">
+                      {formatNextWaterDate(plant)}
+                    </Typography>
                   ) : (
-                    <Typography use="body1">{formatTimeOfDeath(plant)}</Typography>
+                    <Typography use="body1">
+                      {formatTimeOfDeath(plant)}
+                    </Typography>
                   )}
                 </GridCell>
 
@@ -159,12 +199,16 @@ const PlantDetailScreen: React.FC<{ params: PlantDetailRouteParams } & PlantDeta
                       <Typography use="body1">Watered at:</Typography>
                       <List nonInteractive>
                         {plant.wateringTimes.map((date, i) => {
-                          return <ListItem key={i}>{formatWateringTime(date)}</ListItem>;
+                          return (
+                            <ListItem key={i}>
+                              {formatWateringTime(date)}
+                            </ListItem>
+                          );
                         })}
                       </List>
                     </>
                   ) : (
-                    'No watering times recorded'
+                    "No watering times recorded"
                   )}
                 </GridCell>
               </GridRow>

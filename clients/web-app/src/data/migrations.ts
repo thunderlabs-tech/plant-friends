@@ -1,6 +1,6 @@
-import { getItemType, setItemType } from './persistence';
+import { getItemType, setItemType } from "./persistence";
 
-const NEXT_MIGRATION_INDEX_KEY = 'next-migration-index';
+const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
 
 export async function runMigrations({
   getItem,
@@ -20,7 +20,8 @@ export async function runMigrations({
     },
   ]);
 
-  const nextMigrationIndex = (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
+  const nextMigrationIndex =
+    (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
 
   for (let i = nextMigrationIndex; i < migrations.length; i++) {
     const nextMigration = migrations[i];

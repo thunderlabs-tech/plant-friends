@@ -1,9 +1,9 @@
-import localforage from 'localforage';
-import { Plant } from './Plant';
-import { runMigrations } from './migrations';
+import localforage from "localforage";
+import { Plant } from "./Plant";
+import { runMigrations } from "./migrations";
 
 localforage.config({
-  name: 'plant-friends',
+  name: "plant-friends",
   version: 1.1,
 });
 
@@ -13,22 +13,36 @@ function storageKey(key: string): string {
   return `${namespace}-${key}`;
 }
 
-export type getItemType = <T>(key: string, callback?: (err: any, value: T) => void) => Promise<T>;
-function getItem<T>(key: string, callback?: (err: any, value: T) => void): Promise<T> {
+export type getItemType = <T>(
+  key: string,
+  callback?: (err: any, value: T) => void,
+) => Promise<T>;
+function getItem<T>(
+  key: string,
+  callback?: (err: any, value: T) => void,
+): Promise<T> {
   return localforage.getItem<T>(storageKey(key), callback);
 }
 
-export type setItemType = <T>(key: string, value: T, callback?: (err: any, value: T) => void) => Promise<T>;
-function setItem<T>(key: string, value: T, callback?: (err: any, value: T) => void): Promise<T> {
+export type setItemType = <T>(
+  key: string,
+  value: T,
+  callback?: (err: any, value: T) => void,
+) => Promise<T>;
+function setItem<T>(
+  key: string,
+  value: T,
+  callback?: (err: any, value: T) => void,
+): Promise<T> {
   return localforage.setItem<T>(storageKey(key), value, callback);
 }
 
 async function getIdCounter(): Promise<number> {
-  return (await getItem<number | undefined>('id-counter')) || 0;
+  return (await getItem<number | undefined>("id-counter")) || 0;
 }
 
 async function setIdCounter(nextId: number): Promise<number> {
-  return setItem<number>('id-counter', nextId);
+  return setItem<number>("id-counter", nextId);
 }
 
 async function getNextId(): Promise<string> {
@@ -39,8 +53,8 @@ async function getNextId(): Promise<string> {
   return nextId.toString();
 }
 
-const ID_COUNTER_KEY = 'id-counter';
-const PLANTS_KEY = 'plants';
+const ID_COUNTER_KEY = "id-counter";
+const PLANTS_KEY = "plants";
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
@@ -59,11 +73,18 @@ const persistence = {
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
-    const plantIndex = allPlants.findIndex((element) => element.id === plant.id);
+    const plantIndex = allPlants.findIndex(
+      (element) => element.id === plant.id,
+    );
 
-    if (plantIndex === -1) throw new Error(`Plant with ID ${plant.id} not found`);
+    if (plantIndex === -1)
+      throw new Error(`Plant with ID ${plant.id} not found`);
 
-    const newPlants = [...allPlants.slice(0, plantIndex), plant, ...allPlants.slice(plantIndex + 1)];
+    const newPlants = [
+      ...allPlants.slice(0, plantIndex),
+      plant,
+      ...allPlants.slice(plantIndex + 1),
+    ];
 
     return persistence.storePlants(newPlants);
   },
@@ -83,12 +104,14 @@ const persistence = {
     return persistence.storePlants(newPlants);
   },
 
-  createPlant: async (plantDescriptor: Omit<Plant, 'id'>): Promise<Plant[]> => {
+  createPlant: async (plantDescriptor: Omit<Plant, "id">): Promise<Plant[]> => {
     const newPlant = { ...plantDescriptor, id: await getNextId() };
     return persistence.addPlant(newPlant);
   },
 
-  batchCreatePlants: async (plantDescriptors: Omit<Plant, 'id'>[]): Promise<Plant[]> => {
+  batchCreatePlants: async (
+    plantDescriptors: Omit<Plant, "id">[],
+  ): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
     let idCounter = await getIdCounter();
 

@@ -1,4 +1,4 @@
-import { Plant } from './Plant';
+import { Plant } from "./Plant";
 
 function parseWateringTimesString(wateringTimesString: string): Date[] {
   const withoutEnclosingQuotes = wateringTimesString.slice(1, -1);
@@ -7,14 +7,16 @@ function parseWateringTimesString(wateringTimesString: string): Date[] {
     return [];
   }
 
-  return withoutEnclosingQuotes.split(';').map((dateString) => new Date(Date.parse(dateString)));
+  return withoutEnclosingQuotes
+    .split(";")
+    .map((dateString) => new Date(Date.parse(dateString)));
 }
 
-export default function parseCSV(csvContent: string): Omit<Plant, 'id'>[] {
-  const lines = csvContent.split('\n').slice(1);
+export default function parseCSV(csvContent: string): Omit<Plant, "id">[] {
+  const lines = csvContent.split("\n").slice(1);
 
   return lines.map((line) => {
-    const cells = line.split(',');
+    const cells = line.split(",");
 
     const wateringTimes = parseWateringTimesString(cells[3]);
 

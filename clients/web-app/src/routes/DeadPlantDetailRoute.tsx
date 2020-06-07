@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import PlantDetailScreen, { PlantDetailScreenProps } from './PlantDetailScreen';
-import { Route, RouteComponentProps } from 'react-router-dom';
+import PlantDetailScreen, { PlantDetailScreenProps } from "./PlantDetailScreen";
+import { Route, RouteComponentProps } from "react-router-dom";
 
 export type DeadPlantDetailRouteParams = { id: string };
 
@@ -15,7 +15,13 @@ export default function DeadPlantDetailRoute(props: PlantDetailScreenProps) {
       exact
       path="/graveyard/:id"
       render={(routeProps: RouteComponentProps<DeadPlantDetailRouteParams>) => {
-        return <PlantDetailScreen params={routeProps.match.params} deadPlantRoute {...props} />;
+        return (
+          <PlantDetailScreen
+            params={routeProps.match.params}
+            deadPlantRoute
+            {...props}
+          />
+        );
       }}
     />
   );

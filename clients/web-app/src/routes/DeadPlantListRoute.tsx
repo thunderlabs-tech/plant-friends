@@ -1,7 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import DeadPlantListScreen, { DeadPlantListScreenProps } from './DeadPlantListScreen';
-import { Route, RouteComponentProps } from 'react-router-dom';
+import DeadPlantListScreen, {
+  DeadPlantListScreenProps,
+} from "./DeadPlantListScreen";
+import { Route, RouteComponentProps } from "react-router-dom";
 
 export type DeadPlantListRouteParams = {};
 
@@ -15,7 +17,9 @@ export default function DeadPlantListRoute(props: DeadPlantListScreenProps) {
       exact
       path="/graveyard"
       render={(routeProps: RouteComponentProps<DeadPlantListRouteParams>) => {
-        return <DeadPlantListScreen params={routeProps.match.params} {...props} />;
+        return (
+          <DeadPlantListScreen params={routeProps.match.params} {...props} />
+        );
       }}
     />
   );

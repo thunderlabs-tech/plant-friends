@@ -1,37 +1,37 @@
-import React, { useRef, ChangeEvent, useState } from 'react';
-import { Collection } from '../utilities/state/useCollection';
-import { Plant } from '../data/Plant';
-import { batchCreatePlants, deleteAllData } from '../data/actions';
-import { saveAs } from 'file-saver';
+import React, { useRef, ChangeEvent, useState } from "react";
+import { Collection } from "../utilities/state/useCollection";
+import { Plant } from "../data/Plant";
+import { batchCreatePlants, deleteAllData } from "../data/actions";
+import { saveAs } from "file-saver";
 
-import '@rmwc/list/styles';
-import '@rmwc/icon-button/styles';
-import { GridCell, Grid } from '@rmwc/grid';
-import { DataManagementRouteParams } from './DataManagementRoute';
-import Surface from '../components/Surface';
-import Layout from '../components/Layout';
-import generateCSV from '../data/generateCSV';
-import parseCSV from '../data/parseCSV';
-import { TextField } from '@rmwc/textfield';
-import { Button } from '@rmwc/button';
-import TextFieldStyles from '../components/TextField.module.css';
-import { Typography } from '@rmwc/typography';
-import { plantListUrl } from './PlantListRoute';
-import { Link, useHistory } from 'react-router-dom';
+import "@rmwc/list/styles";
+import "@rmwc/icon-button/styles";
+import { GridCell, Grid } from "@rmwc/grid";
+import { DataManagementRouteParams } from "./DataManagementRoute";
+import Surface from "../components/Surface";
+import Layout from "../components/Layout";
+import generateCSV from "../data/generateCSV";
+import parseCSV from "../data/parseCSV";
+import { TextField } from "@rmwc/textfield";
+import { Button } from "@rmwc/button";
+import TextFieldStyles from "../components/TextField.module.css";
+import { Typography } from "@rmwc/typography";
+import { plantListUrl } from "./PlantListRoute";
+import { Link, useHistory } from "react-router-dom";
 
 export type DataManagementScreenProps = {
   plants: Collection<Plant>;
 };
 
-const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataManagementRouteParams }> = ({
-  plants,
-}) => {
-  const [csvData, setCsvData] = useState('');
+const DataManagementScreen: React.FC<
+  DataManagementScreenProps & { params: DataManagementRouteParams }
+> = ({ plants }) => {
+  const [csvData, setCsvData] = useState("");
   const history = useHistory();
 
   function onDownloadCsvClick() {
     const csvContent = generateCSV(plants.data);
-    saveAs(csvContent, 'Plant Friends data.csv');
+    saveAs(csvContent, "Plant Friends data.csv");
   }
 
   const requestCsvFile = () => {
@@ -47,7 +47,9 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const csvContent = await file.text();
-      newPlants = newPlants.concat(await batchCreatePlants(parseCSV(csvContent), plants.dispatch));
+      newPlants = newPlants.concat(
+        await batchCreatePlants(parseCSV(csvContent), plants.dispatch),
+      );
     }
 
     alert(`${newPlants.length} plants added`);
@@ -56,7 +58,10 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
 
   const onParseCSVClick = async () => {
     try {
-      const newPlants = await batchCreatePlants(parseCSV(csvData), plants.dispatch);
+      const newPlants = await batchCreatePlants(
+        parseCSV(csvData),
+        plants.dispatch,
+      );
 
       alert(`${newPlants.length} plants added`);
       history.push(plantListUrl());
@@ -72,15 +77,15 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
   return (
     <Layout
       appBar={{
-        navigationIcon: { icon: 'arrow_back', tag: Link, to: plantListUrl() },
-        title: 'Data Management',
+        navigationIcon: { icon: "arrow_back", tag: Link, to: plantListUrl() },
+        title: "Data Management",
       }}
     >
       <input
         ref={inputRef}
         type="file"
         accept="text/csv"
-        style={{ position: 'absolute', left: -10000 }}
+        style={{ position: "absolute", left: -10000 }}
         onChange={onUploadInputChange}
       />
       <Surface z={1}>
@@ -90,14 +95,16 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
               Download All Data
             </Button>
             <br />
-            <Typography use="caption">This will provide all your data in a CSV</Typography>
+            <Typography use="caption">
+              This will provide all your data in a CSV
+            </Typography>
           </GridCell>
 
           <GridCell tablet={8} desktop={12}>
             <hr />
           </GridCell>
 
-          {Blob.prototype.hasOwnProperty('text') ? (
+          {Blob.prototype.hasOwnProperty("text") ? (
             <GridCell tablet={8} desktop={12}>
               <Button onClick={requestCsvFile} icon="cloud_upload">
                 Upload Data CSV
@@ -118,7 +125,8 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
                   placeholder="Name"
                 />
                 <Typography use="caption">
-                  Unfortunately your device doesn't support CSV file upload. Use this input to paste CSV data instead
+                  Unfortunately your device doesn't support CSV file upload. Use
+                  this input to paste CSV data instead
                 </Typography>
                 <br />
                 <Button onClick={onParseCSVClick} icon="cloud_upload">
@@ -137,7 +145,9 @@ const DataManagementScreen: React.FC<DataManagementScreenProps & { params: DataM
               Delete All Data
             </Button>
             <br />
-            <Typography use="caption">This will delete all Plant Friends data from this device</Typography>
+            <Typography use="caption">
+              This will delete all Plant Friends data from this device
+            </Typography>
             <br />
             <Typography use="caption">WARNING! You can't undo this!</Typography>
           </GridCell>

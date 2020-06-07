@@ -1,5 +1,8 @@
 .PlantAvatar :global(.rmwc-avatar__text) {
-  font-family: var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+  font-family: var(
+    --mdc-typography-subtitle1-font-family,
+    var(--mdc-typography-font-family, Roboto, sans-serif)
+  );
   color: inherit;
 }
 
