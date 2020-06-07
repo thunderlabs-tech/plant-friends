@@ -9,6 +9,7 @@ import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 import { DataManagementRouteParams } from "./DataManagementRoute";
 import Surface from "../components/Surface";
+import assertPresent from "../utilities/lang/assertPresent";
 import Layout from "../components/Layout";
 import generateCSV from "../data/generateCSV";
 import parseCSV from "../data/parseCSV";
@@ -34,10 +35,9 @@ const DataManagementScreen: React.FC<
     saveAs(csvContent, "Plant Friends data.csv");
   }
 
-  const requestCsvFile = () => {
-    inputRef.current!.click();
-  };
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const requestCsvFile = () => assertPresent(inputRef.current).click();
 
   const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;

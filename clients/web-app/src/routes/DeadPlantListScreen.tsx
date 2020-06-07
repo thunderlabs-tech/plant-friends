@@ -37,7 +37,7 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({ plants }) => 
   );
 
   const onResurrectClick = (plant: Plant) => {
-    restoreFromGraveyard(plant!, plants.dispatch);
+    restoreFromGraveyard(plant, plants.dispatch);
   };
 
   return (

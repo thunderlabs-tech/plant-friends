@@ -58,27 +58,6 @@ const PlantDetailScreen: React.FC<
 
   const tabletOrHigher = useMediaQuery({ query: "(min-width: 600px)" });
 
-  const onWaterNowClick = () => {
-    waterPlant(plant!, plants.dispatch);
-  };
-
-  const onMoveToGraveyardClick = async () => {
-    await moveToGraveyard(plant!, plants.dispatch);
-  };
-
-  const onResurrectClick = async () => {
-    restoreFromGraveyard(plant!, plants.dispatch);
-  };
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updatePlant(
-      { ...plant!, name, wateringPeriodInDays },
-      plants.dispatch,
-      history,
-    );
-  };
-
   if (!plant) {
     return (
       <Layout
@@ -88,7 +67,6 @@ const PlantDetailScreen: React.FC<
             tag: Link,
             to: deadPlantRoute ? deadPlantListUrl() : plantListUrl(),
           },
-          actionItems: [{ icon: "check", onClick: onSubmit }],
           title: "Plant Friends",
         }}
       >
@@ -100,6 +78,27 @@ const PlantDetailScreen: React.FC<
       </Layout>
     );
   }
+
+  const onWaterNowClick = () => {
+    waterPlant(plant, plants.dispatch);
+  };
+
+  const onMoveToGraveyardClick = async () => {
+    await moveToGraveyard(plant, plants.dispatch);
+  };
+
+  const onResurrectClick = async () => {
+    restoreFromGraveyard(plant, plants.dispatch);
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    updatePlant(
+      { ...plant, name, wateringPeriodInDays },
+      plants.dispatch,
+      history,
+    );
+  };
 
   const isPlantAlive = !plant.timeOfDeath;
 
