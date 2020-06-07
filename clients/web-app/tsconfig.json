@@ -16,6 +16,7 @@
     "sourceMap": true,
     "rootDir": "src",
     "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
     "jsx": "react"
   },
   "include": ["src"],

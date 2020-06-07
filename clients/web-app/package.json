@@ -61,6 +61,11 @@
       "prettier/@typescript-eslint"
     ],
     "root": true,
+    "rules": {
+      "@typescript-eslint/no-unused-vars": [
+        0
+      ]
+    },
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint"
