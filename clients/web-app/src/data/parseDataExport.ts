@@ -12,19 +12,31 @@ function parseWateringTimesString(wateringTimesString: string): Date[] {
     .map((dateString) => new Date(Date.parse(dateString)));
 }
 
-export default function parseCSV(csvContent: string): Omit<Plant, "id">[] {
+export default function parseDataExport(
+  csvContent: string,
+): Omit<Plant, "id">[] {
   const lines = csvContent.split("\n").slice(1);
 
   return lines.map((line) => {
     const cells = line.split(",");
+    const [
+      // @ts-ignore
+      id,
+      name,
+      wateringPeriodInDaysString,
+      wateringTimesString,
+      timeOfDeathString,
+    ] = cells;
 
-    const wateringTimes = parseWateringTimesString(cells[3]);
+    const wateringTimes = parseWateringTimesString(wateringTimesString);
 
     return {
-      name: cells[1],
-      wateringPeriodInDays: parseInt(cells[2], 10),
+      name,
+      wateringPeriodInDays: parseInt(wateringPeriodInDaysString, 10),
       wateringTimes,
-      timeOfDeath: cells[4] ? new Date(Date.parse(cells[4])) : undefined,
+      timeOfDeath: timeOfDeathString
+        ? new Date(Date.parse(timeOfDeathString))
+        : undefined,
     };
   });
 }

@@ -1,6 +1,6 @@
 import { Plant } from "./Plant";
 
-export default function generateCSV(plants: Plant[]) {
+export default function exportData(plants: Plant[]) {
   const headerRow = [
     "id",
     "name",

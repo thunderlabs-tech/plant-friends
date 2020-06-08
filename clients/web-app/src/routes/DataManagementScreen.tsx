@@ -11,8 +11,8 @@ import { DataManagementRouteParams } from "./DataManagementRoute";
 import Surface from "../components/Surface";
 import assertPresent from "../utilities/lang/assertPresent";
 import Layout from "../components/Layout";
-import generateCSV from "../data/generateCSV";
-import parseCSV from "../data/parseCSV";
+import exportData from "../data/exportData";
+import parseDataExport from "../data/parseDataExport";
 import { TextField } from "@rmwc/textfield";
 import { Button } from "@rmwc/button";
 import TextFieldStyles from "../components/TextField.module.css";
@@ -31,7 +31,7 @@ const DataManagementScreen: React.FC<
   const history = useHistory();
 
   function onDownloadCsvClick() {
-    const csvContent = generateCSV(plants.data);
+    const csvContent = exportData(plants.data);
     saveAs(csvContent, "Plant Friends data.csv");
   }
 
@@ -48,7 +48,7 @@ const DataManagementScreen: React.FC<
       const file = files[i];
       const csvContent = await file.text();
       newPlants = newPlants.concat(
-        await batchCreatePlants(parseCSV(csvContent), plants.dispatch),
+        await batchCreatePlants(parseDataExport(csvContent), plants.dispatch),
       );
     }
 
@@ -59,7 +59,7 @@ const DataManagementScreen: React.FC<
   const onParseCSVClick = async () => {
     try {
       const newPlants = await batchCreatePlants(
-        parseCSV(csvData),
+        parseDataExport(csvData),
         plants.dispatch,
       );
 
