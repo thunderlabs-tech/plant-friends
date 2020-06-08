@@ -15,9 +15,7 @@ const DeadPlantListRoute: React.FC<DeadPlantListScreenProps> = (props) => {
       exact
       path="/graveyard/:id"
       render={() => {
-        return (
-          <DeadPlantListScreen {...props} />
-        );
+        return <DeadPlantListScreen {...props} />;
       }}
     />
   );

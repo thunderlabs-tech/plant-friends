@@ -31,7 +31,9 @@ export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
 };
 
-const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({ plants }) => {
+const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
+  plants,
+}) => {
   const deadPlants = plants.data.filter(
     (plant) => plant.timeOfDeath !== undefined,
   );
