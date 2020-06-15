@@ -1,0 +1,32 @@
+{
+  "name": "plant-friends",
+  "version": "1.0.0",
+  "description": "Keep your plant friends happy",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd clients/web-app && yarn build",
+    "test": "cd clients/web-app && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmadden/plant-friends.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/wmadden/plant-friends/issues"
+  },
+  "private": true,
+  "homepage": "https://github.com/wmadden/plant-friends#readme",
+  "workspaces": [
+    "services/*",
+    "clients/*"
+  ],
+  "dependencies": {
+    "fauna-shell": "^0.11.0",
+    "netlify-cli": "2.43.0"
+  },
+  "engines": {
+    "node": ">=12.14.1"
+  }
+}

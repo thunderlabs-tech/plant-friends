@@ -1,0 +1,5 @@
+- Freepik, flaticon.com
+  - leaf-icon.svg: https://www.flaticon.com/free-icon/leaf_2917972
+  - leaf-icon2.svg: https://www.flaticon.com/free-icon/leaf_2917995
+  - Attribution line:
+    - Icon made by Freepik from www.flaticon.com
