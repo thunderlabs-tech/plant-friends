@@ -85,6 +85,8 @@ const DataManagementScreen: React.FC<
     const file = files[0];
     const fileContent = await file.text();
 
+    e.currentTarget.value = "";
+
     parseAndImportFileContent(fileContent);
   };
 
