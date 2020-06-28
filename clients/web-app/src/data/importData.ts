@@ -2,15 +2,18 @@ import { Plant } from "./Plant";
 import { DataExport } from "./exportData";
 import { Override } from "../utilities/lang/Override";
 
-type PlantWithStringDates = Override<Plant, { wateringTimes: string[] }>;
+type PlantWithStringDates = Override<
+  Plant,
+  { wateringTimes: string[]; timeOfDeath: string | undefined }
+>;
 
-class InvalidImportFormatError extends Error {
+export class InvalidImportFormatError extends Error {
   constructor(message: string) {
     super(message);
   }
 }
 
-export default function parseDataExport(fileContent: string): DataExport {
+export default function importData(fileContent: string): DataExport {
   let result: Override<DataExport, { plants: PlantWithStringDates[] }>;
   try {
     result = JSON.parse(fileContent);
@@ -35,8 +38,11 @@ export default function parseDataExport(fileContent: string): DataExport {
       return {
         ...plantWithStringDates,
         wateringTimes: plantWithStringDates.wateringTimes.map(
-          (isoDateString) => new Date(Date.parse(isoDateString)),
+          (dateString) => new Date(Date.parse(dateString)),
         ),
+        timeOfDeath: plantWithStringDates.timeOfDeath
+          ? new Date(Date.parse(plantWithStringDates.timeOfDeath))
+          : undefined,
       };
     },
   );
