@@ -1,7 +1,7 @@
 import React, { useRef, ChangeEvent, useState } from "react";
 import { Collection } from "../utilities/state/useCollection";
 import { Plant } from "../data/Plant";
-import { batchCreatePlants, deleteAllData } from "../data/actions";
+import { deleteAllData, persistImportedData } from "../data/actions";
 import { saveAs } from "file-saver";
 
 import "@rmwc/list/styles";
@@ -11,14 +11,16 @@ import { DataManagementRouteParams } from "./DataManagementRoute";
 import Surface from "../components/Surface";
 import assertPresent from "../utilities/lang/assertPresent";
 import Layout from "../components/Layout";
-import generateCSV from "../data/generateCSV";
-import parseCSV from "../data/parseCSV";
+import importData from "../data/importData";
+import { InvalidImportFormatError } from "../data/importData";
 import { TextField } from "@rmwc/textfield";
 import { Button } from "@rmwc/button";
 import TextFieldStyles from "../components/TextField.module.css";
 import { Typography } from "@rmwc/typography";
 import { plantListUrl } from "./PlantListRoute";
 import { Link, useHistory } from "react-router-dom";
+import persistence, { IncompatibleImportError } from "../data/persistence";
+import exportData from "../data/exportData";
 
 export type DataManagementScreenProps = {
   plants: Collection<Plant>;
@@ -27,47 +29,67 @@ export type DataManagementScreenProps = {
 const DataManagementScreen: React.FC<
   DataManagementScreenProps & { params: DataManagementRouteParams }
 > = ({ plants }) => {
-  const [csvData, setCsvData] = useState("");
+  const [importDataInputValue, setImportDataInputValue] = useState("");
   const history = useHistory();
 
-  function onDownloadCsvClick() {
-    const csvContent = generateCSV(plants.data);
-    saveAs(csvContent, "Plant Friends data.csv");
+  async function onDownloadExportClick() {
+    const fileContent = exportData(await persistence.getDataForExport());
+    saveAs(
+      new Blob([fileContent], { type: "application/json;charset=utf-8" }),
+      "Plant Friends data.json",
+    );
   }
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const requestCsvFile = () => assertPresent(inputRef.current).click();
+  const requestExportFile = () => assertPresent(inputRef.current).click();
 
-  const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
-    if (!files) return;
+  const parseAndImportFileContent = async (
+    fileContent: string,
+  ): Promise<void> => {
+    let newPlants: Plant[];
 
-    let newPlants: Plant[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const csvContent = await file.text();
-      newPlants = newPlants.concat(
-        await batchCreatePlants(parseCSV(csvContent), plants.dispatch),
-      );
+    try {
+      const importedData = importData(fileContent);
+
+      newPlants = await persistImportedData(importedData, plants.dispatch);
+    } catch (error) {
+      if (
+        !(
+          error instanceof InvalidImportFormatError ||
+          error instanceof IncompatibleImportError
+        )
+      ) {
+        throw error;
+      }
+
+      window.alert(error.message);
+      return;
     }
 
     alert(`${newPlants.length} plants added`);
     history.push(plantListUrl());
   };
 
-  const onParseCSVClick = async () => {
-    try {
-      const newPlants = await batchCreatePlants(
-        parseCSV(csvData),
-        plants.dispatch,
-      );
+  const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (files === null || files.length === 0) return;
 
-      alert(`${newPlants.length} plants added`);
-      history.push(plantListUrl());
-    } catch (error) {
-      alert(`Could not parse CSV data`);
+    if (files.length > 1) {
+      alert(
+        "Can't import more than one file since later files will override earlier ones",
+      );
+      return;
     }
+
+    const file = files[0];
+    const fileContent = await file.text();
+
+    parseAndImportFileContent(fileContent);
+  };
+
+  const onParseExportClick = async () => {
+    parseAndImportFileContent(importDataInputValue);
   };
 
   const onDeleteAllClick = () => {
@@ -84,19 +106,19 @@ const DataManagementScreen: React.FC<
       <input
         ref={inputRef}
         type="file"
-        accept="text/csv"
+        accept="application/json"
         style={{ position: "absolute", left: -10000 }}
         onChange={onUploadInputChange}
       />
       <Surface z={1}>
         <Grid>
           <GridCell tablet={8} desktop={12}>
-            <Button onClick={onDownloadCsvClick} icon="cloud_download">
+            <Button onClick={onDownloadExportClick} icon="cloud_download">
               Download All Data
             </Button>
             <br />
             <Typography use="caption">
-              This will provide all your data in a CSV
+              This will provide all your data in a JSON file
             </Typography>
           </GridCell>
 
@@ -106,30 +128,32 @@ const DataManagementScreen: React.FC<
 
           {Object.prototype.hasOwnProperty.call(Blob.prototype, "text") ? (
             <GridCell tablet={8} desktop={12}>
-              <Button onClick={requestCsvFile} icon="cloud_upload">
-                Upload Data CSV
+              <Button onClick={requestExportFile} icon="cloud_upload">
+                Import Data
               </Button>
             </GridCell>
           ) : (
             <>
               <GridCell tablet={8} desktop={12}>
                 <TextField
-                  id="csv-data"
-                  name="csv-data"
+                  id="export-data"
+                  name="export-data"
                   textarea
                   outlined
-                  value={csvData}
-                  label="Paste CSV data here"
+                  value={importDataInputValue}
+                  label="Paste export content here"
                   className={TextFieldStyles.fullWidth}
-                  onChange={(e) => setCsvData(e.currentTarget.value)}
+                  onChange={(e) =>
+                    setImportDataInputValue(e.currentTarget.value)
+                  }
                   placeholder="Name"
                 />
                 <Typography use="caption">
-                  Unfortunately your device doesn't support CSV file upload. Use
-                  this input to paste CSV data instead
+                  Unfortunately your device doesn't support file upload. Use
+                  this input to paste the content of an exported file instead
                 </Typography>
                 <br />
-                <Button onClick={onParseCSVClick} icon="cloud_upload">
+                <Button onClick={onParseExportClick} icon="cloud_upload">
                   Upload
                 </Button>
               </GridCell>
