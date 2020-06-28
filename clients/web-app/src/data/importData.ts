@@ -7,11 +7,7 @@ type PlantWithStringDates = Override<
   { wateringTimes: string[]; timeOfDeath: string | undefined }
 >;
 
-export class InvalidImportFormatError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
+export class InvalidImportFormatError extends Error {}
 
 export default function importData(fileContent: string): DataExport {
   let result: Override<DataExport, { plants: PlantWithStringDates[] }>;

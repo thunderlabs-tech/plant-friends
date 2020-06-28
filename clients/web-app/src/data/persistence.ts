@@ -51,11 +51,7 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
   await setItem<number>(NEXT_MIGRATION_INDEX_KEY, value);
 }
 
-export class IncompatibleImportError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
+export class IncompatibleImportError extends Error {}
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
