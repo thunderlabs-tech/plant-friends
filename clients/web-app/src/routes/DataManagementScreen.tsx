@@ -88,7 +88,7 @@ const DataManagementScreen: React.FC<
     parseAndImportFileContent(fileContent);
   };
 
-  const onParseExportClick = async () => {
+  const onImportTextContentClick = async () => {
     parseAndImportFileContent(importDataInputValue);
   };
 
@@ -153,7 +153,7 @@ const DataManagementScreen: React.FC<
                   this input to paste the content of an exported file instead
                 </Typography>
                 <br />
-                <Button onClick={onParseExportClick} icon="cloud_upload">
+                <Button onClick={onImportTextContentClick} icon="cloud_upload">
                   Upload
                 </Button>
               </GridCell>
