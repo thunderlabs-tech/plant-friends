@@ -56,7 +56,7 @@ async function getNextId(): Promise<string> {
 
 const ID_COUNTER_KEY = "id-counter";
 const PLANTS_KEY = "plants";
-export const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
+const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
 
 export async function getNextMigrationIndex(): Promise<number> {
   return (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
