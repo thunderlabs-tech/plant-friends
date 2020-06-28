@@ -4,6 +4,7 @@ import LoadingState from "../utilities/state/LoadingState";
 import { Plant } from "./Plant";
 import { useHistory } from "react-router-dom";
 import { plantListUrl } from "../routes/PlantListRoute";
+import { DataExport } from "./exportData";
 
 export async function waterPlant(
   plant: Plant,
@@ -63,6 +64,20 @@ export async function batchCreatePlants(
   plantDispatch.setLoadingState(LoadingState.updating);
 
   const newPlants = await persistence.batchCreatePlants(plants);
+  plantDispatch.setData(newPlants);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+
+  return newPlants;
+}
+
+export async function persistImportedData(
+  importedData: DataExport,
+  plantDispatch: Collection<Plant>["dispatch"],
+): Promise<Plant[]> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const newPlants = await persistence.persistImportedData(importedData);
   plantDispatch.setData(newPlants);
 
   plantDispatch.setLoadingState(LoadingState.ready);
