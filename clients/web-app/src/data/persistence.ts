@@ -14,28 +14,13 @@ function storageKey(key: string): string {
   return `${namespace}-${key}`;
 }
 
-export type getItemType = <T>(
-  key: string,
-  callback?: (err: any, value: T) => void,
-) => Promise<T>;
-function getItem<T>(
-  key: string,
-  callback?: (err: any, value: T) => void,
-): Promise<T> {
-  return localforage.getItem<T>(storageKey(key), callback);
+function getItem<T>(key: string): Promise<T> {
+  return localforage.getItem<T>(storageKey(key));
 }
 
-export type setItemType = <T>(
-  key: string,
-  value: T,
-  callback?: (err: any, value: T) => void,
-) => Promise<T>;
-function setItem<T>(
-  key: string,
-  value: T,
-  callback?: (err: any, value: T) => void,
-): Promise<T> {
-  return localforage.setItem<T>(storageKey(key), value, callback);
+export type setItemType = <T>(key: string, value: T) => Promise<T>;
+function setItem<T>(key: string, value: T): Promise<T> {
+  return localforage.setItem<T>(storageKey(key), value);
 }
 
 async function getIdCounter(): Promise<number> {
@@ -76,7 +61,7 @@ const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ getItem, setItem, PLANTS_KEY, ID_COUNTER_KEY });
+    await runMigrations({ setItem, PLANTS_KEY, ID_COUNTER_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
