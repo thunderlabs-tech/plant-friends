@@ -1,6 +1,7 @@
 import localforage from "localforage";
 import { Plant } from "./Plant";
 import { runMigrations } from "./migrations";
+import { DataExport } from "./exportData";
 
 localforage.config({
   name: "plant-friends",
@@ -55,6 +56,21 @@ async function getNextId(): Promise<string> {
 
 const ID_COUNTER_KEY = "id-counter";
 const PLANTS_KEY = "plants";
+export const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
+
+export async function getNextMigrationIndex(): Promise<number> {
+  return (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
+}
+
+export async function setNextMigrationIndex(value: number): Promise<void> {
+  await setItem<number>(NEXT_MIGRATION_INDEX_KEY, value);
+}
+
+export class IncompatibleImportError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
@@ -125,8 +141,39 @@ const persistence = {
     return persistence.storePlants([...allPlants, ...newPlants]);
   },
 
-  deleteAll: async () => {
-    return Promise.all([persistence.storePlants([]), setIdCounter(0)]);
+  deleteAll: async (): Promise<void> => {
+    await Promise.all([persistence.storePlants([]), setIdCounter(0)]);
+  },
+
+  getDataForExport: async (): Promise<DataExport> => {
+    const [idCounter, nextMigrationIndex, plants] = await Promise.all([
+      getIdCounter(),
+      getNextMigrationIndex(),
+      persistence.loadPlants(),
+    ]);
+    return {
+      idCounter,
+      nextMigrationIndex,
+      plants,
+    };
+  },
+
+  persistImportedData: async (importedData: DataExport): Promise<Plant[]> => {
+    const ourMigrationIndex = await getNextMigrationIndex();
+
+    if (ourMigrationIndex !== importedData.nextMigrationIndex) {
+      throw new IncompatibleImportError(
+        `Import is from a different version of the app (${importedData.nextMigrationIndex} when it should be ${ourMigrationIndex})`,
+      );
+    }
+
+    await Promise.all([
+      setNextMigrationIndex(importedData.nextMigrationIndex),
+      setIdCounter(importedData.idCounter),
+      persistence.storePlants(importedData.plants),
+    ]);
+
+    return importedData.plants;
   },
 };
 export type Persistence = typeof persistence;
