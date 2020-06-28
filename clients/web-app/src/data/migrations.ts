@@ -1,7 +1,6 @@
 import {
   getItemType,
   setItemType,
-  NEXT_MIGRATION_INDEX_KEY,
   getNextMigrationIndex,
   setNextMigrationIndex,
 } from "./persistence";
