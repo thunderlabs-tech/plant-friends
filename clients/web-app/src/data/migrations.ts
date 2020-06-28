@@ -1,5 +1,4 @@
 import {
-  getItemType,
   setItemType,
   getNextMigrationIndex,
   setNextMigrationIndex,
@@ -10,7 +9,6 @@ export async function runMigrations({
   PLANTS_KEY,
   ID_COUNTER_KEY,
 }: {
-  getItem: getItemType;
   setItem: setItemType;
   PLANTS_KEY: string;
   ID_COUNTER_KEY: string;
