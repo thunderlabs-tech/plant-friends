@@ -1,9 +1,12 @@
-import { getItemType, setItemType } from "./persistence";
-
-const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
+import {
+  getItemType,
+  setItemType,
+  NEXT_MIGRATION_INDEX_KEY,
+  getNextMigrationIndex,
+  setNextMigrationIndex,
+} from "./persistence";
 
 export async function runMigrations({
-  getItem,
   setItem,
   PLANTS_KEY,
   ID_COUNTER_KEY,
@@ -20,13 +23,12 @@ export async function runMigrations({
     },
   ]);
 
-  const nextMigrationIndex =
-    (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
+  const nextMigrationIndex = await getNextMigrationIndex();
 
   for (let i = nextMigrationIndex; i < migrations.length; i++) {
     const nextMigration = migrations[i];
     await nextMigration();
   }
 
-  await setItem(NEXT_MIGRATION_INDEX_KEY, migrations.length);
+  await setNextMigrationIndex(migrations.length);
 }
