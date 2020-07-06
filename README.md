@@ -27,6 +27,20 @@ See the README in individual workspaces for project-specific info.
     - It's phrased as "proposed" so that if the person working on the card comes up with a better solution they can
       implement that instead, as long as it solves the problem described in the issue
 
+## Local Development
+
+We use [netlify-dev](https://github.com/netlify/cli/blob/master/docs/netlify-dev.md) to run a local version of the Netlify environment. This serves the backend lambda functions and proxies to the local client dev server to allow testing in a production-like environment.
+
+Netlify-dev will include all production environment variables in the local environment, so watch out.
+
+To start the Netlify dev server:
+
+    netlify dev
+
+This will start the `clients/web-app` local server and proxy requests to it from the local Netlify server whose address it will print out:
+
+    ◈ Server now ready on http://localhost:8888
+
 ## CI & CD
 
 Continuous integration is managed using Github workflows. See [`.github/workflows`](.github/workflows).
@@ -66,3 +80,9 @@ implementation.
 - When I have a new plant / a plant is unwell
   - I want to make sure it has the sun / temperature / humidity it needs
   - E.g. by seeing data about the type of plant it is and its needs
+- When I'm reminded to water a plant but its soil is still damp
+  - I want to not be reminded to water it until it dries out a bit
+  - E.g. by skipping that reminder and increasing the time between watering reminders
+- When one of my plants needs water but I haven't been reminded yet
+  - I want to make it gets enough water
+  - E.g. by watering it and reducing the time between waterings

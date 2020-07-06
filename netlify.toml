@@ -14,7 +14,13 @@
   command = "yarn build"
 
   # Directory with the serverless Lambda functions to deploy to AWS.
-  # functions = "project/functions/"
+  functions = "netlify/functions"
+
+[dev]
+  framework = "#custom"
+  command = "yarn start" # Command to start the client dev server
+  targetPort = 3000 # Port the client dev server runs on
+  port = 8888 # Port that netlify-dev will run on
 
 # Production context: all deploys from the Production branch set in your site's
 # deploy contexts will inherit these settings.
