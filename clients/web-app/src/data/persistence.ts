@@ -28,9 +28,21 @@ function assertSuccessfulResponse<SuccessType = unknown>(
   return response;
 }
 
+type JSONSerializableScalarValue =
+  | string
+  | number
+  | boolean
+  | undefined
+  | null
+  | Date
+  | JSONSerializableScalarValue[];
+type JSONSerializableValue =
+  | { [key: string]: JSONSerializableValue }
+  | JSONSerializableScalarValue;
+
 async function faunaDBQuery<SuccessResponse = unknown>(request: {
   query: string;
-  variables?: { [key: string]: string | number | boolean | undefined | null };
+  variables?: { [key: string]: JSONSerializableValue };
 }): Promise<SuccessResponse> {
   const response = await fetch(faunaDBUrl, {
     method: "POST",
