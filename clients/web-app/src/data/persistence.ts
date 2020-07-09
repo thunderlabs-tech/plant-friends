@@ -2,6 +2,7 @@ import localforage from "localforage";
 import { Plant } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
+import { Override } from "../utilities/lang/Override";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const faunaDBAuthorizationToken = "fnADwAeakMACB0RddDaChuq-Tl9eaSXhQvLqOaqD";
@@ -39,6 +40,29 @@ type JSONSerializableScalarValue =
 type JSONSerializableValue =
   | { [key: string]: JSONSerializableValue }
   | JSONSerializableScalarValue;
+
+export type FaunaDBSerializedPlant = Override<
+  Plant,
+  {
+    wateringTimes: string[];
+    timeOfDeath: string | null;
+  }
+>;
+
+function deserializeDate(iso8601DateString: string): Date {
+  return new Date(Date.parse(iso8601DateString));
+}
+function deserializeFaunaDBPlant(
+  serializedPlant: FaunaDBSerializedPlant,
+): Plant {
+  return {
+    ...serializedPlant,
+    wateringTimes: serializedPlant.wateringTimes.map(deserializeDate),
+    timeOfDeath: serializedPlant.timeOfDeath
+      ? deserializeDate(serializedPlant.timeOfDeath)
+      : null,
+  };
+}
 
 async function faunaDBQuery<SuccessResponse = unknown>(request: {
   query: string;
@@ -135,24 +159,25 @@ const persistence = {
   loadPlants: async (): Promise<Plant[]> => {
     const userId = await getUserId();
     const query = /* GraphQL */ `
-      query($userId: String) {
+      query($userId: String!) {
         getPlants(userId: $userId) {
           data {
-            name
             _id
+            name
             timeOfDeath
             wateringPeriodInDays
             wateringTimes
+            userId
           }
         }
       }
     `;
 
     const response = await faunaDBQuery<{
-      data: { getPlants: { data: Plant[] } };
+      data: { getPlants: { data: FaunaDBSerializedPlant[] } };
     }>({ query, variables: { userId } });
 
-    return response.data.getPlants.data;
+    return response.data.getPlants.data.map(deserializeFaunaDBPlant);
   },
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
