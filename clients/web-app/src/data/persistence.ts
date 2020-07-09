@@ -3,6 +3,51 @@ import { Plant } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
 
+const faunaDBUrl = "https://graphql.fauna.com/graphql";
+const faunaDBAuthorizationToken = "fnADwAeakMACB0RddDaChuq-Tl9eaSXhQvLqOaqD";
+
+type GraphQLErrorResponse = {
+  errors: { message: string }[];
+};
+
+function isGraphQLError(response: any): response is GraphQLErrorResponse {
+  return Object.prototype.hasOwnProperty.call(response, "errors");
+}
+
+function assertSuccessfulResponse<SuccessType = unknown>(
+  response: SuccessType | GraphQLErrorResponse,
+): SuccessType {
+  if (isGraphQLError(response)) {
+    throw new Error(
+      `Request failed: \n${response.errors
+        .map((error) => error.message)
+        .join("\n")}`,
+    );
+  }
+
+  return response;
+}
+
+async function faunaDBQuery<SuccessResponse = unknown>(request: {
+  query: string;
+  variables?: { [key: string]: string | number | boolean | undefined | null };
+}): Promise<SuccessResponse> {
+  const response = await fetch(faunaDBUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${faunaDBAuthorizationToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  const result = (await response.json()) as
+    | SuccessResponse
+    | GraphQLErrorResponse;
+
+  return assertSuccessfulResponse(result);
+}
+
 localforage.config({
   name: "plant-friends",
   version: 1.1,
@@ -52,6 +97,10 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
   await setItem<number>(NEXT_MIGRATION_INDEX_KEY, value);
 }
 
+function getUserId(): Promise<string> {
+  return getItem<string>(USER_ID_KEY);
+}
+
 export class IncompatibleImportError extends Error {}
 
 const persistence = {
@@ -62,7 +111,26 @@ const persistence = {
   },
 
   loadPlants: async (): Promise<Plant[]> => {
-    return await getItem<Plant[]>(PLANTS_KEY);
+    const userId = await getUserId();
+    const query = /* GraphQL */ `
+      query($userId: String) {
+        getPlants(userId: $userId) {
+          data {
+            name
+            _id
+            timeOfDeath
+            wateringPeriodInDays
+            wateringTimes
+          }
+        }
+      }
+    `;
+
+    const response = await faunaDBQuery<{
+      data: { getPlants: { data: Plant[] } };
+    }>({ query, variables: { userId } });
+
+    return response.data.getPlants.data;
   },
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
