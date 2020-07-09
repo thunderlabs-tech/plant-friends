@@ -184,21 +184,7 @@ const persistence = {
     return persistence.addPlant(newPlant);
   },
 
-  batchCreatePlants: async (
-    plantDescriptors: Omit<Plant, "_id">[],
-  ): Promise<Plant[]> => {
-    const allPlants = await persistence.loadPlants();
-    let idCounter = await getIdCounter();
 
-    const newPlants: Plant[] = plantDescriptors.map((plantDescriptor) => {
-      idCounter += 1;
-      return { ...plantDescriptor, _id: idCounter.toString() };
-    });
-
-    await setIdCounter(idCounter);
-
-    return persistence.storePlants([...allPlants, ...newPlants]);
-  },
 
   deleteAll: async (): Promise<void> => {
     await Promise.all([
