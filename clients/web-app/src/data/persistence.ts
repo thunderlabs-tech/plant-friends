@@ -6,7 +6,7 @@ import { Override } from "../utilities/lang/Override";
 import { omit } from "lodash";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
-const faunaDBAuthorizationToken = "fnADwAeakMACB0RddDaChuq-Tl9eaSXhQvLqOaqD";
+const faunaDBAuthorizationToken = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
 
 type GraphQLErrorResponse = {
   errors: { message: string }[];
