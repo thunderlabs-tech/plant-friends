@@ -169,10 +169,6 @@ const persistence = {
     return response.data.getPlants.data.map(deserializeFaunaDBPlant);
   },
 
-  storePlants: (plants: Plant[]): Promise<Plant[]> => {
-    return setItem<Plant[]>(LOCAL_STORAGE_KEYS.PLANTS_KEY, plants);
-  },
-
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const query = /* GraphQL */ `
       mutation($id: ID!, $data: PlantInput!) {
