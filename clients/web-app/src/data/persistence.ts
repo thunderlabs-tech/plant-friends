@@ -114,8 +114,6 @@ async function getIdCounter(): Promise<number> {
 }
 
 export const LOCAL_STORAGE_KEYS = {
-  ID_COUNTER_KEY: "id-counter",
-  PLANTS_KEY: "plants",
   NEXT_MIGRATION_INDEX_KEY: "next-migration-index",
   USER_ID_KEY: "user-id",
 };
