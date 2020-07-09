@@ -2,6 +2,8 @@
 
 Keep your plants happy by tracking and caring for their needs.
 
+- Production app: https://plant-friends.netlify.app/
+
 ## Monorepo Project Structure
 
 This project contains all relevant code for Plant Friends deployment: client apps, server functions, etc. See `clients/` for the available client apps and `services/` for backend services.
@@ -40,6 +42,12 @@ To start the Netlify dev server:
 This will start the `clients/web-app` local server and proxy requests to it from the local Netlify server whose address it will print out:
 
     ◈ Server now ready on http://localhost:8888
+
+## Deployment
+
+Deployed automatically to production via Netlify.
+
+- Netlify admin panel: https://app.netlify.com/sites/plant-friends/overview
 
 ## CI & CD
 
