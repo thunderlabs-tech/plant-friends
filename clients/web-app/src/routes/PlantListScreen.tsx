@@ -33,6 +33,7 @@ import Surface from "../components/Surface";
 import Layout from "../components/Layout";
 import { deadPlantListUrl } from "./DeadPlantListRoute";
 import { dataManagementUrl } from "./DataManagementRoute";
+import { NewPlant } from "../data/persistence";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -57,7 +58,7 @@ const PlantListScreen: React.FC<
     waterPlant(plant, plants.dispatch);
   };
 
-  const onAddNewPlant = (plant: Omit<Plant, "_id">) => {
+  const onAddNewPlant = (plant: NewPlant) => {
     createPlant(plant, plants.dispatch);
   };
 

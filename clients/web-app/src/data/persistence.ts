@@ -117,14 +117,6 @@ async function setIdCounter(nextId: number): Promise<number> {
   return setItem<number>("id-counter", nextId);
 }
 
-async function getNextId(): Promise<string> {
-  const idCounter: number = await getIdCounter();
-
-  const nextId = idCounter + 1;
-  setIdCounter(nextId);
-  return nextId.toString();
-}
-
 export const LOCAL_STORAGE_KEYS = {
   ID_COUNTER_KEY: "id-counter",
   PLANTS_KEY: "plants",
@@ -149,6 +141,8 @@ function getUserId(): Promise<string> {
 }
 
 export class IncompatibleImportError extends Error {}
+
+export type NewPlant = Omit<Plant, "_id" | "userId">;
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
@@ -206,19 +200,27 @@ const persistence = {
     return persistence.loadPlants();
   },
 
-  addPlant: async (plant: Plant): Promise<Plant[]> => {
-    const allPlants = await persistence.loadPlants();
+  createPlant: async (newPlant: NewPlant): Promise<Plant[]> => {
+    let userId = await getUserId();
 
-    const newPlants = [...allPlants, plant];
+    const query = /* GraphQL */ `
+      mutation($data: PlantInput!) {
+        createPlant(data: $data) {
+          _id
+          name
+          timeOfDeath
+          wateringPeriodInDays
+          wateringTimes
+          userId
+        }
+      }
+    `;
 
-    return persistence.storePlants(newPlants);
-  },
+    await faunaDBQuery<{
+      data: { createPlant: Plant };
+    }>({ query, variables: { data: { ...newPlant, userId } } });
 
-  createPlant: async (
-    plantDescriptor: Omit<Plant, "_id">,
-  ): Promise<Plant[]> => {
-    const newPlant: Plant = { ...plantDescriptor, _id: await getNextId() };
-    return persistence.addPlant(newPlant);
+    return persistence.loadPlants();
   },
 
 
