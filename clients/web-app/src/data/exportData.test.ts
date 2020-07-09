@@ -22,13 +22,16 @@ describe("exportData()", () => {
   });
 
   it("encodes dates as ISO8601 date strings", () => {
+    const wateringTimeDate = new Date(2020, 1, 1, 0, 0, 0, 0);
+    const timeOfDeathDate = new Date(2020, 1, 1, 0, 0, 0, 0);
+
     const plants: Plant[] = [
       {
         _id: "1",
         name: "Plant 1",
         wateringPeriodInDays: 10,
-        wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
-        timeOfDeath: null,
+        wateringTimes: [wateringTimeDate],
+        timeOfDeath: timeOfDeathDate,
         userId: "aaaaaaaaa-bbbbbbbbb-ccccccccc",
       },
     ];
@@ -40,13 +43,13 @@ describe("exportData()", () => {
     });
     const data = JSON.parse(resultText);
 
-    const iso8601DateString = new Date(2020, 1, 1, 0, 0, 0, 0).toISOString();
+    const iso8601WateringTimeString = wateringTimeDate.toISOString();
+    const iso8601TimeOfDeathString = timeOfDeathDate.toISOString();
     expect(data.plants).toEqual([
       {
-        id: "1",
-        name: "Plant 1",
-        wateringPeriodInDays: 10,
-        wateringTimes: [iso8601DateString],
+        ...plants[0],
+        wateringTimes: [iso8601WateringTimeString],
+        timeOfDeath: iso8601TimeOfDeathString,
       },
     ]);
   });
