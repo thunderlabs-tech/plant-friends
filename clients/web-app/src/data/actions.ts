@@ -1,5 +1,5 @@
 import { Collection } from "../utilities/state/useCollection";
-import persistence from "./persistence";
+import persistence, { NewPlant } from "./persistence";
 import LoadingState from "../utilities/state/LoadingState";
 import { Plant } from "./Plant";
 import { useHistory } from "react-router-dom";
@@ -24,7 +24,7 @@ export async function waterPlant(
 }
 
 export async function createPlant(
-  plant: Omit<Plant, "_id">,
+  plant: NewPlant,
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);

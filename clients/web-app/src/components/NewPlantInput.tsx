@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { Plant } from "../data/Plant";
 import "@rmwc/textfield/styles";
 import { TextField } from "@rmwc/textfield";
 import "@rmwc/icon-button/styles";
@@ -10,9 +9,10 @@ import { Button } from "@rmwc/button";
 
 import TextFieldStyles from "../components/TextField.module.css";
 import { GridCell, Grid } from "@rmwc/grid";
+import { NewPlant } from "../data/persistence";
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (plant: Omit<Plant, "_id">) => void;
+  onAddNewPlant: (plant: NewPlant) => void;
 };
 
 const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
