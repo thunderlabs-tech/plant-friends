@@ -34,9 +34,7 @@ export type DeadPlantListScreenProps = {
 const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
   plants,
 }) => {
-  const deadPlants = plants.data.filter(
-    (plant) => plant.timeOfDeath !== undefined,
-  );
+  const deadPlants = plants.data.filter((plant) => plant.timeOfDeath !== null);
 
   const onResurrectClick = (plant: Plant) => {
     restoreFromGraveyard(plant, plants.dispatch);
@@ -56,9 +54,9 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
               <List twoLine avatarList theme={["onSurface"]}>
                 {deadPlants.map((plant) => (
                   <ListItem
-                    key={plant.id}
+                    key={plant._id}
                     tag={Link}
-                    to={deadPlantDetailUrl(plant.id)}
+                    to={deadPlantDetailUrl(plant._id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>

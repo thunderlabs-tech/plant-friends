@@ -57,7 +57,7 @@ const PlantListScreen: React.FC<
     waterPlant(plant, plants.dispatch);
   };
 
-  const onAddNewPlant = (plant: Omit<Plant, "id">) => {
+  const onAddNewPlant = (plant: Omit<Plant, "_id">) => {
     createPlant(plant, plants.dispatch);
   };
 
@@ -87,9 +87,9 @@ const PlantListScreen: React.FC<
               {unwateredPlants.length > 0 &&
                 unwateredPlants.map((plant) => (
                   <ListItem
-                    key={plant.id}
+                    key={plant._id}
                     tag={Link}
-                    to={plantDetailUrl(plant.id)}
+                    to={plantDetailUrl(plant._id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>
@@ -119,9 +119,9 @@ const PlantListScreen: React.FC<
               {wateredPlants.length > 0 &&
                 wateredPlants.map((plant) => (
                   <ListItem
-                    key={plant.id}
+                    key={plant._id}
                     tag={Link}
-                    to={plantDetailUrl(plant.id)}
+                    to={plantDetailUrl(plant._id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>

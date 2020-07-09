@@ -1,11 +1,11 @@
 import add from "date-fns/add";
 
 export type Plant = {
-  id: string;
+  _id: string;
   name: string;
   wateringPeriodInDays: number;
   wateringTimes: Date[];
-  timeOfDeath?: Date;
+  timeOfDeath: Date | null;
 };
 
 export function lastWateredAt(plant: Plant): Date | undefined {
