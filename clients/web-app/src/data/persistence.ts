@@ -272,13 +272,11 @@ const persistence = {
       );
     }
 
-    await Promise.all([
-      setNextMigrationIndex(importedData.nextMigrationIndex),
-      setIdCounter(importedData.idCounter),
-      persistence.storePlants(importedData.plants),
-    ]);
+    for (let i = 0; i < importedData.plants.length; i += 1) {
+      await persistence.createPlant(importedData.plants[i]);
+    }
 
-    return importedData.plants;
+    return persistence.loadPlants();
   },
 };
 export type Persistence = typeof persistence;
