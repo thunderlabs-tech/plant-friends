@@ -24,21 +24,14 @@
 
 # Production context: all deploys from the Production branch set in your site's
 # deploy contexts will inherit these settings.
-[context.production]
-#   publish = "project/output/"
-#   command = "make publish"
-  environment = {
-    REACT_APP_LOCAL_STORAGE_NAMESPACE = "production"
-  }
+[context.production.environment]
+  REACT_APP_LOCAL_STORAGE_NAMESPACE = "production"
 
 # Deploy Preview context: all deploys generated from a pull/merge request will
 # inherit these settings.
-[context.deploy-preview]
-  # publish = "project/dist/"
-  environment = { 
-    REACT_APP_FAUNADB_ACCESS_TOKEN = "fnADwVW-dgACBQ-fMyEhKxFUYq5X3OuWotiIgd5E"
-    REACT_APP_LOCAL_STORAGE_NAMESPACE = "staging"
-  }
+[context.deploy-preview.environment]
+  REACT_APP_FAUNADB_ACCESS_TOKEN = "fnADwVW-dgACBQ-fMyEhKxFUYq5X3OuWotiIgd5E"
+  REACT_APP_LOCAL_STORAGE_NAMESPACE = "staging"
 
 # # Here is another way to define context specific environment variables.
 # [context.deploy-preview.environment]
