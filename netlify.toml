@@ -29,10 +29,11 @@
 #   command = "make publish"
 #   environment = { ACCESS_TOKEN = "super secret", NODE_VERSION = "8.0.1" }
 
-# # Deploy Preview context: all deploys generated from a pull/merge request will
-# # inherit these settings.
-# [context.deploy-preview]
-#   publish = "project/dist/"
+# Deploy Preview context: all deploys generated from a pull/merge request will
+# inherit these settings.
+[context.deploy-preview]
+  # publish = "project/dist/"
+  environment = { REACT_APP_FAUNADB_ACCESS_TOKEN: "fnADwVW-dgACBQ-fMyEhKxFUYq5X3OuWotiIgd5E" }
 
 # # Here is another way to define context specific environment variables.
 # [context.deploy-preview.environment]
