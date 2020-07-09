@@ -3,6 +3,7 @@ import { Plant } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
 import { Override } from "../utilities/lang/Override";
+import { omit } from "lodash";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const faunaDBAuthorizationToken = "fnADwAeakMACB0RddDaChuq-Tl9eaSXhQvLqOaqD";
@@ -185,25 +186,24 @@ const persistence = {
   },
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
-    const allPlants = await persistence.loadPlants();
-    const plantIndex = allPlants.findIndex(
-      (element) => element._id === plant._id,
-    );
-    if (plantIndex === -1)
-      throw new Error(`Plant with ID ${plant._id} not found`);
-    const newPlants = [
-      ...allPlants.slice(0, plantIndex),
-      plant,
-      ...allPlants.slice(plantIndex + 1),
-    ];
-    return persistence.storePlants(newPlants);
-  },
-  removePlant: async (plant: Plant): Promise<Plant[]> => {
-    const allPlants = await persistence.loadPlants();
+    const query = /* GraphQL */ `
+      mutation($id: ID!, $data: PlantInput!) {
+        updatePlant(id: $id, data: $data) {
+          _id
+          name
+          timeOfDeath
+          wateringPeriodInDays
+          wateringTimes
+          userId
+        }
+      }
+    `;
 
-    const newPlants = allPlants.filter((element) => element._id !== plant._id);
+    await faunaDBQuery<{
+      data: { updatePlant: Plant };
+    }>({ query, variables: { id: plant._id, data: omit(plant, "_id") } });
 
-    return persistence.storePlants(newPlants);
+    return persistence.loadPlants();
   },
 
   addPlant: async (plant: Plant): Promise<Plant[]> => {
