@@ -38,7 +38,7 @@ export default function importData(fileContent: string): DataExport {
         ),
         timeOfDeath: plantWithStringDates.timeOfDeath
           ? new Date(Date.parse(plantWithStringDates.timeOfDeath))
-          : undefined,
+          : null,
       };
     },
   );

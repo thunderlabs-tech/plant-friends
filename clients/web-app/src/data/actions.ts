@@ -24,7 +24,7 @@ export async function waterPlant(
 }
 
 export async function createPlant(
-  plant: Omit<Plant, "id">,
+  plant: Omit<Plant, "_id">,
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
@@ -58,7 +58,7 @@ export async function refreshPlants(
 }
 
 export async function batchCreatePlants(
-  plants: Omit<Plant, "id">[],
+  plants: Omit<Plant, "_id">[],
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<Plant[]> {
   plantDispatch.setLoadingState(LoadingState.updating);
@@ -104,7 +104,7 @@ export async function restoreFromGraveyard(
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const updatedPlant = { ...plant, timeOfDeath: undefined };
+  const updatedPlant: Plant = { ...plant, timeOfDeath: null };
   const newPlants = await persistence.updatePlant(updatedPlant);
   plantDispatch.setData(newPlants);
 

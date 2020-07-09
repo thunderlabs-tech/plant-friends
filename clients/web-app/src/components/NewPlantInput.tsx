@@ -12,7 +12,7 @@ import TextFieldStyles from "../components/TextField.module.css";
 import { GridCell, Grid } from "@rmwc/grid";
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (plant: Omit<Plant, "id">) => void;
+  onAddNewPlant: (plant: Omit<Plant, "_id">) => void;
 };
 
 const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
@@ -22,7 +22,12 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddNewPlant({ name, wateringPeriodInDays, wateringTimes: [] });
+    onAddNewPlant({
+      name,
+      wateringPeriodInDays,
+      timeOfDeath: null,
+      wateringTimes: [],
+    });
     setName("");
   };
 

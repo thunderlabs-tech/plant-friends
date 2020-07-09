@@ -24,10 +24,11 @@ describe("exportData()", () => {
   it("encodes dates as ISO8601 date strings", () => {
     const plants: Plant[] = [
       {
-        id: "1",
+        _id: "1",
         name: "Plant 1",
         wateringPeriodInDays: 10,
         wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
+        timeOfDeath: null,
       },
     ];
 

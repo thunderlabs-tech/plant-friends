@@ -47,7 +47,7 @@ const PlantDetailScreen: React.FC<
   { params: PlantDetailRouteParams } & PlantDetailScreenProps
 > = ({ plants, params, deadPlantRoute }) => {
   const plant = plants.data.find(
-    (plantElement) => plantElement.id === params.id,
+    (plantElement) => plantElement._id === params.id,
   );
 
   const history = useHistory();
