@@ -42,6 +42,7 @@ async function getNextId(): Promise<string> {
 const ID_COUNTER_KEY = "id-counter";
 const PLANTS_KEY = "plants";
 const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
+const USER_ID_KEY = "user-id";
 
 export async function getNextMigrationIndex(): Promise<number> {
   return (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
@@ -57,7 +58,7 @@ const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ setItem, PLANTS_KEY, ID_COUNTER_KEY });
+    await runMigrations({ setItem, PLANTS_KEY, ID_COUNTER_KEY, USER_ID_KEY });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
