@@ -7,6 +7,7 @@ import { omit } from "lodash";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const faunaDBAuthorizationToken = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
+const namespace = process.env.REACT_APP_LOCAL_STORAGE_NAMESPACE;
 
 type GraphQLErrorResponse = {
   errors: { message: string }[];
@@ -89,8 +90,6 @@ localforage.config({
   name: "plant-friends",
   version: 1.1,
 });
-
-const namespace = process.env.NODE_ENV;
 
 function storageKey(key: string): string {
   return `${namespace}-${key}`;
