@@ -68,6 +68,10 @@ function setItem<T>(key: string, value: T): Promise<T> {
   return localforage.setItem<T>(storageKey(key), value);
 }
 
+function removeItem(key: string): Promise<void> {
+  return localforage.removeItem(storageKey(key));
+}
+
 async function getIdCounter(): Promise<number> {
   return (await getItem<number | undefined>("id-counter")) || 0;
 }
@@ -84,21 +88,27 @@ async function getNextId(): Promise<string> {
   return nextId.toString();
 }
 
-const ID_COUNTER_KEY = "id-counter";
-const PLANTS_KEY = "plants";
-const NEXT_MIGRATION_INDEX_KEY = "next-migration-index";
-const USER_ID_KEY = "user-id";
+export const LOCAL_STORAGE_KEYS = {
+  ID_COUNTER_KEY: "id-counter",
+  PLANTS_KEY: "plants",
+  NEXT_MIGRATION_INDEX_KEY: "next-migration-index",
+  USER_ID_KEY: "user-id",
+};
 
 export async function getNextMigrationIndex(): Promise<number> {
-  return (await getItem<number | undefined>(NEXT_MIGRATION_INDEX_KEY)) || 0;
+  return (
+    (await getItem<number | undefined>(
+      LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY,
+    )) || 0
+  );
 }
 
 export async function setNextMigrationIndex(value: number): Promise<void> {
-  await setItem<number>(NEXT_MIGRATION_INDEX_KEY, value);
+  await setItem<number>(LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY, value);
 }
 
 function getUserId(): Promise<string> {
-  return getItem<string>(USER_ID_KEY);
+  return getItem<string>(LOCAL_STORAGE_KEYS.USER_ID_KEY);
 }
 
 export class IncompatibleImportError extends Error {}
@@ -107,7 +117,7 @@ const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ setItem, PLANTS_KEY, ID_COUNTER_KEY, USER_ID_KEY });
+    await runMigrations({ setItem, ...LOCAL_STORAGE_KEYS });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
@@ -134,30 +144,27 @@ const persistence = {
   },
 
   storePlants: (plants: Plant[]): Promise<Plant[]> => {
-    return setItem<Plant[]>(PLANTS_KEY, plants);
+    return setItem<Plant[]>(LOCAL_STORAGE_KEYS.PLANTS_KEY, plants);
   },
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
     const plantIndex = allPlants.findIndex(
-      (element) => element.id === plant.id,
+      (element) => element._id === plant._id,
     );
-
     if (plantIndex === -1)
-      throw new Error(`Plant with ID ${plant.id} not found`);
-
+      throw new Error(`Plant with ID ${plant._id} not found`);
     const newPlants = [
       ...allPlants.slice(0, plantIndex),
       plant,
       ...allPlants.slice(plantIndex + 1),
     ];
-
     return persistence.storePlants(newPlants);
   },
   removePlant: async (plant: Plant): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
 
-    const newPlants = allPlants.filter((element) => element.id !== plant.id);
+    const newPlants = allPlants.filter((element) => element._id !== plant._id);
 
     return persistence.storePlants(newPlants);
   },
@@ -170,20 +177,22 @@ const persistence = {
     return persistence.storePlants(newPlants);
   },
 
-  createPlant: async (plantDescriptor: Omit<Plant, "id">): Promise<Plant[]> => {
-    const newPlant = { ...plantDescriptor, id: await getNextId() };
+  createPlant: async (
+    plantDescriptor: Omit<Plant, "_id">,
+  ): Promise<Plant[]> => {
+    const newPlant: Plant = { ...plantDescriptor, _id: await getNextId() };
     return persistence.addPlant(newPlant);
   },
 
   batchCreatePlants: async (
-    plantDescriptors: Omit<Plant, "id">[],
+    plantDescriptors: Omit<Plant, "_id">[],
   ): Promise<Plant[]> => {
     const allPlants = await persistence.loadPlants();
     let idCounter = await getIdCounter();
 
     const newPlants: Plant[] = plantDescriptors.map((plantDescriptor) => {
       idCounter += 1;
-      return { ...plantDescriptor, id: idCounter.toString() };
+      return { ...plantDescriptor, _id: idCounter.toString() };
     });
 
     await setIdCounter(idCounter);
@@ -192,7 +201,12 @@ const persistence = {
   },
 
   deleteAll: async (): Promise<void> => {
-    await Promise.all([persistence.storePlants([]), setIdCounter(0)]);
+    await Promise.all([
+      removeItem(LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY),
+      removeItem(LOCAL_STORAGE_KEYS.PLANTS_KEY),
+      removeItem(LOCAL_STORAGE_KEYS.ID_COUNTER_KEY),
+      removeItem(LOCAL_STORAGE_KEYS.USER_ID_KEY),
+    ]);
   },
 
   getDataForExport: async (): Promise<DataExport> => {
