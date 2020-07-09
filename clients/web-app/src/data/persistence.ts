@@ -201,10 +201,11 @@ const persistence = {
       getNextMigrationIndex(),
       persistence.loadPlants(),
     ]);
+
     return {
       idCounter,
       nextMigrationIndex,
-      plants,
+      plants: plants.map((plant) => omit(plant, "_id")),
     };
   },
 
