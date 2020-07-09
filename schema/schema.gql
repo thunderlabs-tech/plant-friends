@@ -1,0 +1,11 @@
+type Plant {
+  name: String!
+  wateringTimes: [Date]
+  timeOfDeath: Date
+  wateringPeriodInDays: Int!
+  userId: String
+}
+
+type Query {
+  getPlants(userId: String): [Plant!]!
+}
