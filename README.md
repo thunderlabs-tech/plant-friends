@@ -43,6 +43,12 @@ This will start the `clients/web-app` local server and proxy requests to it from
 
     ◈ Server now ready on http://localhost:8888
 
+### Invoking Netlify Serverless Functions
+
+Once `netlify dev` is runnning, you can use [`netlify functions:invoke`](https://github.com/netlify/cli/blob/master/docs/netlify-dev.md#locally-testing-functions-with-netlify-functionsinvoke).
+
+    netlify functions:invoke getPlants
+
 ## Deployment
 
 Deployed automatically to production via Netlify.
@@ -54,6 +60,26 @@ Deployed automatically to production via Netlify.
 Continuous integration is managed using Github workflows. See [`.github/workflows`](.github/workflows).
 
 Continuous deployment is managed using Netlify. See [`netlify.toml`](netlify.toml).
+
+## Persistence / FaunaDB
+
+Data is stored in [FaunaDB](https://dashboard.fauna.com/).
+
+### Databases, access keys, environment variables
+
+One database is designated for production and its access key is stored as an environment variable in Netlify.
+
+For local development, create a new database for yourself or [run a local FaunaDB docker image](https://fauna.com/blog/setting-up-a-new-fauna-cluster-using-docker).
+
+FaunaDB identifies which database you connect to by your access token. Once you've created a database, assign the key to the environment variable `REACT_APP_FAUNADB_ACCESS_TOKEN` (you can put it in [`.env`](clients/web-app/.env) for convenience).
+
+### Schema
+
+For now databases need to be set up and migrated manually. The current schema is stored in (schema/schema.gql)[schema/schema.gql]. You can upload it using the FaunaDB dashboard (go to the "GraphQL" tab and there's an "Update Schema" button).
+
+### Staging, Netlify deploy previews
+
+Netlify builds a copy of the app for each open PR. Currently they will all connect to the same FaunaDB staging database. In the future we could add a Netlify hook to provision a new FaunaDB database for each new deploy preview so that they don't conflict. This will be particularly important when we have automated migrations.
 
 ## User stories
 
