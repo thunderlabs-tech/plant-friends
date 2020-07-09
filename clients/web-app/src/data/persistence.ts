@@ -113,10 +113,6 @@ async function getIdCounter(): Promise<number> {
   return (await getItem<number | undefined>("id-counter")) || 0;
 }
 
-async function setIdCounter(nextId: number): Promise<number> {
-  return setItem<number>("id-counter", nextId);
-}
-
 export const LOCAL_STORAGE_KEYS = {
   ID_COUNTER_KEY: "id-counter",
   PLANTS_KEY: "plants",
@@ -223,15 +219,34 @@ const persistence = {
     return persistence.loadPlants();
   },
 
+  deletePlant: async (plant: Plant): Promise<void> => {
+    const query = /* GraphQL */ `
+      mutation($id: ID!) {
+        deletePlant(id: $id) {
+          _id
+        }
+      }
+    `;
 
+    await faunaDBQuery<{
+      data: { deletePlant: Plant };
+    }>({ query, variables: { id: plant._id } });
+  },
 
   deleteAll: async (): Promise<void> => {
+    const plants = await persistence.loadPlants();
+
+    for (let i = 0; i < plants.length; i += 1) {
+      await persistence.deletePlant(plants[i]);
+    }
+
+    // TODO: delete remote data and update description in UI
     await Promise.all([
       removeItem(LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY),
-      removeItem(LOCAL_STORAGE_KEYS.PLANTS_KEY),
-      removeItem(LOCAL_STORAGE_KEYS.ID_COUNTER_KEY),
       removeItem(LOCAL_STORAGE_KEYS.USER_ID_KEY),
     ]);
+
+    window.location.reload();
   },
 
   getDataForExport: async (): Promise<DataExport> => {
