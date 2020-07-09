@@ -29,7 +29,7 @@ describe("exportData()", () => {
         wateringPeriodInDays: 10,
         wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
         timeOfDeath: null,
-        userId: 'aaaaaaaaa-bbbbbbbbb-ccccccccc',
+        userId: "aaaaaaaaa-bbbbbbbbb-ccccccccc",
       },
     ];
 
