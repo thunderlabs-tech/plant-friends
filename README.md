@@ -28,6 +28,7 @@ See the README in individual workspaces for project-specific info.
     - Describes the solution the author has in mind
     - It's phrased as "proposed" so that if the person working on the card comes up with a better solution they can
       implement that instead, as long as it solves the problem described in the issue
+- Only (and always) use scream caps for constants set by environment variables, and always use scream caps for environment variables
 
 ## Local Development
 
