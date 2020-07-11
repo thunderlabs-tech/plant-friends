@@ -3,20 +3,17 @@ import { Plant } from "./Plant";
 
 describe("exportData()", () => {
   it("encodes the application data as JSON", () => {
-    const idCounter = 1;
     const nextMigrationIndex = 2;
 
     const result = JSON.parse(
       exportData({
         nextMigrationIndex,
-        idCounter,
         plants: [],
       }),
     );
 
     expect(result).toEqual({
       nextMigrationIndex,
-      idCounter,
       plants: [],
     });
   });
@@ -38,7 +35,6 @@ describe("exportData()", () => {
 
     const resultText = exportData({
       nextMigrationIndex: 1,
-      idCounter: 2,
       plants,
     });
     const data = JSON.parse(resultText);

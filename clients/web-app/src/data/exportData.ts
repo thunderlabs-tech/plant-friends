@@ -1,7 +1,6 @@
 import { Plant } from "./Plant";
 
 export type DataExport = {
-  idCounter: number;
   nextMigrationIndex: number;
   plants: Plant[];
 };
