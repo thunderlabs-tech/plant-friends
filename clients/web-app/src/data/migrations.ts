@@ -5,6 +5,8 @@ import {
   setNextMigrationIndex,
 } from "./persistence";
 
+async function removedMigration() {}
+
 export async function runMigrations({
   setItem,
   userIdKey,
@@ -12,10 +14,8 @@ export async function runMigrations({
   setItem: setItemType;
   userIdKey: string;
 }): Promise<void> {
-  const migrations = Object.freeze([
-    async function createInitialStructure() {
-      /* noop */
-    },
+  const migrations: readonly (() => Promise<unknown>)[] = Object.freeze([
+    removedMigration,
 
     async function generateUserId() {
       await setItem(userIdKey, uuidv4());
