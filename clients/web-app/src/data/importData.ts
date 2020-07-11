@@ -20,7 +20,6 @@ export default function importData(fileContent: string): DataExport {
   if (
     typeof result !== "object" ||
     !result ||
-    typeof result.idCounter !== "number" ||
     typeof result.nextMigrationIndex !== "number" ||
     !Array.isArray(result.plants)
   ) {

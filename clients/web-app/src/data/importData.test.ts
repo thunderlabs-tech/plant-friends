@@ -4,7 +4,6 @@ import importData from "./importData";
 describe("importData()", () => {
   it("parses the input string as JSON", () => {
     const dataExport: DataExport = {
-      idCounter: 1,
       nextMigrationIndex: 2,
       plants: [],
     };
@@ -15,7 +14,6 @@ describe("importData()", () => {
 
   it("parses ISO8601 date strings as Date objects", () => {
     const dataExport: DataExport = {
-      idCounter: 1,
       nextMigrationIndex: 2,
       plants: [
         {
@@ -24,6 +22,7 @@ describe("importData()", () => {
           wateringPeriodInDays: 10,
           wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
           timeOfDeath: null,
+          userId: "aaaaaaaaaaaa-bbbbbbbbbb-cccccccccc-ddddddddd",
         },
       ],
     };
