@@ -108,10 +108,6 @@ function removeItem(key: string): Promise<void> {
   return localforage.removeItem(storageKey(key));
 }
 
-async function getIdCounter(): Promise<number> {
-  return (await getItem<number | undefined>("id-counter")) || 0;
-}
-
 export const localStorageKeys = Object.freeze({
   nextMigrationIndex: "next-migration-index",
   userId: "user-id",
