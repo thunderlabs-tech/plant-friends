@@ -66,7 +66,13 @@ Continuous deployment is managed using Netlify. See [`netlify.toml`](netlify.tom
 
 Data is stored in [FaunaDB](https://dashboard.fauna.com/).
 
-### Databases, access keys, environment variables
+### Environment variables
+
+Store all access keys in the Netlify UI rather than in the codebase. Since Netlify will make all environment variables available in production and staging, prefix variables with the environment they apply to (e.g. `PRODUCTION_FAUNADB_ACCESS_TOKEN`).
+
+Use the files [env/production](env/production) and [env/staging](env/staging) to select which env vars apply in which environment. These files are included in the running environment by the commands `build-production` and `build-staging`, respectively, in [package.json](package.json).
+
+### Databases, access keys
 
 One database is designated for production and its access key is stored as an environment variable in Netlify.
 
