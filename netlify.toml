@@ -10,9 +10,6 @@
   # been specified, include it in the publish directory path.
   publish = "clients/web-app/build"
 
-  # Default build command.
-  command = "yarn build"
-
   # Directory with the serverless Lambda functions to deploy to AWS.
   functions = "netlify/functions"
 
@@ -24,11 +21,17 @@
 
 # Production context: all deploys from the Production branch set in your site's
 # deploy contexts will inherit these settings.
+[context.production]
+  command = "yarn build-production"
+
 [context.production.environment]
   REACT_APP_LOCAL_STORAGE_NAMESPACE = "production"
 
 # Deploy Preview context: all deploys generated from a pull/merge request will
 # inherit these settings.
+[context.deploy-preview]
+  command = "yarn build-staging"
+
 [context.deploy-preview.environment]
   REACT_APP_LOCAL_STORAGE_NAMESPACE = "staging"
 
