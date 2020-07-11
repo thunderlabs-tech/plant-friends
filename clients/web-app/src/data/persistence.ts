@@ -6,8 +6,8 @@ import { Override } from "../utilities/lang/Override";
 import { omit } from "lodash";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
-const faunaDBAuthorizationToken = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
-const namespace = process.env.REACT_APP_LOCAL_STORAGE_NAMESPACE;
+const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
+const LOCAL_STORAGE_NAMESPACE = process.env.REACT_APP_LOCAL_STORAGE_NAMESPACE;
 
 type GraphQLErrorResponse = {
   errors: { message: string }[];
@@ -73,7 +73,7 @@ async function faunaDBQuery<SuccessResponse = unknown>(request: {
   const response = await fetch(faunaDBUrl, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${faunaDBAuthorizationToken}`,
+      Authorization: `Bearer ${FAUNADB_ACCESS_TOKEN}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
@@ -92,7 +92,7 @@ localforage.config({
 });
 
 function storageKey(key: string): string {
-  return `${namespace}-${key}`;
+  return `${LOCAL_STORAGE_NAMESPACE}-${key}`;
 }
 
 function getItem<T>(key: string): Promise<T> {
@@ -112,25 +112,24 @@ async function getIdCounter(): Promise<number> {
   return (await getItem<number | undefined>("id-counter")) || 0;
 }
 
-export const LOCAL_STORAGE_KEYS = {
-  NEXT_MIGRATION_INDEX_KEY: "next-migration-index",
-  USER_ID_KEY: "user-id",
-};
+export const localStorageKeys = Object.freeze({
+  nextMigrationIndex: "next-migration-index",
+  userId: "user-id",
+});
 
 export async function getNextMigrationIndex(): Promise<number> {
   return (
-    (await getItem<number | undefined>(
-      LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY,
-    )) || 0
+    (await getItem<number | undefined>(localStorageKeys.nextMigrationIndex)) ||
+    0
   );
 }
 
 export async function setNextMigrationIndex(value: number): Promise<void> {
-  await setItem<number>(LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY, value);
+  await setItem<number>(localStorageKeys.nextMigrationIndex, value);
 }
 
 function getUserId(): Promise<string> {
-  return getItem<string>(LOCAL_STORAGE_KEYS.USER_ID_KEY);
+  return getItem<string>(localStorageKeys.userId);
 }
 
 export class IncompatibleImportError extends Error {}
@@ -141,7 +140,7 @@ const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ setItem, ...LOCAL_STORAGE_KEYS });
+    await runMigrations({ setItem, userIdKey: localStorageKeys.userId });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
@@ -235,8 +234,8 @@ const persistence = {
 
     // TODO: delete remote data and update description in UI
     await Promise.all([
-      removeItem(LOCAL_STORAGE_KEYS.NEXT_MIGRATION_INDEX_KEY),
-      removeItem(LOCAL_STORAGE_KEYS.USER_ID_KEY),
+      removeItem(localStorageKeys.nextMigrationIndex),
+      removeItem(localStorageKeys.userId),
     ]);
 
     window.location.reload();

@@ -7,10 +7,10 @@ import {
 
 export async function runMigrations({
   setItem,
-  USER_ID_KEY,
+  userIdKey,
 }: {
   setItem: setItemType;
-  USER_ID_KEY: string;
+  userIdKey: string;
 }): Promise<void> {
   const migrations = Object.freeze([
     async function createInitialStructure() {
@@ -18,7 +18,7 @@ export async function runMigrations({
     },
 
     async function generateUserId() {
-      await setItem(USER_ID_KEY, uuidv4());
+      await setItem(userIdKey, uuidv4());
     },
   ]);
 
