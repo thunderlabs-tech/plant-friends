@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "cd clients/web-app && yarn build",
+    "build-production": "source env/production && yarn build",
+    "build-staging": "source env/staging && yarn build",
     "start": "cd clients/web-app && yarn start",
     "test": "cd clients/web-app && yarn test"
   },
