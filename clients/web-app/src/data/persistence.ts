@@ -242,16 +242,14 @@ const persistence = {
   },
 
   getDataForExport: async (): Promise<DataExport> => {
-    const [idCounter, nextMigrationIndex, plants] = await Promise.all([
-      getIdCounter(),
+    const [nextMigrationIndex, plants] = await Promise.all([
       getNextMigrationIndex(),
       persistence.loadPlants(),
     ]);
 
     return {
-      idCounter,
       nextMigrationIndex,
-      plants: plants.map((plant) => omit(plant, "_id")),
+      plants: plants,
     };
   },
 
