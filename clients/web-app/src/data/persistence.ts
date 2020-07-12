@@ -7,7 +7,6 @@ import { omit } from "lodash";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
-const LOCAL_STORAGE_NAMESPACE = process.env.REACT_APP_LOCAL_STORAGE_NAMESPACE;
 
 type GraphQLErrorResponse = {
   errors: { message: string }[];
@@ -91,21 +90,17 @@ localforage.config({
   version: 1.1,
 });
 
-function storageKey(key: string): string {
-  return `${LOCAL_STORAGE_NAMESPACE}-${key}`;
-}
-
 function getItem<T>(key: string): Promise<T> {
-  return localforage.getItem<T>(storageKey(key));
+  return localforage.getItem<T>(key);
 }
 
 export type setItemType = <T>(key: string, value: T) => Promise<T>;
 function setItem<T>(key: string, value: T): Promise<T> {
-  return localforage.setItem<T>(storageKey(key), value);
+  return localforage.setItem<T>(key, value);
 }
 
 function removeItem(key: string): Promise<void> {
-  return localforage.removeItem(storageKey(key));
+  return localforage.removeItem(key);
 }
 
 export const localStorageKeys = Object.freeze({
