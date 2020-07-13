@@ -6,6 +6,7 @@ import {
   lastWateredAt,
   needsWater,
   formatNextWaterDate,
+  PlantInput,
 } from "../data/Plant";
 import { waterPlant, createPlant, refreshPlants } from "../data/actions";
 import { Link } from "react-router-dom";
@@ -33,7 +34,6 @@ import Surface from "../components/Surface";
 import Layout from "../components/Layout";
 import { deadPlantListUrl } from "./DeadPlantListRoute";
 import { dataManagementUrl } from "./DataManagementRoute";
-import { NewPlant } from "../data/persistence";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -58,7 +58,7 @@ const PlantListScreen: React.FC<
     waterPlant(plant, plants.dispatch);
   };
 
-  const onAddNewPlant = (plant: NewPlant) => {
+  const onAddNewPlant = (plant: Omit<PlantInput, "userId">) => {
     createPlant(plant, plants.dispatch);
   };
 
