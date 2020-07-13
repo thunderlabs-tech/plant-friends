@@ -146,6 +146,13 @@ const persistence = {
             wateringPeriodInDays
             wateringTimes
             userId
+            events {
+              data {
+                _id
+                type
+                createdAt
+              }
+            }
           }
         }
       }

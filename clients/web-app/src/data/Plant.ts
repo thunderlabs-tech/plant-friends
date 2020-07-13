@@ -1,4 +1,5 @@
 import add from "date-fns/add";
+import { PlantEvent } from "./PlantEvent";
 
 export type Plant = {
   _id: string;
@@ -7,6 +8,7 @@ export type Plant = {
   wateringTimes: Date[];
   timeOfDeath: Date | null;
   userId: string;
+  events: PlantEvent[];
 };
 
 export function lastWateredAt(plant: Plant): Date | undefined {
