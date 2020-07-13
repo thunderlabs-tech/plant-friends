@@ -37,3 +37,11 @@ type Mutation {
   updatePlantEvent: DISABLED @resolver(name: "updatePlantEvent")
   deletePlantEvent: DISABLED @resolver(name: "deletePlantEvent")
 }
+
+input PlantInput {
+  name: String!
+  wateringTimes: [Time!]
+  timeOfDeath: Time
+  wateringPeriodInDays: Int!
+  userId: String!
+}
