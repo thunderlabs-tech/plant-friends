@@ -23,6 +23,7 @@ describe("importData()", () => {
           wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
           timeOfDeath: null,
           userId: "aaaaaaaaaaaa-bbbbbbbbbb-cccccccccc-ddddddddd",
+          events: [],
         },
       ],
     };

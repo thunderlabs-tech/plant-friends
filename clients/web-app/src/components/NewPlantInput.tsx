@@ -27,6 +27,7 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
       wateringPeriodInDays,
       timeOfDeath: null,
       wateringTimes: [],
+      events: [],
     });
     setName("");
   };

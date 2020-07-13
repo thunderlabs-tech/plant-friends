@@ -30,6 +30,7 @@ describe("exportData()", () => {
         wateringTimes: [wateringTimeDate],
         timeOfDeath: timeOfDeathDate,
         userId: "aaaaaaaaa-bbbbbbbbb-ccccccccc",
+        events: [],
       },
     ];
 
