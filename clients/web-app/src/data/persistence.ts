@@ -1,10 +1,11 @@
 import localforage from "localforage";
-import { Plant } from "./Plant";
+import { Plant, PlantInput } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
 import { omit } from "lodash";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
+import castAs from "../utilities/lang/castAs";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -92,8 +93,6 @@ function getUserId(): Promise<string> {
 
 export class IncompatibleImportError extends Error {}
 
-export type NewPlant = Omit<Plant, "_id" | "userId">;
-
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
@@ -148,12 +147,20 @@ const persistence = {
 
     await faunaDBQuery<{
       data: { updatePlant: Plant };
-    }>({ query, variables: { id: plant._id, data: omit(plant, "_id") } });
+    }>({
+      query,
+      variables: {
+        id: plant._id,
+        data: castAs<PlantInput>(omit(plant, "_id")),
+      },
+    });
 
     return persistence.loadPlants();
   },
 
-  createPlant: async (newPlant: NewPlant): Promise<Plant[]> => {
+  createPlant: async (
+    newPlant: Omit<PlantInput, "userId">,
+  ): Promise<Plant[]> => {
     let userId = await getUserId();
 
     const query = /* GraphQL */ `

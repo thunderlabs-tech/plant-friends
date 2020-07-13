@@ -9,10 +9,10 @@ import { Button } from "@rmwc/button";
 
 import TextFieldStyles from "../components/TextField.module.css";
 import { GridCell, Grid } from "@rmwc/grid";
-import { NewPlant } from "../data/persistence";
+import { PlantInput } from "../data/Plant";
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (plant: NewPlant) => void;
+  onAddNewPlant: (plant: Omit<PlantInput, "userId">) => void;
 };
 
 const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
@@ -27,7 +27,6 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
       wateringPeriodInDays,
       timeOfDeath: null,
       wateringTimes: [],
-      events: [],
     });
     setName("");
   };
