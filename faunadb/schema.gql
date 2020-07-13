@@ -6,6 +6,7 @@ type Plant {
   name: String!
   wateringTimes: [Time!]
   timeOfDeath: Time
+  lastWateredAt: Time
   wateringPeriodInDays: Int!
   userId: String!
   events: [PlantEvent!]! @relation

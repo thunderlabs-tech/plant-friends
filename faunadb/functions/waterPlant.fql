@@ -1,12 +1,18 @@
 Query(
   Lambda(
-    ["plantId", "at"],
-    Create("PlantEvent", {
-      data: {
-        createdAt: If(IsNull(Var("at")), Now(), Var("at")),
-        type: "WATERED",
-        plant: Ref(Collection("Plant"), Var("plantId"))
-      }
-    })
+    ["plantId", "createdAt"],
+    Let(
+      { plant: Ref(Collection("Plant"), Var("plantId")) },
+      Do(
+        Create("PlantEvent", {
+          data: {
+            createdAt: Var("createdAt"),
+            type: "WATERED",
+            plant: Var("plant")
+          }
+        }),
+        Update(Var("plant"), { lastWateredAt: Var("createdAt") })
+      )
+    )
   )
 )
