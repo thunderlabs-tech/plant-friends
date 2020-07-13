@@ -2,9 +2,9 @@ import localforage from "localforage";
 import { Plant } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
-import { Override } from "../utilities/lang/Override";
 import { omit } from "lodash";
-import { JsonValue } from "../utilities/JsonValue";
+import deserializeDateStrings from "../utilities/deserializeDateStrings";
+import JsonValue from "../utilities/JsonValue";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -31,30 +31,7 @@ function assertSuccessfulResponse<SuccessType = unknown>(
   return response;
 }
 
-export type FaunaDBSerializedPlant = Override<
-  Plant,
-  {
-    wateringTimes: string[];
-    timeOfDeath: string | null;
-  }
->;
-
-function deserializeDate(iso8601DateString: string): Date {
-  return new Date(Date.parse(iso8601DateString));
-}
-function deserializeFaunaDBPlant(
-  serializedPlant: FaunaDBSerializedPlant,
-): Plant {
-  return {
-    ...serializedPlant,
-    wateringTimes: serializedPlant.wateringTimes.map(deserializeDate),
-    timeOfDeath: serializedPlant.timeOfDeath
-      ? deserializeDate(serializedPlant.timeOfDeath)
-      : null,
-  };
-}
-
-async function faunaDBQuery<SuccessResponse = unknown>(request: {
+async function faunaDBQuery<SuccessResponse extends JsonValue>(request: {
   query: string;
   variables?: { [key: string]: JsonValue };
 }): Promise<SuccessResponse> {
@@ -67,11 +44,12 @@ async function faunaDBQuery<SuccessResponse = unknown>(request: {
     body: JSON.stringify(request),
   });
 
-  const result = (await response.json()) as
+  const resultOrError = (await response.json()) as
     | SuccessResponse
     | GraphQLErrorResponse;
 
-  return assertSuccessfulResponse(result);
+  const result = assertSuccessfulResponse(resultOrError);
+  return deserializeDateStrings(result);
 }
 
 localforage.config({
@@ -148,10 +126,10 @@ const persistence = {
     `;
 
     const response = await faunaDBQuery<{
-      data: { getPlants: { data: FaunaDBSerializedPlant[] } };
+      data: { getPlants: { data: Plant[] } };
     }>({ query, variables: { userId } });
 
-    return response.data.getPlants.data.map(deserializeFaunaDBPlant);
+    return response.data.getPlants.data;
   },
 
   updatePlant: async (plant: Plant): Promise<Plant[]> => {

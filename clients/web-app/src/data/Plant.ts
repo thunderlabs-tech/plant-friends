@@ -51,5 +51,6 @@ export function formatNextWaterDate(plant: Plant) {
 export function formatTimeOfDeath(plant: Plant) {
   if (!plant.timeOfDeath) return `Still going strong`;
   // TO DO: add `createdAt` and format epitaph as "June 2020 - July 2020"
+  debugger;
   return `Died ${plant.timeOfDeath.toLocaleDateString()}`;
 }
