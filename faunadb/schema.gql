@@ -30,6 +30,8 @@ type Query {
 }
 
 type Mutation {
+  waterPlant(plantId: ID!): PlantEvent! @resolver(name: "waterPlant")
+
   # These mutations are automatically created by FaunaDB but we don't want to expose them
   createPlantEvent: DISABLED @resolver(name: "createPlantEvent")
   updatePlantEvent: DISABLED @resolver(name: "updatePlantEvent")
