@@ -36,11 +36,11 @@ type JSONSerializableScalarValue =
   | boolean
   | undefined
   | null
-  | Date
-  | JSONSerializableScalarValue[];
+  | Date;
 type JSONSerializableValue =
   | { [key: string]: JSONSerializableValue }
-  | JSONSerializableScalarValue;
+  | JSONSerializableScalarValue
+  | JSONSerializableValue[];
 
 export type FaunaDBSerializedPlant = Override<
   Plant,
