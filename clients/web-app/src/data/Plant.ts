@@ -6,10 +6,18 @@ export type Plant = {
   name: string;
   wateringPeriodInDays: number;
   wateringTimes: Date[];
-  lastWateredAt: Date | null;
+  lastWateredAt?: Date | null;
   timeOfDeath: Date | null;
   userId: string;
   events: PlantEvent[];
+};
+
+export type PlantInput = {
+  name: string;
+  wateringTimes: Date[];
+  timeOfDeath: Date | null;
+  wateringPeriodInDays: number;
+  userId: string;
 };
 
 export function lastWateredAt(plant: Plant): Date | undefined {
