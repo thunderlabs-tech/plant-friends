@@ -1,11 +1,37 @@
+enum DISABLED {
+  DISABLED
+}
+
 type Plant {
   name: String!
   wateringTimes: [Time!]
   timeOfDeath: Time
   wateringPeriodInDays: Int!
   userId: String!
+  events: [PlantEvent!]! @relation
+}
+
+enum PlantEventType {
+  WATERED
+}
+
+type PlantEvent {
+  plant: Plant!
+  type: PlantEventType!
+  createdAt: Time!
 }
 
 type Query {
   getPlants(userId: String): [Plant!]!
+
+  # These queries are automatically created by FaunaDB but we don't want to expose them
+  findPlantEventByID: DISABLED @resolver(name: "findPlantEventByID")
+  findPlantByID: DISABLED @resolver(name: "findPlantByID")
+}
+
+type Mutation {
+  # These mutations are automatically created by FaunaDB but we don't want to expose them
+  createPlantEvent: DISABLED @resolver(name: "createPlantEvent")
+  updatePlantEvent: DISABLED @resolver(name: "updatePlantEvent")
+  deletePlantEvent: DISABLED @resolver(name: "deletePlantEvent")
 }
