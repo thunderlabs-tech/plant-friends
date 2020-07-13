@@ -10,6 +10,7 @@ export function makePlant(attributes: Partial<Plant> = {}): Plant {
     timeOfDeath: null,
     userId: uuidv4(),
     events: [],
+    lastWateredAt: null,
     ...attributes,
   };
 }

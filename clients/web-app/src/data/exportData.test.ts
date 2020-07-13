@@ -1,5 +1,6 @@
 import exportData from "./exportData";
 import { Plant } from "./Plant";
+import { makePlant } from "../utilities/test/factories";
 
 describe("exportData()", () => {
   it("encodes the application data as JSON", () => {
@@ -20,18 +21,15 @@ describe("exportData()", () => {
 
   it("encodes dates as ISO8601 date strings", () => {
     const wateringTimeDate = new Date(2020, 1, 1, 0, 0, 0, 0);
-    const timeOfDeathDate = new Date(2020, 1, 1, 0, 0, 0, 0);
+    const timeOfDeathDate = new Date(2020, 2, 1, 0, 0, 0, 0);
+    const lastWateredAtDate = new Date(2020, 3, 1, 0, 0, 0, 0);
 
     const plants: Plant[] = [
-      {
-        _id: "1",
-        name: "Plant 1",
-        wateringPeriodInDays: 10,
+      makePlant({
         wateringTimes: [wateringTimeDate],
         timeOfDeath: timeOfDeathDate,
-        userId: "aaaaaaaaa-bbbbbbbbb-ccccccccc",
-        events: [],
-      },
+        lastWateredAt: lastWateredAtDate,
+      }),
     ];
 
     const resultText = exportData({
@@ -40,13 +38,12 @@ describe("exportData()", () => {
     });
     const data = JSON.parse(resultText);
 
-    const iso8601WateringTimeString = wateringTimeDate.toISOString();
-    const iso8601TimeOfDeathString = timeOfDeathDate.toISOString();
     expect(data.plants).toEqual([
       {
         ...plants[0],
-        wateringTimes: [iso8601WateringTimeString],
-        timeOfDeath: iso8601TimeOfDeathString,
+        wateringTimes: [wateringTimeDate.toISOString()],
+        timeOfDeath: timeOfDeathDate.toISOString(),
+        lastWateredAt: lastWateredAtDate.toISOString(),
       },
     ]);
   });
