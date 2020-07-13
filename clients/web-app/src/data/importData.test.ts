@@ -1,5 +1,6 @@
 import { DataExport } from "./exportData";
 import importData from "./importData";
+import { makePlant } from "../utilities/test/factories";
 
 describe("importData()", () => {
   it("parses the input string as JSON", () => {
@@ -16,15 +17,9 @@ describe("importData()", () => {
     const dataExport: DataExport = {
       nextMigrationIndex: 2,
       plants: [
-        {
-          _id: "1",
-          name: "Plant 1",
-          wateringPeriodInDays: 10,
+        makePlant({
           wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
-          timeOfDeath: null,
-          userId: "aaaaaaaaaaaa-bbbbbbbbbb-cccccccccc-ddddddddd",
-          events: [],
-        },
+        }),
       ],
     };
     const jsonString = JSON.stringify(dataExport);
