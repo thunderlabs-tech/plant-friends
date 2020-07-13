@@ -4,6 +4,7 @@ import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
 import { Override } from "../utilities/lang/Override";
 import { omit } from "lodash";
+import { JsonValue } from "../utilities/JsonValue";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -30,18 +31,6 @@ function assertSuccessfulResponse<SuccessType = unknown>(
   return response;
 }
 
-type JSONSerializableScalarValue =
-  | string
-  | number
-  | boolean
-  | undefined
-  | null
-  | Date;
-type JSONSerializableValue =
-  | { [key: string]: JSONSerializableValue }
-  | JSONSerializableScalarValue
-  | JSONSerializableValue[];
-
 export type FaunaDBSerializedPlant = Override<
   Plant,
   {
@@ -67,7 +56,7 @@ function deserializeFaunaDBPlant(
 
 async function faunaDBQuery<SuccessResponse = unknown>(request: {
   query: string;
-  variables?: { [key: string]: JSONSerializableValue };
+  variables?: { [key: string]: JsonValue };
 }): Promise<SuccessResponse> {
   const response = await fetch(faunaDBUrl, {
     method: "POST",
