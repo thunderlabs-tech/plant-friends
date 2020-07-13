@@ -1,0 +1,12 @@
+Query(
+  Lambda(
+    ["plantId", "at"],
+    Create("PlantEvent", {
+      data: {
+        createdAt: If(IsNull(Var("at")), Now(), Var("at")),
+        type: "WATERED",
+        plant: Ref(Collection("Plant"), Var("plantId"))
+      }
+    })
+  )
+)
