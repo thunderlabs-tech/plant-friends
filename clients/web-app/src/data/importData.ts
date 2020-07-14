@@ -1,17 +1,23 @@
-import { Plant } from "./Plant";
 import { DataExport } from "./exportData";
-import { Override } from "../utilities/lang/Override";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 
-type PlantWithStringDates = Override<
-  Plant,
-  { wateringTimes: string[]; timeOfDeath: string | undefined }
->;
+type Replace<Input, SearchFor, Replacement> = Input extends SearchFor
+  ? Exclude<Input, SearchFor> | Replacement
+  : Input;
+
+type DateValuesAsStrings<Object extends { [Key: string]: any }> = {
+  [Key in keyof Object]: Object[Key] extends Date
+    ? string
+    : Object[Key] extends { [Key: string]: any }
+    ? DateValuesAsStrings<Object[Key]>
+    : Replace<Object[Key], Date, string>;
+};
 
 export class InvalidImportFormatError extends Error {}
 
 export default function importData(fileContent: string): DataExport {
-  let result: Override<DataExport, { plants: PlantWithStringDates[] }>;
+  let result: DateValuesAsStrings<DataExport>;
+
   try {
     result = JSON.parse(fileContent);
   } catch (error) {
