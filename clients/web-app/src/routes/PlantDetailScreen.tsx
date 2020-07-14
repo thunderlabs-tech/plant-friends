@@ -27,6 +27,7 @@ import TextFieldStyles from "../components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "./DeadPlantListRoute";
 import { plantListUrl } from "./PlantListRoute";
+import { PlantEventType, PlantEvent } from "../data/PlantEvent";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -41,6 +42,16 @@ function formatWateringTime(date: Date): string {
     hour: "numeric",
     minute: "numeric",
   });
+}
+
+function sortEvents(plantEvents: PlantEvent[]): PlantEvent[] {
+  return plantEvents.sort((d1, d2) =>
+    d1.createdAt.valueOf() > d2.createdAt.valueOf()
+      ? -1
+      : d1.createdAt.valueOf() === d2.createdAt.valueOf()
+      ? 0
+      : 1,
+  );
 }
 
 const PlantDetailScreen: React.FC<
@@ -193,15 +204,17 @@ const PlantDetailScreen: React.FC<
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
-                  {plant.wateringTimes.length > 0 ? (
+                  {plant.events.data.length > 0 ? (
                     <>
                       <Typography use="body1">Watered at:</Typography>
                       <List nonInteractive>
-                        {plant.wateringTimes.map((date, i) => {
+                        {sortEvents(plant.events.data).map((event) => {
                           return (
-                            <ListItem key={i}>
-                              {formatWateringTime(date)}
-                            </ListItem>
+                            event.type === PlantEventType.WATERED && (
+                              <ListItem key={event._id}>
+                                {formatWateringTime(event.createdAt)}
+                              </ListItem>
+                            )
                           );
                         })}
                       </List>
