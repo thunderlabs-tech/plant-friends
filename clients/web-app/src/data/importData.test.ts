@@ -1,6 +1,6 @@
 import { DataExport } from "./exportData";
 import importData from "./importData";
-import { makePlant } from "../utilities/test/factories";
+import { makePlant, makeWateredEvent } from "../utilities/test/factories";
 
 describe("importData()", () => {
   it("parses the input string as JSON", () => {
@@ -18,7 +18,11 @@ describe("importData()", () => {
       nextMigrationIndex: 2,
       plants: [
         makePlant({
-          wateringTimes: [new Date(2020, 1, 1, 0, 0, 0, 0)],
+          events: {
+            data: [
+              makeWateredEvent({ createdAt: new Date(2020, 1, 1, 0, 0, 0, 0) }),
+            ],
+          },
         }),
       ],
     };

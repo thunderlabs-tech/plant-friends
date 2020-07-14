@@ -1,6 +1,6 @@
 import exportData from "./exportData";
 import { Plant } from "./Plant";
-import { makePlant } from "../utilities/test/factories";
+import { makePlant, makeWateredEvent } from "../utilities/test/factories";
 
 describe("exportData()", () => {
   it("encodes the application data as JSON", () => {
@@ -26,7 +26,7 @@ describe("exportData()", () => {
 
     const plants: Plant[] = [
       makePlant({
-        wateringTimes: [wateringTimeDate],
+        events: { data: [makeWateredEvent({ createdAt: wateringTimeDate })] },
         timeOfDeath: timeOfDeathDate,
         lastWateredAt: lastWateredAtDate,
       }),
@@ -41,7 +41,14 @@ describe("exportData()", () => {
     expect(data.plants).toEqual([
       {
         ...plants[0],
-        wateringTimes: [wateringTimeDate.toISOString()],
+        events: {
+          data: [
+            {
+              ...plants[0].events.data[0],
+              createdAt: wateringTimeDate.toISOString(),
+            },
+          ],
+        },
         timeOfDeath: timeOfDeathDate.toISOString(),
         lastWateredAt: lastWateredAtDate.toISOString(),
       },

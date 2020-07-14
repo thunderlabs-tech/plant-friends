@@ -1,6 +1,7 @@
 import { Plant } from "./Plant";
 import { DataExport } from "./exportData";
 import { Override } from "../utilities/lang/Override";
+import deserializeDateStrings from "../utilities/deserializeDateStrings";
 
 type PlantWithStringDates = Override<
   Plant,
@@ -28,22 +29,5 @@ export default function importData(fileContent: string): DataExport {
     );
   }
 
-  const plants = result.plants.map(
-    (plantWithStringDates: PlantWithStringDates): Plant => {
-      return {
-        ...plantWithStringDates,
-        wateringTimes: plantWithStringDates.wateringTimes.map(
-          (dateString) => new Date(Date.parse(dateString)),
-        ),
-        timeOfDeath: plantWithStringDates.timeOfDeath
-          ? new Date(Date.parse(plantWithStringDates.timeOfDeath))
-          : null,
-      };
-    },
-  );
-
-  return {
-    ...result,
-    plants,
-  };
+  return deserializeDateStrings(result);
 }
