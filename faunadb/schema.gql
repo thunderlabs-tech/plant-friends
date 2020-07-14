@@ -4,7 +4,6 @@ enum DISABLED {
 
 type Plant {
   name: String!
-  wateringTimes: [Time!]
   timeOfDeath: Time
   lastWateredAt: Time
   wateringPeriodInDays: Int!
@@ -41,7 +40,6 @@ type Mutation {
 
 input PlantInput {
   name: String!
-  wateringTimes: [Time!]
   timeOfDeath: Time
   wateringPeriodInDays: Int!
   userId: String!
