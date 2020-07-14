@@ -135,7 +135,7 @@ const persistence = {
     return response.data.getPlants.data;
   },
 
-  updatePlant: async (plant: Plant): Promise<Plant[]> => {
+  updatePlant: async (plant: Plant): Promise<Plant> => {
     const query = /* GraphQL */ `
       mutation($id: ID!, $data: PlantInput!) {
         updatePlant(id: $id, data: $data) {
@@ -144,7 +144,7 @@ const persistence = {
       }
     `;
 
-    await faunaDBQuery<{
+    const result = await faunaDBQuery<{
       data: { updatePlant: Plant };
     }>({
       query,
@@ -156,7 +156,7 @@ const persistence = {
       },
     });
 
-    return persistence.loadPlants();
+    return result.data.updatePlant;
   },
 
   waterPlant: async (plant: Plant): Promise<Plant> => {
