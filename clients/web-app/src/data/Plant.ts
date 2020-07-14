@@ -9,7 +9,9 @@ export type Plant = {
   lastWateredAt?: Date | null;
   timeOfDeath: Date | null;
   userId: string;
-  events: PlantEvent[];
+  events: {
+    data: PlantEvent[];
+  };
 };
 
 export type PlantInput = {
