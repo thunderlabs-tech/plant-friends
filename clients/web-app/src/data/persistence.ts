@@ -98,7 +98,6 @@ _id
 name
 timeOfDeath
 wateringPeriodInDays
-wateringTimes
 userId
 lastWateredAt
 events {
