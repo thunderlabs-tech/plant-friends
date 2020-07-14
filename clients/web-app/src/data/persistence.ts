@@ -93,6 +93,22 @@ function getUserId(): Promise<string> {
 
 export class IncompatibleImportError extends Error {}
 
+const allPlantFields = Object.freeze(`
+_id
+name
+timeOfDeath
+wateringPeriodInDays
+wateringTimes
+userId
+lastWateredAt
+events {
+  data {
+    _id
+    type
+    createdAt
+  }
+}`);
+
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
 
@@ -106,19 +122,7 @@ const persistence = {
       query($userId: String!) {
         getPlants(userId: $userId) {
           data {
-            _id
-            name
-            timeOfDeath
-            wateringPeriodInDays
-            wateringTimes
-            userId
-            events {
-              data {
-                _id
-                type
-                createdAt
-              }
-            }
+            ${allPlantFields}
           }
         }
       }
@@ -135,12 +139,7 @@ const persistence = {
     const query = /* GraphQL */ `
       mutation($id: ID!, $data: PlantInput!) {
         updatePlant(id: $id, data: $data) {
-          _id
-          name
-          timeOfDeath
-          wateringPeriodInDays
-          wateringTimes
-          userId
+          ${allPlantFields}
         }
       }
     `;
@@ -162,20 +161,7 @@ const persistence = {
     const query = /* GraphQL */ `
       mutation($plantId: ID!, $at: Time!) {
         waterPlant(plantId: $plantId, at: $at) {
-          _id
-          name
-          timeOfDeath
-          wateringPeriodInDays
-          wateringTimes
-          userId
-          lastWateredAt
-          events {
-            data {
-              _id
-              type
-              createdAt
-            }
-          }
+          ${allPlantFields}
         }
       }
     `;
@@ -201,12 +187,7 @@ const persistence = {
     const query = /* GraphQL */ `
       mutation($data: PlantInput!) {
         createPlant(data: $data) {
-          _id
-          name
-          timeOfDeath
-          wateringPeriodInDays
-          wateringTimes
-          userId
+          ${allPlantFields}
         }
       }
     `;
