@@ -10,15 +10,10 @@ export async function waterPlant(
   plant: Plant,
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
-  const updatedPlant = {
-    ...plant,
-    wateringTimes: [new Date(), ...plant.wateringTimes],
-  };
-
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const newPlants = await persistence.updatePlant(updatedPlant);
-  plantDispatch.setData(newPlants);
+  const updatedPlant = await persistence.waterPlant(plant);
+  plantDispatch.replace(plant, updatedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
 }
