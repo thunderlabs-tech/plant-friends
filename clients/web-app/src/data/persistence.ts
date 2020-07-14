@@ -2,7 +2,7 @@ import localforage from "localforage";
 import { Plant, PlantInput } from "./Plant";
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
-import { omit } from "lodash";
+import { pick } from "lodash";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
 import castAs from "../utilities/lang/castAs";
@@ -150,7 +150,9 @@ const persistence = {
       query,
       variables: {
         id: plant._id,
-        data: castAs<PlantInput>(omit(plant, "_id")),
+        data: castAs<PlantInput>(
+          pick(plant, "name", "timeOfDeath", "wateringPeriodInDays", "userId"),
+        ),
       },
     });
 
