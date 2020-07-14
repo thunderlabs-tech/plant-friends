@@ -17,6 +17,20 @@ export default function useCollection<Elem>(
       ...state,
       loadingState: loadingState,
     }),
+    replace: (state, element, newElement) => {
+      const originalElementIndex = state.data.indexOf(element);
+
+      if (originalElementIndex === -1)
+        throw new Error("Can't replace element, not present in collection");
+
+      const newElementsArray = state.data.slice(0);
+      newElementsArray[originalElementIndex] = newElement;
+
+      return {
+        ...state,
+        data: newElementsArray,
+      };
+    },
   };
 
   const [state, dispatch] = useAppState(
@@ -44,6 +58,11 @@ type CollectionActionFns<Elem> = {
   setLoadingState: (
     state: CollectionState<Elem>,
     loadingState: LoadingState,
+  ) => CollectionState<Elem>;
+  replace: (
+    state: CollectionState<Elem>,
+    element: Elem,
+    newElement: Elem,
   ) => CollectionState<Elem>;
 };
 
