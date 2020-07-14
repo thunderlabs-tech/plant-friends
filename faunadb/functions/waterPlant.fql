@@ -11,7 +11,7 @@ Query(
             plant: Var("plant")
           }
         }),
-        Update(Var("plant"), { lastWateredAt: Var("createdAt") })
+        Update(Var("plant"), { data: { lastWateredAt: Var("createdAt") } })
       )
     )
   )
