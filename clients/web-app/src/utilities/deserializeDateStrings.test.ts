@@ -15,6 +15,12 @@ describe("deserializeDateStrings()", () => {
     expect(deserializeDateStrings(date.toISOString())).toEqual(date);
   });
 
+  it("converts an ISO8601 date string with microsecond precision to a Date instance", () => {
+    expect(deserializeDateStrings("2020-07-13T21:21:42.835111Z")).toEqual(
+      new Date(Date.parse("2020-07-13T21:21:42.835111Z")),
+    );
+  });
+
   it("converts the values of an object containing ISO8601 date strings to Date instances", () => {
     const eventWithDateString = { createdAt: date.toISOString() };
     const eventWithDate = { createdAt: date };
