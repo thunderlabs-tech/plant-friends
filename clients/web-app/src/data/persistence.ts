@@ -158,6 +158,41 @@ const persistence = {
     return persistence.loadPlants();
   },
 
+  waterPlant: async (plant: Plant): Promise<Plant> => {
+    const query = /* GraphQL */ `
+      mutation($plantId: ID!, $at: Time!) {
+        waterPlant(plantId: $plantId, at: $at) {
+          _id
+          name
+          timeOfDeath
+          wateringPeriodInDays
+          wateringTimes
+          userId
+          lastWateredAt
+          events {
+            data {
+              _id
+              type
+              createdAt
+            }
+          }
+        }
+      }
+    `;
+
+    const result = await faunaDBQuery<{
+      data: { waterPlant: Plant };
+    }>({
+      query,
+      variables: {
+        plantId: plant._id,
+        at: new Date(),
+      },
+    });
+
+    return result.data.waterPlant;
+  },
+
   createPlant: async (
     newPlant: Omit<PlantInput, "userId">,
   ): Promise<Plant[]> => {
