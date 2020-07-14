@@ -1,7 +1,7 @@
 import JsonValue from "./JsonValue";
 import { mapValues } from "lodash";
 
-const ISO_8601_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-](\d{2}):(\d{2}))$/;
+const ISO_8601_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3,6})?(Z|[+-](\d{2}):(\d{2}))$/;
 
 export default function deserializeDateStrings<OutputType = unknown>(
   value: JsonValue,
