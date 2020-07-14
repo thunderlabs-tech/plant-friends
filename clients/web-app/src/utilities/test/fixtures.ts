@@ -1,5 +1,3 @@
-import { mapValues } from "lodash";
-
 const baseContextValue = () => {
   throw new Error(
     "You may only call fixture functions during a live test run (i.e. inside an `it()`)",
