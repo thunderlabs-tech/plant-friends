@@ -3,7 +3,6 @@ import { Collection } from "../utilities/state/useCollection";
 import partition from "lodash/partition";
 import {
   Plant,
-  lastWateredAt,
   needsWater,
   formatNextWaterDate,
   PlantInput,
@@ -40,7 +39,7 @@ export type PlantListScreenProps = {
 };
 
 function formatTimeSinceWatered(plant: Plant) {
-  const date = lastWateredAt(plant);
+  const date = plant.lastWateredAt;
   if (!date) return `Never watered`;
   return `Last watered ${date.toLocaleDateString()}`;
 }
