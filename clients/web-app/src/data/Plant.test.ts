@@ -1,29 +1,9 @@
-import { Plant, lastWateredAt, waterNextAt, needsWater } from "./Plant";
+import { Plant, waterNextAt, needsWater } from "./Plant";
 import { makePlant } from "../utilities/test/factories";
 import add from "date-fns/add";
 import sub from "date-fns/sub";
 
 describe("Plant", () => {
-  describe("lastWateredAt()", () => {
-    describe("when there are no wateringTimes", () => {
-      it("is undefined", () => {
-        const plant: Plant = makePlant({ wateringTimes: [] });
-        expect(lastWateredAt(plant)).toBe(undefined);
-      });
-    });
-
-    describe("when there are multiple wateringTimes", () => {
-      it("is returns the latest one", () => {
-        const earliestWateringTime = new Date(2020, 1, 1);
-        const latestWateringTime = new Date(2020, 1, 2);
-        const plant: Plant = makePlant({
-          wateringTimes: [earliestWateringTime, latestWateringTime],
-        });
-        expect(lastWateredAt(plant)).toBe(latestWateringTime);
-      });
-    });
-  });
-
   describe("waterNextAt()", () => {
     describe("when there are no wateringTimes", () => {
       it("is undefined", () => {
@@ -46,9 +26,12 @@ describe("Plant", () => {
         expect(waterNextAt(plant)).toEqual(nextWaterDate);
       });
     });
+
+    // TODO: test start of day behavior
   });
 
   describe("needsWater()", () => {
+    // TODO: rewrite without `wateringTimes`
     describe("when there are no wateringTimes", () => {
       it("is undefined", () => {
         const plant: Plant = makePlant({ wateringTimes: [] });

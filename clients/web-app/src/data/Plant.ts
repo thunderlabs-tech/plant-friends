@@ -20,21 +20,13 @@ export type PlantInput = {
   userId: string;
 };
 
-export function lastWateredAt(plant: Plant): Date | undefined {
-  const sortedTimes = plant.wateringTimes.sort((a, b) =>
-    a.valueOf() < b.valueOf() ? 1 : a.valueOf() === b.valueOf() ? 0 : -1,
-  );
-  return sortedTimes[0];
-}
-
 export function waterNextAt(plant: Plant): Date | undefined {
-  const lastWateredAtDateTime: Date | undefined = lastWateredAt(plant);
-  if (!lastWateredAtDateTime) return undefined;
+  if (!plant.lastWateredAt) return undefined;
 
   const lastWateredAtBeginningOfDay = new Date(
-    lastWateredAtDateTime.getFullYear(),
-    lastWateredAtDateTime.getMonth(),
-    lastWateredAtDateTime.getDate(),
+    plant.lastWateredAt.getFullYear(),
+    plant.lastWateredAt.getMonth(),
+    plant.lastWateredAt.getDate(),
   );
 
   return add(lastWateredAtBeginningOfDay.valueOf(), {
@@ -49,7 +41,7 @@ export function needsWater(plant: Plant, now = Date.now()): boolean {
 }
 
 export function formatNextWaterDate(plant: Plant) {
-  const lastWateredAtDate = lastWateredAt(plant);
+  const lastWateredAtDate = plant.lastWateredAt;
   if (!lastWateredAtDate) return "Needs to be watered";
   const nextWaterDate = add(lastWateredAtDate, {
     days: plant.wateringPeriodInDays,
