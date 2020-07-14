@@ -37,8 +37,8 @@ export async function updatePlant(
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const newPlants = await persistence.updatePlant(plant);
-  plantDispatch.setData(newPlants);
+  const updatedPlant = await persistence.updatePlant(plant);
+  plantDispatch.replace(plant, updatedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
   history.push(plantListUrl());
@@ -72,9 +72,11 @@ export async function moveToGraveyard(
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const updatedPlant = { ...plant, timeOfDeath: new Date() };
-  const newPlants = await persistence.updatePlant(updatedPlant);
-  plantDispatch.setData(newPlants);
+  const updatedPlant = await persistence.updatePlant({
+    ...plant,
+    timeOfDeath: new Date(),
+  });
+  plantDispatch.replace(plant, updatedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
 }
@@ -85,9 +87,11 @@ export async function restoreFromGraveyard(
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const updatedPlant: Plant = { ...plant, timeOfDeath: null };
-  const newPlants = await persistence.updatePlant(updatedPlant);
-  plantDispatch.setData(newPlants);
+  const updatedPlant = await persistence.updatePlant({
+    ...plant,
+    timeOfDeath: null,
+  });
+  plantDispatch.replace(plant, updatedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
 }
