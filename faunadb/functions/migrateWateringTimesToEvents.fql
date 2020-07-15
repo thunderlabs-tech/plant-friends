@@ -1,0 +1,75 @@
+Query(
+  Lambda(
+    [],
+    Map(
+      Paginate(Match(Index("allPlants"), [])),
+      Lambda(
+        ["plant"],
+        Let(
+          {
+            wateringTimes: Select(
+              ["data", "wateringTimes"],
+              Get(Var("plant")),
+              null
+            )
+          },
+          Do(
+            If(
+              Not(IsNull(Var("wateringTimes"))),
+              Do(
+                Foreach(
+                  Var("wateringTimes"),
+                  Lambda(
+                    ["wateringTime"],
+                    Create("PlantEvent", {
+                      data: {
+                        type: "WATERED",
+                        plant: Var("plant"),
+                        createdAt: Var("wateringTime")
+                      }
+                    })
+                  )
+                ),
+                Update(Var("plant"), { 
+                  data: { 
+                    wateringTimes: null,
+                    lastWateredAt: If(
+                      IsEmpty(Var("wateringTimes")),
+                      null,
+                      Max(Var("wateringTimes")),
+                    ),
+                  },
+                }),
+              ),
+              false
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+
+
+
+# Let(
+#   {
+#     latestWateredEventTimeAndRef: Select(
+#       ["data", 0], 
+#       Paginate(
+#         Match(
+#           Index("plantEventByPlantAndTypeSortedByCreatedAtDesc"), 
+#           [
+#             Ref(Collection("Plant"), "271033339800977927"), 
+#             "WATERED",
+#           ],
+#         ),
+#       ),
+#       null,
+#     ),
+#   },
+#   Do(
+
+#   )
+# )
