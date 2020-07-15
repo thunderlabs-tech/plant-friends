@@ -93,6 +93,12 @@ function getUserId(): Promise<string> {
 
 export class IncompatibleImportError extends Error {}
 
+type Page<T> = {
+  data: T[];
+  before: string | null;
+  after: string | null;
+};
+
 const allPlantFields = Object.freeze(`
 _id
 name
@@ -118,20 +124,32 @@ const persistence = {
   loadPlants: async (): Promise<Plant[]> => {
     const userId = await getUserId();
     const query = /* GraphQL */ `
-      query($userId: String!) {
-        getPlants(userId: $userId) {
+      query($_cursor: String, $userId: String!) {
+        getPlants(_size: 100, _cursor: $_cursor, userId: $userId) {
           data {
             ${allPlantFields}
-          }
+          },
+          after,
         }
       }
     `;
 
-    const response = await faunaDBQuery<{
-      data: { getPlants: { data: Plant[] } };
-    }>({ query, variables: { userId } });
+    function fetchNextPage(cursor?: string) {
+      return faunaDBQuery<{
+        data: { getPlants: Page<Plant> };
+      }>({ query, variables: { _cursor: cursor, userId } });
+    }
 
-    return response.data.getPlants.data;
+    let latestResponse = await fetchNextPage();
+    let { data: plants, after: cursor } = latestResponse.data.getPlants;
+
+    while (cursor !== null) {
+      latestResponse = await fetchNextPage(cursor);
+      plants = plants.concat(latestResponse.data.getPlants.data);
+      cursor = latestResponse.data.getPlants.after;
+    }
+
+    return plants;
   },
 
   updatePlant: async (plant: Plant): Promise<Plant> => {
