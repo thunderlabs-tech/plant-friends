@@ -6,6 +6,7 @@ import { pick } from "lodash";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
 import castAs from "../utilities/lang/castAs";
+import PlantEvent from "./PlantEvent";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -113,6 +114,39 @@ events {
     createdAt
   }
 }`);
+
+async function createPlantWithEvents(
+  newPlant: Omit<PlantInput, "userId">,
+  events: Pick<PlantEvent, "type" | "createdAt">[],
+): Promise<Plant[]> {
+  let userId = await getUserId();
+
+  const query = /* GraphQL */ `
+    mutation($data: PlantInput!) {
+      createPlant(data: $data) {
+        ${allPlantFields}
+      }
+    }
+  `;
+
+  await faunaDBQuery<{
+    data: { createPlant: Plant };
+  }>({
+    query,
+    variables: {
+      data: {
+        ...newPlant,
+        userId,
+        events: {
+          create: events,
+        },
+      },
+      events,
+    },
+  });
+
+  return persistence.loadPlants();
+}
 
 const persistence = {
   // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
@@ -239,7 +273,8 @@ const persistence = {
       await persistence.deletePlant(plants[i]);
     }
 
-    // TODO: delete remote data and update description in UI
+    // TODO: delete events
+
     await Promise.all([
       removeItem(localStorageKeys.nextMigrationIndex),
       removeItem(localStorageKeys.userId),
@@ -270,7 +305,17 @@ const persistence = {
     }
 
     for (let i = 0; i < importedData.plants.length; i += 1) {
-      await persistence.createPlant(importedData.plants[i]);
+      const plant = importedData.plants[i];
+      await createPlantWithEvents(
+        pick(
+          plant,
+          "name",
+          "timeOfDeath",
+          "lastWateredAt",
+          "wateringPeriodInDays",
+        ),
+        plant.events.data.map((event) => pick(event, "type", "createdAt")),
+      );
     }
 
     return persistence.loadPlants();
