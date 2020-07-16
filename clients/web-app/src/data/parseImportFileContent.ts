@@ -15,7 +15,9 @@ type DateValuesAsStrings<Object extends { [Key: string]: any }> = {
 
 export class InvalidImportFormatError extends Error {}
 
-export default function importData(fileContent: string): DataExport {
+export default function parseImportFileContent(
+  fileContent: string,
+): DataExport {
   let result: DateValuesAsStrings<DataExport>;
 
   try {

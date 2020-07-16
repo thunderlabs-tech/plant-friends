@@ -1,5 +1,5 @@
 import { DataExport } from "./exportData";
-import importData from "./importData";
+import parseImportFileContent from "./parseImportFileContent";
 import { makePlant, makeWateredEvent } from "../utilities/test/factories";
 
 describe("importData()", () => {
@@ -9,7 +9,7 @@ describe("importData()", () => {
       plants: [],
     };
     const jsonString = JSON.stringify(dataExport);
-    const parsedResult = importData(jsonString);
+    const parsedResult = parseImportFileContent(jsonString);
     expect(parsedResult).toEqual(dataExport);
   });
 
@@ -27,7 +27,7 @@ describe("importData()", () => {
       ],
     };
     const jsonString = JSON.stringify(dataExport);
-    const parsedResult = importData(jsonString);
+    const parsedResult = parseImportFileContent(jsonString);
     expect(parsedResult).toEqual(dataExport);
   });
 
@@ -35,7 +35,7 @@ describe("importData()", () => {
     const jsonString = "not valid JSON";
 
     expect(() => {
-      importData(jsonString);
+      parseImportFileContent(jsonString);
     }).toThrowError(/not valid JSON/);
   });
 
@@ -43,7 +43,7 @@ describe("importData()", () => {
     const jsonString = "null";
 
     expect(() => {
-      importData(jsonString);
+      parseImportFileContent(jsonString);
     }).toThrowError(/does not contain a valid export object/);
   });
 });
