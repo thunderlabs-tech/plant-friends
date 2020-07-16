@@ -72,7 +72,8 @@ const DataManagementScreen: React.FC<
   };
 
   const onUploadInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
+    const fileInput = e.currentTarget;
+    const files = fileInput.files;
     if (files === null || files.length === 0) return;
 
     if (files.length > 1) {
@@ -85,7 +86,7 @@ const DataManagementScreen: React.FC<
     const file = files[0];
     const fileContent = await file.text();
 
-    e.currentTarget.value = "";
+    fileInput.value = "";
 
     parseAndImportFileContent(fileContent);
   };
