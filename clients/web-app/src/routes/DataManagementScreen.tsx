@@ -11,8 +11,8 @@ import { DataManagementRouteParams } from "./DataManagementRoute";
 import Surface from "../components/Surface";
 import assertPresent from "../utilities/lang/assertPresent";
 import Layout from "../components/Layout";
-import importData from "../data/importData";
-import { InvalidImportFormatError } from "../data/importData";
+import parseImportFileContent from "../data/parseImportFileContent";
+import { InvalidImportFormatError } from "../data/parseImportFileContent";
 import { TextField } from "@rmwc/textfield";
 import { Button } from "@rmwc/button";
 import TextFieldStyles from "../components/TextField.module.css";
@@ -50,7 +50,7 @@ const DataManagementScreen: React.FC<
     let newPlants: Plant[];
 
     try {
-      const importedData = importData(fileContent);
+      const importedData = parseImportFileContent(fileContent);
 
       newPlants = await persistImportedData(importedData, plants.dispatch);
     } catch (error) {
