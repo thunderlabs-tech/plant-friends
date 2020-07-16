@@ -27,7 +27,7 @@ import TextFieldStyles from "../components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "./DeadPlantListRoute";
 import { plantListUrl } from "./PlantListRoute";
-import { PlantEventType, PlantEvent } from "../data/PlantEvent";
+import PlantEvent, { PlantEventType } from "../data/PlantEvent";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;

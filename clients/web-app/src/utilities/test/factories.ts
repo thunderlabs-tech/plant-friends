@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Plant } from "../../data/Plant";
 import { uniqueId } from "lodash";
-import { PlantEvent, PlantEventType } from "../../data/PlantEvent";
+import PlantEvent, { PlantEventType } from "../../data/PlantEvent";
 
 export function makePlant(attributes: Partial<Plant> = {}): Plant {
   return {
