@@ -49,27 +49,3 @@ Query(
     )
   )
 )
-
-
-
-
-# Let(
-#   {
-#     latestWateredEventTimeAndRef: Select(
-#       ["data", 0], 
-#       Paginate(
-#         Match(
-#           Index("plantEventByPlantAndTypeSortedByCreatedAtDesc"), 
-#           [
-#             Ref(Collection("Plant"), "271033339800977927"), 
-#             "WATERED",
-#           ],
-#         ),
-#       ),
-#       null,
-#     ),
-#   },
-#   Do(
-
-#   )
-# )
