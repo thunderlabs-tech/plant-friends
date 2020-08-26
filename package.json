@@ -23,7 +23,7 @@
   "homepage": "https://github.com/wmadden/plant-friends#readme",
   "workspaces": [
     "services/*",
-    "clients/*"
+    "web-client"
   ],
   "dependencies": {
     "fauna-shell": "^0.11.0",

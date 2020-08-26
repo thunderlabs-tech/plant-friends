@@ -6,7 +6,7 @@ Keep your plants happy by tracking and caring for their needs.
 
 ## Monorepo Project Structure
 
-This project contains all relevant code for Plant Friends deployment: client apps, server functions, etc. See `clients/` for the available client apps and `services/` for backend services.
+This project contains all relevant code for Plant Friends deployment: client apps, server functions, etc.
 
 We use Yarn to manage multiple projects in one repository (known as "workspaces" in Yarn terminology).
 
