@@ -85,12 +85,6 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
   await setItem<number>(localStorageKeys.nextMigrationIndex, value);
 }
 
-async function getUserId(): Promise<string> {
-  const userId = await getItem<string>(localStorageKeys.userId);
-  if (userId === null) throw new Error("User ID missing from local storage");
-  return userId;
-}
-
 export class IncompatibleImportError extends Error {}
 
 type Page<T> = {
@@ -118,7 +112,7 @@ async function createPlantWithEvents(
   newPlant: Omit<PlantInput, "userId">,
   events: Pick<PlantEvent, "type" | "createdAt">[],
 ): Promise<Plant[]> {
-  let userId = await getUserId();
+  let userId = await persistence.getUserId();
 
   const query = /* GraphQL */ `
     mutation($data: PlantInput!) {
@@ -155,7 +149,7 @@ const persistence = {
   },
 
   loadPlants: async (): Promise<Plant[]> => {
-    const userId = await getUserId();
+    const userId = await persistence.getUserId();
     const query = /* GraphQL */ `
       query($_cursor: String, $userId: String!) {
         getPlants(_size: 100, _cursor: $_cursor, userId: $userId) {
@@ -234,7 +228,7 @@ const persistence = {
   createPlant: async (
     newPlant: Omit<PlantInput, "userId">,
   ): Promise<Plant[]> => {
-    let userId = await getUserId();
+    let userId = await persistence.getUserId();
 
     const query = /* GraphQL */ `
       mutation($data: PlantInput!) {
@@ -318,6 +312,12 @@ const persistence = {
     }
 
     return persistence.loadPlants();
+  },
+
+  async getUserId(): Promise<string> {
+    const userId = await getItem<string>(localStorageKeys.userId);
+    if (userId === null) throw new Error("User ID missing from local storage");
+    return userId;
   },
 };
 export type Persistence = typeof persistence;
