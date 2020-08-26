@@ -319,6 +319,11 @@ const persistence = {
     if (userId === null) throw new Error("User ID missing from local storage");
     return userId;
   },
+
+  async setUserId(value: string): Promise<void> {
+    await setItem<string>(localStorageKeys.userId, value);
+    window.location.reload();
+  },
 };
 export type Persistence = typeof persistence;
 
