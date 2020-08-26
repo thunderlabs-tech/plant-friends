@@ -4,11 +4,11 @@
   "description": "Keep your plant friends happy",
   "main": "index.js",
   "scripts": {
-    "build": "cd clients/web-app && yarn build",
+    "build": "cd web-client && yarn build",
     "build-production": ". env/production && yarn build",
     "build-staging": ". env/staging && yarn build",
-    "start": "cd clients/web-app && yarn start",
-    "test": "cd clients/web-app && yarn test"
+    "start": "cd web-client && yarn start",
+    "test": "cd web-client && yarn test"
   },
   "repository": {
     "type": "git",
