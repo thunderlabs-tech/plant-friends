@@ -43,7 +43,7 @@ To start the Netlify dev server:
 
     netlify dev
 
-This will start the `clients/web-app` local server and proxy requests to it from the local Netlify server whose address it will print out:
+This will start the `web-client` local server and proxy requests to it from the local Netlify server whose address it will print out:
 
     ◈ Server now ready on http://localhost:8888
 
@@ -81,7 +81,7 @@ One database is designated for production and its access key is stored as an env
 
 For local development, create a new database for yourself or [run a local FaunaDB docker image](https://fauna.com/blog/setting-up-a-new-fauna-cluster-using-docker).
 
-FaunaDB identifies which database you connect to by your access token. Once you've created a database, assign the key to the environment variable `REACT_APP_FAUNADB_ACCESS_TOKEN` (you can put it in [`.env`](clients/web-app/.env) for convenience).
+FaunaDB identifies which database you connect to by your access token. Once you've created a database, assign the key to the environment variable `REACT_APP_FAUNADB_ACCESS_TOKEN` (you can put it in [`.env`](web-client/.env) for convenience).
 
 ### Schema
 

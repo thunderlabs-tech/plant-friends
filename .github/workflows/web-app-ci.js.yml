@@ -7,15 +7,15 @@ on:
   push:
     branches: [master]
     paths:
-      - 'clients/web-app/**.*'
+      - "web-client/**.*"
   pull_request:
     branches: [master]
     paths:
-      - 'clients/web-app/**.*'
+      - "web-client/**.*"
 
 defaults:
   run:
-    working-directory: clients/web-app
+    working-directory: web-client
 
 jobs:
   build:

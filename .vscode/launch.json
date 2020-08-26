@@ -9,11 +9,11 @@
       "name": "vscode-jest-tests",
       "request": "launch",
       "args": ["test", "--runInBand"],
-      "cwd": "${workspaceFolder}/clients/web-app",
+      "cwd": "${workspaceFolder}/web-client",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
-      "program": "${workspaceFolder}/clients/web-app/node_modules/.bin/react-scripts"
+      "program": "${workspaceFolder}/web-client/node_modules/.bin/react-scripts"
     }
   ]
 }
