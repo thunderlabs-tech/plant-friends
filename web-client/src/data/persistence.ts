@@ -59,7 +59,7 @@ localforage.config({
   version: 1.1,
 });
 
-function getItem<T>(key: string): Promise<T> {
+function getItem<T>(key: string): Promise<T | null> {
   return localforage.getItem<T>(key);
 }
 
@@ -78,18 +78,17 @@ export const localStorageKeys = Object.freeze({
 });
 
 export async function getNextMigrationIndex(): Promise<number> {
-  return (
-    (await getItem<number | undefined>(localStorageKeys.nextMigrationIndex)) ||
-    0
-  );
+  return (await getItem<number>(localStorageKeys.nextMigrationIndex)) || 0;
 }
 
 export async function setNextMigrationIndex(value: number): Promise<void> {
   await setItem<number>(localStorageKeys.nextMigrationIndex, value);
 }
 
-function getUserId(): Promise<string> {
-  return getItem<string>(localStorageKeys.userId);
+async function getUserId(): Promise<string> {
+  const userId = await getItem<string>(localStorageKeys.userId);
+  if (userId === null) throw new Error("User ID missing from local storage");
+  return userId;
 }
 
 export class IncompatibleImportError extends Error {}
