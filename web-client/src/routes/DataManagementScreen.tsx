@@ -1,4 +1,4 @@
-import React, { useRef, ChangeEvent, useState } from "react";
+import React, { useRef, ChangeEvent, useState, useEffect } from "react";
 import { Collection } from "../utilities/state/useCollection";
 import { Plant } from "../data/Plant";
 import { deleteAllData, persistImportedData } from "../data/actions";
@@ -30,6 +30,14 @@ const DataManagementScreen: React.FC<
   DataManagementScreenProps & { params: DataManagementRouteParams }
 > = ({ plants }) => {
   const [importDataInputValue, setImportDataInputValue] = useState("");
+  const [userId, setUserId] = useState("...");
+
+  useEffect(() => {
+    async function fetchData() {
+      setUserId(await persistence.getUserId());
+    }
+    fetchData();
+  }, []);
   const history = useHistory();
 
   async function onDownloadExportClick() {
@@ -99,6 +107,10 @@ const DataManagementScreen: React.FC<
     deleteAllData(plants.dispatch, history);
   };
 
+  const onSetUserIdClick = () => {
+    persistence.setUserId(userId);
+  };
+
   return (
     <Layout
       appBar={{
@@ -115,6 +127,26 @@ const DataManagementScreen: React.FC<
       />
       <Surface z={1}>
         <Grid>
+          <GridCell tablet={8} desktop={12}>
+            <TextField
+              id="user-id"
+              name="user-id"
+              value={userId}
+              label="User ID"
+              helpText="Set your user ID and reboot the app"
+              className={TextFieldStyles.fullWidth}
+              onChange={(e) => setUserId(e.currentTarget.value)}
+            />
+
+            <Button onClick={onSetUserIdClick} icon="save">
+              Set User ID
+            </Button>
+          </GridCell>
+
+          <GridCell tablet={8} desktop={12}>
+            <hr />
+          </GridCell>
+
           <GridCell tablet={8} desktop={12}>
             <Button onClick={onDownloadExportClick} icon="cloud_download">
               Download All Data
