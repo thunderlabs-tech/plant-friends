@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+AMPLIFY_HARDCODED_MODELS_DIR="src"
+GENERATED_CODE_OUTPUT_PATH="web-client/src/gen"
+
+set -e
+
+echo "🧹 Clear existing generated code"
+rm -rf ${GENERATED_CODE_OUTPUT_PATH}
+
+echo "\n🔨 Generate Amplify queries, schema and models"
+amplify codegen
+amplify codegen models
+
+echo "\n😠 Correct Amplify hardcoded model output path"
+mkdir -p ${GENERATED_CODE_OUTPUT_PATH}/models
+mv src/models ${GENERATED_CODE_OUTPUT_PATH}
+rmdir src
+
+echo "\n✨ Run prettier on generated code"
+prettier -w ${GENERATED_CODE_OUTPUT_PATH}
+
+echo "\n✅ Done!"
