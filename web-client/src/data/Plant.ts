@@ -2,7 +2,7 @@ import add from "date-fns/add";
 import PlantEvent from "./PlantEvent";
 
 export type Plant = {
-  _id: string;
+  id: string;
   name: string;
   wateringPeriodInDays: number;
   lastWateredAt?: Date | null;

@@ -94,7 +94,7 @@ type Page<T> = {
 };
 
 const allPlantFields = Object.freeze(`
-_id
+id
 name
 timeOfDeath
 wateringPeriodInDays
@@ -102,7 +102,7 @@ userId
 lastWateredAt
 events {
   data {
-    _id
+    id
     type
     createdAt
   }
@@ -193,7 +193,7 @@ const persistence = {
     }>({
       query,
       variables: {
-        id: plant._id,
+        id: plant.id,
         data: castAs<PlantInput>(
           pick(plant, "name", "timeOfDeath", "wateringPeriodInDays", "userId"),
         ),
@@ -217,7 +217,7 @@ const persistence = {
     }>({
       query,
       variables: {
-        plantId: plant._id,
+        plantId: plant.id,
         at: new Date(),
       },
     });
@@ -249,14 +249,14 @@ const persistence = {
     const query = /* GraphQL */ `
       mutation($id: ID!) {
         deletePlant(id: $id) {
-          _id
+          id
         }
       }
     `;
 
     await faunaDBQuery<{
       data: { deletePlant: Plant };
-    }>({ query, variables: { id: plant._id } });
+    }>({ query, variables: { id: plant.id } });
   },
 
   deleteAll: async (): Promise<void> => {

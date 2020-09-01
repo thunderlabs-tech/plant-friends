@@ -87,9 +87,9 @@ const PlantListScreen: React.FC<
               {unwateredPlants.length > 0 &&
                 unwateredPlants.map((plant) => (
                   <ListItem
-                    key={plant._id}
+                    key={plant.id}
                     tag={Link}
-                    to={plantDetailUrl(plant._id)}
+                    to={plantDetailUrl(plant.id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>
@@ -119,9 +119,9 @@ const PlantListScreen: React.FC<
               {wateredPlants.length > 0 &&
                 wateredPlants.map((plant) => (
                   <ListItem
-                    key={plant._id}
+                    key={plant.id}
                     tag={Link}
-                    to={plantDetailUrl(plant._id)}
+                    to={plantDetailUrl(plant.id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>
