@@ -204,11 +204,11 @@ const PlantDetailScreen: React.FC<
                 </GridCell>
 
                 <GridCell tablet={8} desktop={12}>
-                  {plant.events.data.length > 0 ? (
+                  {plant.events.length > 0 ? (
                     <>
                       <Typography use="body1">Watered at:</Typography>
                       <List nonInteractive>
-                        {sortEvents(plant.events.data).map((event) => {
+                        {sortEvents(plant.events).map((event) => {
                           return (
                             event.type === PlantEventType.WATERED && (
                               <ListItem key={event._id}>

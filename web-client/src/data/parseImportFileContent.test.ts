@@ -18,11 +18,9 @@ describe("importData()", () => {
       nextMigrationIndex: 2,
       plants: [
         makePlant({
-          events: {
-            data: [
-              makeWateredEvent({ createdAt: new Date(2020, 1, 1, 0, 0, 0, 0) }),
-            ],
-          },
+          events: [
+            makeWateredEvent({ createdAt: new Date(2020, 1, 1, 0, 0, 0, 0) }),
+          ],
         }),
       ],
     };
