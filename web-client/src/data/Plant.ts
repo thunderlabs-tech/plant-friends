@@ -5,7 +5,7 @@ export type Plant = {
   id: string;
   name: string;
   wateringPeriodInDays: number;
-  lastWateredAt?: Date | null;
+  lastWateredAt: Date | null;
   timeOfDeath: Date | null;
   userId: string;
   events: {
