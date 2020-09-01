@@ -26,7 +26,7 @@ describe("exportData()", () => {
 
     const plants: Plant[] = [
       makePlant({
-        events: { data: [makeWateredEvent({ createdAt: wateringTimeDate })] },
+        events: [makeWateredEvent({ createdAt: wateringTimeDate })],
         timeOfDeath: timeOfDeathDate,
         lastWateredAt: lastWateredAtDate,
       }),
@@ -41,14 +41,12 @@ describe("exportData()", () => {
     expect(data.plants).toEqual([
       {
         ...plants[0],
-        events: {
-          data: [
-            {
-              ...plants[0].events.data[0],
-              createdAt: wateringTimeDate.toISOString(),
-            },
-          ],
-        },
+        events: [
+          {
+            ...plants[0].events[0],
+            createdAt: wateringTimeDate.toISOString(),
+          },
+        ],
         timeOfDeath: timeOfDeathDate.toISOString(),
         lastWateredAt: lastWateredAtDate.toISOString(),
       },

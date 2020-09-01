@@ -8,9 +8,7 @@ export type Plant = {
   lastWateredAt: Date | null;
   timeOfDeath: Date | null;
   userId: string;
-  events: {
-    data: PlantEvent[];
-  };
+  events: PlantEvent[];
 };
 
 export type PlantInput = {
