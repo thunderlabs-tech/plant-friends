@@ -29,7 +29,7 @@ const availableColors = [
 
 const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
   const plant = props.plant;
-  const colorIndex = parseInt(plant._id, 10) || 0;
+  const colorIndex = parseInt(plant.id, 10) || 0;
 
   const backgroundColor = availableColors[colorIndex % availableColors.length];
   const textColor = getContrastTextColor(backgroundColor, grey[800], grey[200]);

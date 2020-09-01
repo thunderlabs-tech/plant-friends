@@ -54,9 +54,9 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
               <List twoLine avatarList theme={["onSurface"]}>
                 {deadPlants.map((plant) => (
                   <ListItem
-                    key={plant._id}
+                    key={plant.id}
                     tag={Link}
-                    to={deadPlantDetailUrl(plant._id)}
+                    to={deadPlantDetailUrl(plant.id)}
                   >
                     <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                     <ListItemText>

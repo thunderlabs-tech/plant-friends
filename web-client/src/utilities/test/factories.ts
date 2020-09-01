@@ -5,7 +5,7 @@ import PlantEvent, { PlantEventType } from "../../data/PlantEvent";
 
 export function makePlant(attributes: Partial<Plant> = {}): Plant {
   return {
-    _id: uniqueId(),
+    id: uniqueId(),
     name: "Basil",
     wateringPeriodInDays: 1,
     timeOfDeath: null,
@@ -20,7 +20,7 @@ export function makeWateredEvent(
   attributes: Partial<PlantEvent> = {},
 ): PlantEvent {
   return {
-    _id: uniqueId(),
+    id: uniqueId(),
     type: PlantEventType.WATERED,
     createdAt: new Date(),
     ...attributes,
