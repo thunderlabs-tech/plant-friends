@@ -211,7 +211,7 @@ const PlantDetailScreen: React.FC<
                         {sortEvents(plant.events).map((event) => {
                           return (
                             event.type === PlantEventType.WATERED && (
-                              <ListItem key={event._id}>
+                              <ListItem key={event.id}>
                                 {formatWateringTime(event.createdAt)}
                               </ListItem>
                             )
