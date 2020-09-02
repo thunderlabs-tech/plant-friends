@@ -1,5 +1,6 @@
 import JsonValue from "./JsonValue";
 import { mapValues } from "lodash";
+import blindCast from "./lang/blindCast";
 
 const ISO_8601_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3,6})?(Z|[+-](\d{2}):(\d{2}))$/;
 
@@ -18,7 +19,8 @@ export default function deserializeDateStrings<OutputType = unknown>(
     result = value;
   }
 
-  // It's impossible to express the relationship between `OutputType` and the intial value so we let the caller pass in
-  // the return type and blindly cast our result to that
-  return (result as any) as OutputType;
+  return blindCast<
+    OutputType,
+    "Can't express the relationship between the input and OutputType so the caller must pass it in"
+  >(result);
 }
