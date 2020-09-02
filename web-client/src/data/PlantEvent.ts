@@ -3,7 +3,7 @@ export enum PlantEventType {
 }
 
 type PlantEvent = {
-  _id: string;
+  id: string;
   type: PlantEventType;
   createdAt: Date;
 };
