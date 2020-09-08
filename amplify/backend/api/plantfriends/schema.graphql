@@ -1,0 +1,26 @@
+type Plant
+@model
+@auth(rules: [{ allow: owner, operations: [create, read, update] }]) {
+  id: ID!
+  name: String!
+  timeOfDeath: AWSDateTime
+  lastWateredAt: AWSDateTime
+  wateringPeriodInDays: Int!
+  userId: String!
+  events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
+}
+
+enum PlantEventType {
+  WATERED
+}
+
+type PlantEvent
+@model
+@key(name: "byPlant", fields: ["plantId", "createdAt"])
+@auth(rules: [{ allow: owner, operations: [create, read, update] }]) {
+  id: ID!
+  plantId: ID!
+  plant: Plant! @connection(fields: ["plantId"])
+  type: PlantEventType!
+  createdAt: AWSDateTime!
+}
