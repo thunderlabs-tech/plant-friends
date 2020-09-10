@@ -9,6 +9,7 @@ import JsonValue from "../utilities/JsonValue";
 import castAs from "../utilities/lang/castAs";
 import PlantEvent from "./PlantEvent";
 import * as queries from "../gen/graphql/queries";
+import * as mutations from "../gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
 import blindCast from "../utilities/lang/blindCast";
 import { ListPlantsQuery } from "../gen/API";
@@ -250,17 +251,11 @@ const persistence = {
   ): Promise<Plant[]> => {
     let userId = await persistence.getUserId();
 
-    const query = /* GraphQL */ `
-      mutation($data: PlantInput!) {
-        createPlant(data: $data) {
-          ${allPlantFields}
-        }
-      }
-    `;
-
-    await faunaDBQuery<{
-      data: { createPlant: Plant };
-    }>({ query, variables: { data: { ...newPlant, userId } } });
+    await API.graphql(
+      graphqlOperation(mutations.createPlant, {
+        input: { ...newPlant, userId },
+      }),
+    );
 
     return persistence.loadPlants();
   },
@@ -327,7 +322,7 @@ const persistence = {
           "lastWateredAt",
           "wateringPeriodInDays",
         ),
-        plant.events.data.map((event) => pick(event, "type", "createdAt")),
+        plant.events.map((event) => pick(event, "type", "createdAt")),
       );
     }
 
