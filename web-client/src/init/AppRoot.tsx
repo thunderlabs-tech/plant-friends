@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import Amplify from "aws-amplify";
+import awsExports from "../gen/aws-exports";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import theme from "./theme";
 import useCollection from "../utilities/state/useCollection";
@@ -16,6 +19,8 @@ import RootRoute from "../routes/RootRoute";
 import DeadPlantListRoute from "../routes/DeadPlantListRoute";
 import DeadPlantDetailRoute from "../routes/DeadPlantDetailRoute";
 import DataManagementRoute from "../routes/DataManagementRoute";
+
+Amplify.configure(awsExports);
 
 const AppRoot: React.FC = () => {
   const plants = useCollection<Plant>();
@@ -52,4 +57,4 @@ const AppRoot: React.FC = () => {
   );
 };
 
-export default AppRoot;
+export default withAuthenticator(AppRoot);
