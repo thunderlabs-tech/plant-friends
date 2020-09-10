@@ -1,5 +1,6 @@
 import localforage from "localforage";
 import { Plant, PlantInput } from "./Plant";
+
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
 import { pick } from "lodash";
@@ -7,6 +8,17 @@ import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
 import castAs from "../utilities/lang/castAs";
 import PlantEvent from "./PlantEvent";
+import * as queries from "../gen/graphql/queries";
+import { API, graphqlOperation } from "aws-amplify";
+import blindCast from "../utilities/lang/blindCast";
+import { ListPlantsQuery } from "../gen/API";
+import { transformObject } from "../utilities/transformObject";
+import { parseDateString } from "../utilities/parseDateString";
+import {
+  GraphqlResult,
+  assertGraphqlSuccessResult,
+} from "../utilities/GraphqlResult";
+import { filterNull } from "../utilities/filterNull";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -31,6 +43,17 @@ function assertSuccessfulResponse<SuccessType = unknown>(
   }
 
   return response;
+}
+
+async function appSyncQuery<Result extends object>(
+  ...args: Parameters<typeof API.graphql>
+) {
+  const result = await API.graphql(...args);
+
+  return blindCast<
+    GraphqlResult<Result>,
+    "we require the caller to specify the return type of API.graphql(), which is typed as `object`"
+  >(result);
 }
 
 async function faunaDBQuery<SuccessResponse extends JsonValue>(request: {
@@ -87,12 +110,6 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
 
 export class IncompatibleImportError extends Error {}
 
-type Page<T> = {
-  data: T[];
-  before: string | null;
-  after: string | null;
-};
-
 const allPlantFields = Object.freeze(`
 id
 name
@@ -142,41 +159,44 @@ async function createPlantWithEvents(
 }
 
 const persistence = {
-  // NOTE: we don't verify the structure of stored data, we assume it was stored correctly
-
   runMigrations: async (): Promise<void> => {
     await runMigrations({ setItem, userIdKey: localStorageKeys.userId });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
-    const userId = await persistence.getUserId();
-    const query = /* GraphQL */ `
-      query($_cursor: String, $userId: String!) {
-        getPlants(_size: 100, _cursor: $_cursor, userId: $userId) {
-          data {
-            ${allPlantFields}
-          },
-          after,
-        }
-      }
-    `;
-
-    function fetchNextPage(cursor?: string) {
-      return faunaDBQuery<{
-        data: { getPlants: Page<Plant> };
-      }>({ query, variables: { _cursor: cursor, userId } });
+    function fetchNextPage(cursor?: string | null) {
+      return appSyncQuery<ListPlantsQuery>(
+        graphqlOperation(queries.listPlants),
+      );
     }
 
     let latestResponse = await fetchNextPage();
-    let { data: plants, after: cursor } = latestResponse.data.getPlants;
 
-    while (cursor !== null) {
-      latestResponse = await fetchNextPage(cursor);
-      plants = plants.concat(latestResponse.data.getPlants.data);
-      cursor = latestResponse.data.getPlants.after;
-    }
+    assertGraphqlSuccessResult(latestResponse);
+    let result: Plant[] = [];
+    let { items, nextToken } = latestResponse.data.listPlants || {};
 
-    return plants;
+    do {
+      result = [
+        ...result,
+        ...filterNull(items || []).map(
+          (item): Plant => ({
+            ...transformObject(item, {
+              lastWateredAt: parseDateString,
+              timeOfDeath: parseDateString,
+            }),
+            events: [],
+          }),
+        ),
+      ];
+
+      latestResponse = await fetchNextPage(nextToken);
+      assertGraphqlSuccessResult(latestResponse);
+      items = latestResponse.data.listPlants?.items || [];
+      nextToken = latestResponse.data.listPlants?.nextToken;
+    } while (nextToken);
+
+    return result;
   },
 
   updatePlant: async (plant: Plant): Promise<Plant> => {
