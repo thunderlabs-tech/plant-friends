@@ -12,7 +12,7 @@ import * as queries from "../gen/graphql/queries";
 import * as mutations from "../gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
 import blindCast from "../utilities/lang/blindCast";
-import { ListPlantsQuery } from "../gen/API";
+import { ListPlantsQuery, DeletePlantInput } from "../gen/API";
 import { transformObject } from "../utilities/transformObject";
 import { parseDateString } from "../utilities/parseDateString";
 import {
@@ -261,17 +261,11 @@ const persistence = {
   },
 
   deletePlant: async (plant: Plant): Promise<void> => {
-    const query = /* GraphQL */ `
-      mutation($id: ID!) {
-        deletePlant(id: $id) {
-          id
-        }
-      }
-    `;
+    const input: DeletePlantInput = {
+      id: plant.id,
+    };
 
-    await faunaDBQuery<{
-      data: { deletePlant: Plant };
-    }>({ query, variables: { id: plant.id } });
+    await API.graphql(graphqlOperation(mutations.deletePlant, { input }));
   },
 
   deleteAll: async (): Promise<void> => {
