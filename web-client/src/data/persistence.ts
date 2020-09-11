@@ -15,11 +15,11 @@ import { API, graphqlOperation } from "aws-amplify";
 import blindCast from "../utilities/lang/blindCast";
 import { ListPlantsQuery, DeletePlantInput } from "../gen/API";
 import { transformObject } from "../utilities/transformObject";
-import { parseDateString } from "../utilities/parseDateString";
+import { parseDateString } from "../utilities/graphql/parseDateString";
 import {
   GraphqlResult,
   assertGraphqlSuccessResult,
-} from "../utilities/GraphqlResult";
+} from "../utilities/graphql/GraphqlResult";
 import { filterNull } from "../utilities/filterNull";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
@@ -47,11 +47,7 @@ function assertSuccessfulResponse<SuccessType = unknown>(
   return response;
 }
 
-async function appSyncQuery<Result extends object>(
-  ...args: Parameters<typeof API.graphql>
-) {
-  const result = await API.graphql(...args);
-type GraphQLOptions<Variables extends object> = {
+type GraphqlOptions<Variables extends object> = {
   query: string;
   variables?: Variables;
   authMode?: GRAPHQL_AUTH_MODE;
@@ -60,11 +56,11 @@ async function appSyncQuery<
   Result extends object,
   Variables extends object = {}
 >(
-  options: GraphQLOptions<Variables>,
+  options: GraphqlOptions<Variables>,
   additionalHeaders?: {
     [key: string]: string;
   },
-): Promise<PFGraphQLResult<Result>> {
+): Promise<GraphqlResult<Result>> {
   const result = await API.graphql(options, additionalHeaders);
 
   return blindCast<
