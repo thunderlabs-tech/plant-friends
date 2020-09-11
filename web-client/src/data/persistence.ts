@@ -4,10 +4,7 @@ import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
-import { pick, omit } from "lodash";
-import deserializeDateStrings from "../utilities/deserializeDateStrings";
-import JsonValue from "../utilities/JsonValue";
-import PlantEvent from "./PlantEvent";
+import { omit } from "lodash";
 import * as queries from "../gen/graphql/queries";
 import * as mutations from "../gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
@@ -35,31 +32,6 @@ import { QueryResultItems } from "../utilities/graphql/QueryTypes";
 import plantToGraphqlPlant from "../utilities/graphql/plantToGraphqlPlant";
 import dateToString from "../utilities/graphql/dateToString";
 
-const faunaDBUrl = "https://graphql.fauna.com/graphql";
-const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
-
-type GraphQLErrorResponse = {
-  errors: { message: string }[];
-};
-
-function isGraphQLError(response: any): response is GraphQLErrorResponse {
-  return Object.prototype.hasOwnProperty.call(response, "errors");
-}
-
-function assertSuccessfulResponse<SuccessType = unknown>(
-  response: SuccessType | GraphQLErrorResponse,
-): SuccessType {
-  if (isGraphQLError(response)) {
-    throw new Error(
-      `Request failed: \n${response.errors
-        .map((error) => error.message)
-        .join("\n")}`,
-    );
-  }
-
-  return response;
-}
-
 type GraphqlOptions<Variables extends object> = {
   query: string;
   variables?: Variables;
@@ -80,27 +52,6 @@ async function appSyncQuery<
     GraphqlResult<Result>,
     "we require the caller to specify the return type of API.graphql(), which is typed as `object`"
   >(result);
-}
-
-async function faunaDBQuery<SuccessResponse extends JsonValue>(request: {
-  query: string;
-  variables?: { [key: string]: JsonValue };
-}): Promise<SuccessResponse> {
-  const response = await fetch(faunaDBUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${FAUNADB_ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
-  });
-
-  const resultOrError = (await response.json()) as
-    | SuccessResponse
-    | GraphQLErrorResponse;
-
-  const result = assertSuccessfulResponse(resultOrError);
-  return deserializeDateStrings(result);
 }
 
 localforage.config({
@@ -136,10 +87,7 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
 
 export class IncompatibleImportError extends Error {}
 
-async function createPlantWithEvents(
-  newPlant: Plant,
-  events: Pick<PlantEvent, "type" | "createdAt">[],
-): Promise<Plant[]> {
+async function createPlantWithEvents(newPlant: Plant): Promise<Plant[]> {
   const plantResult = await appSyncQuery<
     CreatePlantMutation,
     CreatePlantMutationVariables
@@ -325,10 +273,7 @@ const persistence = {
 
     for (let i = 0; i < importedData.plants.length; i += 1) {
       const plant = importedData.plants[i];
-      await createPlantWithEvents(
-        plant,
-        plant.events.map((event) => pick(event, "type", "createdAt")),
-      );
+      await createPlantWithEvents(plant);
     }
 
     return persistence.loadPlants();
