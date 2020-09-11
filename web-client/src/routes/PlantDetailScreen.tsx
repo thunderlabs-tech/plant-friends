@@ -105,6 +105,7 @@ const PlantDetailScreen: React.FC<
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updatePlant(
+      plant,
       { ...plant, name, wateringPeriodInDays },
       plants.dispatch,
       history,
