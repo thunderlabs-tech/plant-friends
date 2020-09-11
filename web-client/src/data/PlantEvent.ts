@@ -1,3 +1,7 @@
+export enum PlantEventType {
+  WATERED = "WATERED",
+}
+
 type PlantEvent = {
   _id: string;
   type: PlantEventType;
@@ -5,7 +9,3 @@ type PlantEvent = {
 };
 
 export default PlantEvent;
-
-export enum PlantEventType {
-  WATERED = "WATERED",
-}
