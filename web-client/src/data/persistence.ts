@@ -4,7 +4,7 @@ import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
-import { pick } from "lodash";
+import { pick, omit } from "lodash";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
 import PlantEvent from "./PlantEvent";
@@ -18,6 +18,11 @@ import {
   UpdatePlantMutation,
   UpdatePlantMutationVariables,
   ListPlantsQueryVariables,
+  CreatePlantEventMutation,
+  CreatePlantEventMutationVariables,
+  PlantEventType,
+  CreatePlantMutation,
+  CreatePlantMutationVariables,
 } from "../gen/API";
 import {
   GraphqlResult,
@@ -28,6 +33,7 @@ import graphqlPlantToPlant from "../utilities/graphql/graphqlPlantToPlant";
 import assertPresent from "../utilities/lang/assertPresent";
 import { QueryResultItems } from "../utilities/graphql/QueryTypes";
 import plantToGraphqlPlant from "../utilities/graphql/plantToGraphqlPlant";
+import dateToString from "../utilities/graphql/dateToString";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -130,50 +136,39 @@ export async function setNextMigrationIndex(value: number): Promise<void> {
 
 export class IncompatibleImportError extends Error {}
 
-const allPlantFields = Object.freeze(`
-id
-name
-timeOfDeath
-wateringPeriodInDays
-userId
-lastWateredAt
-events {
-  data {
-    id
-    type
-    createdAt
-  }
-}`);
-
 async function createPlantWithEvents(
-  newPlant: Omit<PlantInput, "userId">,
+  newPlant: Plant,
   events: Pick<PlantEvent, "type" | "createdAt">[],
 ): Promise<Plant[]> {
-  let userId = await persistence.getUserId();
-
-  const query = /* GraphQL */ `
-    mutation($data: PlantInput!) {
-      createPlant(data: $data) {
-        ${allPlantFields}
-      }
-    }
-  `;
-
-  await faunaDBQuery<{
-    data: { createPlant: Plant };
-  }>({
-    query,
+  const plantResult = await appSyncQuery<
+    CreatePlantMutation,
+    CreatePlantMutationVariables
+  >({
+    query: mutations.createPlant,
     variables: {
-      data: {
-        ...newPlant,
-        userId,
-        events: {
-          create: events,
-        },
-      },
-      events,
+      input: omit(plantToGraphqlPlant(newPlant), ["id"]),
     },
   });
+
+  assertGraphQLSuccessResult(plantResult);
+  assertPresent(plantResult.data.createPlant);
+  const plantId = plantResult.data.createPlant.id;
+
+  // TODO: batch resolver https://docs.aws.amazon.com/appsync/latest/devguide/tutorial-dynamodb-batch.html
+
+  for (let event of newPlant.events) {
+    const eventResult = await appSyncQuery<
+      CreatePlantEventMutation,
+      CreatePlantEventMutationVariables
+    >({
+      query: mutations.createPlantEvent,
+      variables: {
+        input: { ...event, plantId, createdAt: dateToString(event.createdAt) },
+      },
+    });
+
+    assertGraphQLSuccessResult(eventResult);
+  }
 
   return persistence.loadPlants();
 }
@@ -224,30 +219,48 @@ const persistence = {
     });
 
     assertGraphQLSuccessResult(result);
+    assertPresent(result.data.updatePlant);
 
-    return graphqlPlantToPlant(result.data.updatePlant!);
+    return graphqlPlantToPlant(result.data.updatePlant);
   },
 
   waterPlant: async (plant: Plant): Promise<Plant> => {
-    const query = /* GraphQL */ `
-      mutation($plantId: ID!, $at: Time!) {
-        waterPlant(plantId: $plantId, at: $at) {
-          ${allPlantFields}
-        }
-      }
-    `;
+    // TODO: implement as custom resolver for named mutation
+    const lastWateredAt = dateToString(new Date());
 
-    const result = await faunaDBQuery<{
-      data: { waterPlant: Plant };
-    }>({
-      query,
+    const plantEventResult = await appSyncQuery<
+      CreatePlantEventMutation,
+      CreatePlantEventMutationVariables
+    >({
+      query: mutations.createPlantEvent,
       variables: {
-        plantId: plant.id,
-        at: new Date(),
+        input: {
+          plantId: plant.id,
+          createdAt: lastWateredAt,
+          type: PlantEventType.WATERED,
+        },
       },
     });
 
-    return result.data.waterPlant;
+    assertGraphQLSuccessResult(plantEventResult);
+
+    const result = await appSyncQuery<
+      UpdatePlantMutation,
+      UpdatePlantMutationVariables
+    >({
+      query: mutations.updatePlant,
+      variables: {
+        input: {
+          ...plantToGraphqlPlant(plant),
+          lastWateredAt,
+        },
+      },
+    });
+
+    assertGraphQLSuccessResult(result);
+    assertPresent(result.data.updatePlant);
+
+    return graphqlPlantToPlant(result.data.updatePlant);
   },
 
   createPlant: async (
@@ -313,13 +326,7 @@ const persistence = {
     for (let i = 0; i < importedData.plants.length; i += 1) {
       const plant = importedData.plants[i];
       await createPlantWithEvents(
-        pick(
-          plant,
-          "name",
-          "timeOfDeath",
-          "lastWateredAt",
-          "wateringPeriodInDays",
-        ),
+        plant,
         plant.events.map((event) => pick(event, "type", "createdAt")),
       );
     }
