@@ -50,7 +50,10 @@ const DataManagementScreen: React.FC<
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const requestExportFile = () => assertPresent(inputRef.current).click();
+  const requestExportFile = () => {
+    assertPresent(inputRef.current);
+    inputRef.current.click();
+  };
 
   const parseAndImportFileContent = async (
     fileContent: string,
