@@ -1,5 +1,6 @@
 import localforage from "localforage";
 import { Plant, PlantInput } from "./Plant";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "./migrations";
 import { DataExport } from "./exportData";
@@ -50,6 +51,21 @@ async function appSyncQuery<Result extends object>(
   ...args: Parameters<typeof API.graphql>
 ) {
   const result = await API.graphql(...args);
+type GraphQLOptions<Variables extends object> = {
+  query: string;
+  variables?: Variables;
+  authMode?: GRAPHQL_AUTH_MODE;
+};
+async function appSyncQuery<
+  Result extends object,
+  Variables extends object = {}
+>(
+  options: GraphQLOptions<Variables>,
+  additionalHeaders?: {
+    [key: string]: string;
+  },
+): Promise<PFGraphQLResult<Result>> {
+  const result = await API.graphql(options, additionalHeaders);
 
   return blindCast<
     GraphqlResult<Result>,
