@@ -7,7 +7,6 @@ import { DataExport } from "./exportData";
 import { pick } from "lodash";
 import deserializeDateStrings from "../utilities/deserializeDateStrings";
 import JsonValue from "../utilities/JsonValue";
-import castAs from "../utilities/lang/castAs";
 import PlantEvent from "./PlantEvent";
 import * as queries from "../gen/graphql/queries";
 import * as mutations from "../gen/graphql/mutations";
@@ -17,20 +16,18 @@ import {
   ListPlantsQuery,
   DeletePlantInput,
   UpdatePlantMutation,
-  UpdatePlantInput,
   UpdatePlantMutationVariables,
   ListPlantsQueryVariables,
 } from "../gen/API";
-import { transformObject } from "../utilities/transformObject";
 import {
   GraphqlResult,
   assertGraphqlSuccessResult,
 } from "../utilities/graphql/GraphqlResult";
 import { filterNull } from "../utilities/filterNull";
-import dateToString from "../utilities/graphql/dateToString";
-import graphqlPlantToPlant from "./graphqlPlantToPlant";
+import graphqlPlantToPlant from "../utilities/graphql/graphqlPlantToPlant";
 import assertPresent from "../utilities/lang/assertPresent";
 import { QueryResultItems } from "../utilities/graphql/QueryTypes";
+import plantToGraphqlPlant from "../utilities/graphql/plantToGraphqlPlant";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -216,27 +213,19 @@ const persistence = {
   },
 
   updatePlant: async (plant: Plant): Promise<Plant> => {
-    const query = /* GraphQL */ `
-      mutation($id: ID!, $data: PlantInput!) {
-        updatePlant(id: $id, data: $data) {
-          ${allPlantFields}
-        }
-      }
-    `;
-
-    const result = await faunaDBQuery<{
-      data: { updatePlant: Plant };
-    }>({
-      query,
+    const result = await appSyncQuery<
+      UpdatePlantMutation,
+      UpdatePlantMutationVariables
+    >({
+      query: mutations.updatePlant,
       variables: {
-        id: plant.id,
-        data: castAs<PlantInput>(
-          pick(plant, "name", "timeOfDeath", "wateringPeriodInDays", "userId"),
-        ),
+        input: plantToGraphqlPlant(plant),
       },
     });
 
-    return result.data.updatePlant;
+    assertGraphQLSuccessResult(result);
+
+    return graphqlPlantToPlant(result.data.updatePlant!);
   },
 
   waterPlant: async (plant: Plant): Promise<Plant> => {
