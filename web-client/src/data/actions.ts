@@ -31,14 +31,16 @@ export async function createPlant(
 }
 
 export async function updatePlant(
-  plant: Plant,
+  originalPlant: Plant,
+  updatedPlant: Plant,
   plantDispatch: Collection<Plant>["dispatch"],
   history: ReturnType<typeof useHistory>,
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
 
-  const updatedPlant = await persistence.updatePlant(plant);
-  plantDispatch.replace(plant, updatedPlant);
+  plantDispatch.replace(originalPlant, updatedPlant);
+  const persistedPlant = await persistence.updatePlant(updatedPlant);
+  plantDispatch.replace(updatedPlant, persistedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
   history.push(plantListUrl());
