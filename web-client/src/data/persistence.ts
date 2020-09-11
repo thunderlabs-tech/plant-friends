@@ -13,15 +13,24 @@ import * as queries from "../gen/graphql/queries";
 import * as mutations from "../gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
 import blindCast from "../utilities/lang/blindCast";
-import { ListPlantsQuery, DeletePlantInput } from "../gen/API";
+import {
+  ListPlantsQuery,
+  DeletePlantInput,
+  UpdatePlantMutation,
+  UpdatePlantInput,
+  UpdatePlantMutationVariables,
+  ListPlantsQueryVariables,
+} from "../gen/API";
 import { transformObject } from "../utilities/transformObject";
-import { parseDateString } from "../utilities/graphql/parseDateString";
 import {
   GraphqlResult,
   assertGraphqlSuccessResult,
 } from "../utilities/graphql/GraphqlResult";
 import { filterNull } from "../utilities/filterNull";
 import dateToString from "../utilities/graphql/dateToString";
+import graphqlPlantToPlant from "./graphqlPlantToPlant";
+import assertPresent from "../utilities/lang/assertPresent";
+import { QueryResultItems } from "../utilities/graphql/QueryTypes";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
@@ -178,36 +187,29 @@ const persistence = {
   },
 
   loadPlants: async (): Promise<Plant[]> => {
-    function fetchNextPage(cursor?: string | null) {
-      return appSyncQuery<ListPlantsQuery>(
-        graphqlOperation(queries.listPlants),
-      );
+    let result: Plant[] = [];
+
+    let latestResponse: GraphqlResult<ListPlantsQuery>;
+    let items: QueryResultItems<ListPlantsQuery["listPlants"]>;
+    let nextToken: string | null = null;
+
+    async function fetchNextPage(cursor?: string | null) {
+      latestResponse = await appSyncQuery<
+        ListPlantsQuery,
+        ListPlantsQueryVariables
+      >(graphqlOperation(queries.listPlants, { nextToken: cursor }));
+
+      assertGraphqlSuccessResult(latestResponse);
+      assertPresent(latestResponse.data.listPlants);
+      assertPresent(latestResponse.data.listPlants.items);
+
+      items = latestResponse.data.listPlants.items || [];
+      nextToken = latestResponse.data.listPlants.nextToken;
+      result = [...result, ...filterNull(items).map(graphqlPlantToPlant)];
     }
 
-    let latestResponse = await fetchNextPage();
-
-    assertGraphqlSuccessResult(latestResponse);
-    let result: Plant[] = [];
-    let { items, nextToken } = latestResponse.data.listPlants || {};
-
     do {
-      result = [
-        ...result,
-        ...filterNull(items || []).map(
-          (item): Plant => ({
-            ...transformObject(item, {
-              lastWateredAt: parseDateString,
-              timeOfDeath: parseDateString,
-            }),
-            events: [],
-          }),
-        ),
-      ];
-
-      latestResponse = await fetchNextPage(nextToken);
-      assertGraphqlSuccessResult(latestResponse);
-      items = latestResponse.data.listPlants?.items || [];
-      nextToken = latestResponse.data.listPlants?.nextToken;
+      await fetchNextPage(nextToken);
     } while (nextToken);
 
     return result;
