@@ -21,6 +21,7 @@ import {
   assertGraphqlSuccessResult,
 } from "../utilities/graphql/GraphqlResult";
 import { filterNull } from "../utilities/filterNull";
+import dateToString from "../utilities/graphql/dateToString";
 
 const faunaDBUrl = "https://graphql.fauna.com/graphql";
 const FAUNADB_ACCESS_TOKEN = process.env.REACT_APP_FAUNADB_ACCESS_TOKEN;
