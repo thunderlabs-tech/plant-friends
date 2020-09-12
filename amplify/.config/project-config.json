@@ -7,7 +7,7 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "web-client/build",
-      "BuildCommand": "yarn build",
+      "BuildCommand": "./bin/build",
       "StartCommand": "yarn start"
     }
   },
