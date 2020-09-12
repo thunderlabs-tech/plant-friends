@@ -98,7 +98,7 @@ async function createPlantWithEvents(newPlant: Plant): Promise<Plant[]> {
     },
   });
 
-  assertGraphQLSuccessResult(plantResult);
+  assertGraphqlSuccessResult(plantResult);
   assertPresent(plantResult.data.createPlant);
   const plantId = plantResult.data.createPlant.id;
 
@@ -115,7 +115,7 @@ async function createPlantWithEvents(newPlant: Plant): Promise<Plant[]> {
       },
     });
 
-    assertGraphQLSuccessResult(eventResult);
+    assertGraphqlSuccessResult(eventResult);
   }
 
   return persistence.loadPlants();
@@ -166,7 +166,7 @@ const persistence = {
       },
     });
 
-    assertGraphQLSuccessResult(result);
+    assertGraphqlSuccessResult(result);
     assertPresent(result.data.updatePlant);
 
     return graphqlPlantToPlant(result.data.updatePlant);
@@ -190,7 +190,7 @@ const persistence = {
       },
     });
 
-    assertGraphQLSuccessResult(plantEventResult);
+    assertGraphqlSuccessResult(plantEventResult);
 
     const result = await appSyncQuery<
       UpdatePlantMutation,
@@ -205,7 +205,7 @@ const persistence = {
       },
     });
 
-    assertGraphQLSuccessResult(result);
+    assertGraphqlSuccessResult(result);
     assertPresent(result.data.updatePlant);
 
     return graphqlPlantToPlant(result.data.updatePlant);
