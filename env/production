@@ -1,1 +1,1 @@
-export REACT_APP_FAUNADB_ACCESS_TOKEN=$PRODUCTION_FAUNADB_ACCESS_TOKEN
+echo "🔨 Loading production environment variables"

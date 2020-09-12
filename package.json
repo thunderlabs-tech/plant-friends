@@ -26,7 +26,6 @@
     "web-client"
   ],
   "dependencies": {
-    "fauna-shell": "^0.11.0",
     "netlify-cli": "^2.57.0"
   },
   "engines": {
