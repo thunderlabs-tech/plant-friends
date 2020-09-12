@@ -4,9 +4,7 @@
   "description": "Keep your plant friends happy",
   "main": "index.js",
   "scripts": {
-    "build": "cd web-client && yarn build",
-    "build-production": ". env/production && yarn build",
-    "build-staging": ". env/staging && yarn build",
+    "build": "./bin/build",
     "start": "cd web-client && yarn start",
     "test": "cd web-client && yarn test"
   },
