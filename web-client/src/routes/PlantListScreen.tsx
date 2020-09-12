@@ -57,7 +57,7 @@ const PlantListScreen: React.FC<
     waterPlant(plant, plants.dispatch);
   };
 
-  const onAddNewPlant = (plant: Omit<PlantInput, "userId">) => {
+  const onAddNewPlant = (plant: PlantInput) => {
     createPlant(plant, plants.dispatch);
   };
 
