@@ -21,6 +21,7 @@ export function makeWateredEvent(
 ): PlantEvent {
   return {
     id: uniqueId(),
+    plantId: uniqueId(),
     type: PlantEventType.WATERED,
     createdAt: new Date(),
     ...attributes,

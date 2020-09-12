@@ -4,6 +4,7 @@ export enum PlantEventType {
 
 type PlantEvent = {
   id: string;
+  plantId: string;
   type: PlantEventType;
   createdAt: Date;
 };
