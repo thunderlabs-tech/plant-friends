@@ -6,7 +6,6 @@ type Plant
   timeOfDeath: AWSDateTime
   lastWateredAt: AWSDateTime
   wateringPeriodInDays: Int!
-  userId: String!
   events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
 }
 

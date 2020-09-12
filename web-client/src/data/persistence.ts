@@ -297,14 +297,10 @@ const persistence = {
     };
   },
 
-  createPlant: async (
-    newPlant: Omit<PlantInput, "userId">,
-  ): Promise<Plant[]> => {
-    let userId = await persistence.getUserId();
-
+  createPlant: async (newPlant: PlantInput): Promise<Plant[]> => {
     await API.graphql(
       graphqlOperation(mutations.createPlant, {
-        input: { ...newPlant, userId },
+        input: newPlant,
       }),
     );
 

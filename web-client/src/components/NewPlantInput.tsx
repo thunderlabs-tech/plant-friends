@@ -12,7 +12,7 @@ import { GridCell, Grid } from "@rmwc/grid";
 import { PlantInput } from "../data/Plant";
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (plant: Omit<PlantInput, "userId">) => void;
+  onAddNewPlant: (plant: PlantInput) => void;
 };
 
 const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {

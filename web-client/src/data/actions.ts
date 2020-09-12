@@ -19,7 +19,7 @@ export async function waterPlant(
 }
 
 export async function createPlant(
-  plant: Omit<PlantInput, "userId">,
+  plant: PlantInput,
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
