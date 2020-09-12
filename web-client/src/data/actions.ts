@@ -50,7 +50,7 @@ export async function refreshPlants(
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);
-  plantDispatch.setData(await persistence.loadPlants());
+  plantDispatch.setData(await persistence.loadPlantsAndEvents());
   plantDispatch.setLoadingState(LoadingState.ready);
 }
 

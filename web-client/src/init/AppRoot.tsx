@@ -29,7 +29,7 @@ const AppRoot: React.FC = () => {
     async function fetchData() {
       await persistence.runMigrations();
 
-      plants.dispatch.setData(await persistence.loadPlants());
+      plants.dispatch.setData(await persistence.loadPlantsAndEvents());
       plants.dispatch.setLoadingState(LoadingState.ready);
     }
     fetchData();
