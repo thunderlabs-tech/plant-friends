@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -e
+
+ROOT=$(cd $(dirname "$0")/..; pwd)
+
+${ROOT}/bin/codegen
+
+cd ${ROOT}/web-client
+yarn build
