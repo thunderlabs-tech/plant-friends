@@ -3,4 +3,9 @@ set -e
 
 ROOT=$(cd $(dirname "$0")/..; pwd)
 
-./web-client/bin/build
+cd ${ROOT}
+amplify env pull
+mv src/aws-exports.js web-client/src/gen
+
+cd ${ROOT}/web-client
+./bin/build
