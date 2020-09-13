@@ -13,12 +13,8 @@ on:
     paths:
       - "web-client/**.*"
 
-defaults:
-  run:
-    working-directory: web-client
-
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,8 +23,4 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - run: yarn install --frozen-lockfile
-      - run: yarn prettier-check
-      - run: yarn eslint
-      - run: yarn test
-      - run: yarn build
+      - run: ./bin/ci
