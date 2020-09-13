@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "description": "Keep your plant friends happy",
   "main": "index.js",
-  "scripts": {
-    "build": "./bin/build",
-    "start": "cd web-client && yarn start",
-    "test": "cd web-client && yarn test"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wmadden/plant-friends.git"
