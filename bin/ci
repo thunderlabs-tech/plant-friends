@@ -16,9 +16,9 @@ echo "\n✨ ESLint"
 eslint .
 
 echo "\n🚦 Run tests"
-react-scripts test
+./bin/test
 
 echo "\n🔨 Build"
-react-scripts build
+./bin/build
 
 echo "\n✅ Done!"

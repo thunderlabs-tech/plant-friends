@@ -3,5 +3,4 @@ set -e
 
 ROOT=$(cd $(dirname "$0")/..; pwd)
 
-cd ${ROOT}/web-client
-yarn build
+./web-client/bin/build

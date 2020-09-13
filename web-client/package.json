@@ -2,12 +2,7 @@
   "name": "plant-friends-client-web-app",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "scripts": {},
   "dependencies": {
     "@aws-amplify/ui-react": "^0.2.15",
     "@rmwc/avatar": "^6.0.14",
