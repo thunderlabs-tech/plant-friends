@@ -78,7 +78,6 @@ function removeItem(key: string): Promise<void> {
 
 export const localStorageKeys = Object.freeze({
   nextMigrationIndex: "next-migration-index",
-  userId: "user-id",
 });
 
 export async function getNextMigrationIndex(): Promise<number> {
@@ -142,7 +141,7 @@ function assignPlantEventsToPlants(
 
 const persistence = {
   runMigrations: async (): Promise<void> => {
-    await runMigrations({ setItem, userIdKey: localStorageKeys.userId });
+    await runMigrations({ setItem });
   },
 
   loadPlants: async (): Promise<Plant[]> => {
@@ -324,10 +323,7 @@ const persistence = {
 
     // TODO: delete events
 
-    await Promise.all([
-      removeItem(localStorageKeys.nextMigrationIndex),
-      removeItem(localStorageKeys.userId),
-    ]);
+    await Promise.all([removeItem(localStorageKeys.nextMigrationIndex)]);
 
     window.location.reload();
   },
@@ -359,17 +355,6 @@ const persistence = {
     }
 
     return persistence.loadPlantsAndEvents();
-  },
-
-  async getUserId(): Promise<string> {
-    const userId = await getItem<string>(localStorageKeys.userId);
-    if (userId === null) throw new Error("User ID missing from local storage");
-    return userId;
-  },
-
-  async setUserId(value: string): Promise<void> {
-    await setItem<string>(localStorageKeys.userId, value);
-    window.location.reload();
   },
 };
 export type Persistence = typeof persistence;

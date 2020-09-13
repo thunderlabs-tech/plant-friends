@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import {
   setItemType,
   getNextMigrationIndex,
@@ -9,17 +8,12 @@ async function removedMigration() {}
 
 export async function runMigrations({
   setItem,
-  userIdKey,
 }: {
   setItem: setItemType;
-  userIdKey: string;
 }): Promise<void> {
   const migrations: readonly (() => Promise<unknown>)[] = Object.freeze([
     removedMigration,
-
-    async function generateUserId() {
-      await setItem(userIdKey, uuidv4());
-    },
+    removedMigration,
   ]);
 
   const nextMigrationIndex = await getNextMigrationIndex();
