@@ -3,3 +3,4 @@ set -e
 
 echo "🔨 Build web-client"
 node_modules/.bin/react-scripts build
+echo "\n✅ Done!"

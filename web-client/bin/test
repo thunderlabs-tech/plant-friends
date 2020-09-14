@@ -3,3 +3,4 @@ set -e
 
 echo "🚦 Run tests"
 node_modules/.bin/react-scripts test
+echo "\n✅ Done!"
