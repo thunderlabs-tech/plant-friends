@@ -3,3 +3,4 @@ set -e
 
 echo "✨ ESLint"
 node_modules/.bin/eslint .
+echo "\n✅ Done!"

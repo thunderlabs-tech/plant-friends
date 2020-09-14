@@ -7,7 +7,9 @@ echo "📦 Installing dependencies"
 cd ${ROOT}
 yarn install --frozen-lockfile
 
+echo "cd web-client"
 cd web-client
+
 ./bin/prettier-check
 ./bin/eslint
 ./bin/test
