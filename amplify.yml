@@ -12,7 +12,7 @@ frontend:
         - yarn install --frozen-lockfile
     build:
       commands:
-        - ./bin/build
+        - ./bin/amplify-build
   artifacts:
     # IMPORTANT - Please verify your build output directory
     baseDirectory: web-client/build
