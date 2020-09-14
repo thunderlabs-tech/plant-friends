@@ -9,11 +9,10 @@ DEST_PATH="web-client/src/gen"
 echo "🧹 Clear existing generated code"
 rm -rf ${ROOT}/${DEST_PATH}
 
-echo "\n🔨 Generate Amplify queries, schema and models"
+echo "\n🔨 Generate Amplify schema, queries and models"
 amplify api gql-compile
 amplify codegen
 amplify codegen models
-amplify env pull
 
 echo "\n😠 Correct Amplify hardcoded output path"
 mkdir ${ROOT}/${DEST_PATH}
@@ -24,3 +23,4 @@ echo "\n✨ Run prettier on generated code"
 prettier -w ${ROOT}/${DEST_PATH}
 
 echo "\n✅ Done!"
+echo "\n☝️  Don't forget to run 'amplify env pull' to generate aws-exports.js"
