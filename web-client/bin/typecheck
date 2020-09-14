@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-set -e
+source $(dirname "$0")/.include.sh
 
 echo "🕵🏻‍♀️ Type check"
-node_modules/.bin/tsc .
-echo "\n✅ Done!"
+tsc .
+echo "✅ Done!"
