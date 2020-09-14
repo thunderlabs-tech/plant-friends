@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 set -e
-react-scripts build
+
+echo "🔨 Build web-client"
+node_modules/.bin/react-scripts build

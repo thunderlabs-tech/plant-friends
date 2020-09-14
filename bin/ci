@@ -2,23 +2,16 @@
 set -e
 
 ROOT=$(cd $(dirname "$0")/..; pwd)
-PATH=${PATH}:${ROOT}/node_modules/.bin
 
 echo "📦 Installing dependencies"
 cd ${ROOT}
 yarn install --frozen-lockfile
 
 cd web-client
-echo "\n💅 Prettier check"
-prettier -c .
-
-echo "\n✨ ESLint"
-eslint .
-
-echo "\n🚦 Run tests"
+./bin/prettier-check
+./bin/eslint
 ./bin/test
-
-echo "\n🔨 Build"
+./bin/typecheck
 ./bin/build
 
 echo "\n✅ Done!"
