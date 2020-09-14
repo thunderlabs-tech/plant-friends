@@ -1,13 +1,10 @@
 #!/usr/bin/env sh
-set -e
+source $(dirname "$0")/.include.sh
 
-ROOT=$(cd $(dirname "$0")/..; pwd)
-
-AMPLIFY_HARDCODED_OUTPUT_PATH="src"
 DEST_PATH="web-client/src/gen"
 
 echo "🧹 Clear existing generated code"
-rm -rf ${ROOT}/${DEST_PATH}
+rm -rf ${DEST_PATH}
 
 echo "\n🔨 Generate Amplify schema, queries and models"
 amplify api gql-compile
@@ -15,12 +12,12 @@ amplify codegen
 amplify codegen models
 
 echo "\n😠 Correct Amplify hardcoded output path"
-mkdir ${ROOT}/${DEST_PATH}
-mv ${ROOT}/${AMPLIFY_HARDCODED_OUTPUT_PATH}/* ${ROOT}/${DEST_PATH}
-rmdir ${ROOT}/${AMPLIFY_HARDCODED_OUTPUT_PATH}
+mkdir ${DEST_PATH}
+mv ${AMPLIFY_OUTPUT_PATH}/* ${DEST_PATH}
+rmdir ${AMPLIFY_OUTPUT_PATH}
 
 echo "\n✨ Run prettier on generated code"
-prettier -w ${ROOT}/${DEST_PATH}
+prettier -w ${DEST_PATH}
 
 echo "✅ Done!"
 echo "\n☝️  Don't forget to run 'amplify env pull' to generate aws-exports.js"

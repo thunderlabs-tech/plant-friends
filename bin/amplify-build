@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+source $(dirname "$0")/.include.sh
+
+amplify env pull
+mv ${AMPLIFY_OUTPUT_PATH}/aws-exports.js web-client/src/gen
+
+web-client/bin/build
