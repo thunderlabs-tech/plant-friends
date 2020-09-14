@@ -19,9 +19,7 @@
     "services/*",
     "web-client"
   ],
-  "dependencies": {
-    "netlify-cli": "^2.57.0"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=10.16.0"
   }
