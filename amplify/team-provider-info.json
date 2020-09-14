@@ -16,5 +16,59 @@
         "plantfriends63010d5c": {}
       }
     }
+  },
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantfriends-staging-160514-authRole",
+      "UnauthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-staging-160514-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-staging-160514-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-plantfriends-staging-160514-deployment",
+      "UnauthRoleName": "amplify-plantfriends-staging-160514-unauthRole",
+      "StackName": "amplify-plantfriends-staging-160514",
+      "StackId": "arn:aws:cloudformation:eu-central-1:866741672071:stack/amplify-plantfriends-staging-160514/265decb0-f5ca-11ea-8696-0a0c9a06689c",
+      "AmplifyAppId": "d1rae0x5ejtmb6"
+    },
+    "categories": {
+      "auth": {
+        "plantfriends63010d5c": {}
+      }
+    }
+  },
+  "production": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantfriends-production-162144-authRole",
+      "UnauthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-production-162144-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-production-162144-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-plantfriends-production-162144-deployment",
+      "UnauthRoleName": "amplify-plantfriends-production-162144-unauthRole",
+      "StackName": "amplify-plantfriends-production-162144",
+      "StackId": "arn:aws:cloudformation:eu-central-1:866741672071:stack/amplify-plantfriends-production-162144/74a38b30-f5cc-11ea-843a-0ab33d325cd0",
+      "AmplifyAppId": "d1rae0x5ejtmb6"
+    },
+    "categories": {
+      "auth": {
+        "plantfriends63010d5c": {}
+      }
+    }
+  },
+  "ci": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantfriends-ci-165717-authRole",
+      "UnauthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-ci-165717-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-ci-165717-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-plantfriends-ci-165717-deployment",
+      "UnauthRoleName": "amplify-plantfriends-ci-165717-unauthRole",
+      "StackName": "amplify-plantfriends-ci-165717",
+      "StackId": "arn:aws:cloudformation:eu-central-1:866741672071:stack/amplify-plantfriends-ci-165717/6c0ca740-f5d1-11ea-9f5d-06fecd730058",
+      "AmplifyAppId": "d1rae0x5ejtmb6"
+    },
+    "categories": {
+      "auth": {
+        "plantfriends63010d5c": {}
+      }
+    }
   }
 }
