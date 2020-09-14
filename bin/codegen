@@ -22,5 +22,5 @@ rmdir ${ROOT}/${AMPLIFY_HARDCODED_OUTPUT_PATH}
 echo "\n✨ Run prettier on generated code"
 prettier -w ${ROOT}/${DEST_PATH}
 
-echo "\n✅ Done!"
+echo "✅ Done!"
 echo "\n☝️  Don't forget to run 'amplify env pull' to generate aws-exports.js"

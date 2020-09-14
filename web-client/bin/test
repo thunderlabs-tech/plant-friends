@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-set -e
+source $(dirname "$0")/.include.sh
 
 echo "🚦 Run tests"
-node_modules/.bin/react-scripts test
-echo "\n✅ Done!"
+react-scripts test
+echo "✅ Done!"

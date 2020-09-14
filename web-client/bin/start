@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -e
+source $(dirname "$0")/.include.sh
 
 echo "🏄🏿‍♂️ Start local development server"
-node_modules/.bin/react-scripts start
+react-scripts start
