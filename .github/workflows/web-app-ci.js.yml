@@ -31,4 +31,4 @@ jobs:
       - run: yarn prettier-check
       - run: yarn eslint
       - run: yarn test
-      - run: ../bin/build
+      - run: yarn build
