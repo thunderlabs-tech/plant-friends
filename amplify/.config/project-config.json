@@ -7,7 +7,7 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "web-client/build",
-      "BuildCommand": "./bin/build",
+      "BuildCommand": "./bin/amplify-build",
       "StartCommand": "yarn start"
     }
   },
