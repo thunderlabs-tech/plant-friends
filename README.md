@@ -2,7 +2,7 @@
 
 Keep your plants happy by tracking and caring for their needs.
 
-- Production app: https://plant-friends.netlify.app/
+- Production app: https://plantfriends.thunderlabs.tech
 
 ## Monorepo Project Structure
 
@@ -32,64 +32,80 @@ See the README in individual workspaces for project-specific info.
   - Only (and always) use scream caps for constants set by environment variables, and always use scream caps for environment variables
   - Use `at` suffix for properties containing a time value (e.g. `createdAt`)
   - Only uppercase the first letter in an acronym (e.g. `HttpRequest`)
+- Store scripts in `bin/` instead of `package.json`
+  - By convention the commands `npm start` and `npm test` run the corresponding script string from `package.json`. Over time people have started adding all relevant scripts as strings in `package.json`, which is not a good medium for them since it unnecessarily loads an entire NodeJS virtual machine just to read the strings out of `package.json` and forces you to write all your scripts as single lines.
 
-## Local Development
+## Local Development Environment
 
-We use [netlify-dev](https://github.com/netlify/cli/blob/master/docs/netlify-dev.md) to run a local version of the Netlify environment. This serves the backend lambda functions and proxies to the local client dev server to allow testing in a production-like environment.
+1. Install the Amplify CLI globally (running the CLI fails if you install it locally in the project)
+   - `yarn install -g @aws-amplify/cli`
+2. Install dependencies
+   - `yarn install`
+3. Check out an Amplify environment
+   - `amplify env checkout dev`
 
-Netlify-dev will include all production environment variables in the local environment, so watch out.
+You can optionally scaffold a mock AWS environment using `amplify mock` ([see documentation](https://docs.amplify.aws/cli/usage/mock)).
 
-To start the Netlify dev server:
+## Project Scripts
 
-    netlify dev
+Can be found in the `bin/` directories. Github- and Amplify-specific scripts are prefixed with their name.
 
-This will start the `web-client` local server and proxy requests to it from the local Netlify server whose address it will print out:
+All scripts execute in their parent directory so relative paths (e.g. `src/`) will be correct regardless of where the script is executed from. Common setup is stored in `bin/.include.sh`.
 
-    ◈ Server now ready on http://localhost:8888
+## Continuous Integration with Github
 
-### Invoking Netlify Serverless Functions
+Continuous integration is managed using Github workflows. See [`.github/workflows/web-app-ci.js.yml`](.github/workflows/web-app-ci.js.yml), which invokes [`bin/github-ci`](bin/github-ci).
 
-Once `netlify dev` is runnning, you can use [`netlify functions:invoke`](https://github.com/netlify/cli/blob/master/docs/netlify-dev.md#locally-testing-functions-with-netlify-functionsinvoke).
+## Continuous Deployment
 
-    netlify functions:invoke getPlants
+Continuous deployment is managed by Amplify and administered via the [Amplify Dashboard](https://eu-central-1.console.aws.amazon.com/amplify/home?region=eu-central-1&code=8bab87709196a7ed216c#/d1rae0x5ejtmb6).
 
-## Deployment
+Find build configuration in [amplify.yml](amplify.yml).
 
-Deployed automatically to production via Netlify.
+## Amplify
 
-- Netlify admin panel: https://app.netlify.com/sites/plant-friends/overview
+We use the AWS Amplify framework for deployment, hosting, CDN, routing, persistence, server-side functions, storage, etc. The more important functions are listed here. See the Amplify documentation for the rest.
 
-## CI & CD
+- [Plant Friends Amplify Console](https://eu-central-1.console.aws.amazon.com/amplify/home?region=eu-central-1#/d1rae0x5ejtmb6)
+- `amplify console` opens the lower-level management UI
+- `amplify api console` opens the AWS GraphQL explorer for the API
 
-Continuous integration is managed using Github workflows. See [`.github/workflows`](.github/workflows).
+NOTE: if you get a "not found" error, it might be because AWS has defaulted to the wrong region. Switch to `eu-central-1 (Frankfurt)` and try again.
 
-Continuous deployment is managed using Netlify. See [`netlify.toml`](netlify.toml).
+### Environments
 
-## Persistence / FaunaDB
+- Production: https://plantfriends.thunderlabs.tech
+  - Deployed automatically from branch `master`
+- Staging: https://plantfriends-staging.thunderlabs.tech
+  - Deployed automatically from branch `staging`
 
-Data is stored in [FaunaDB](https://dashboard.fauna.com/).
+You can provision your own environment for development using `amplify env add`.
 
-### Environment variables
+You can set sensitive environment variables in the Amplify Console.
 
-Store all access keys in the Netlify UI rather than in the codebase. Since Netlify will make all environment variables available in production and staging, prefix variables with the environment they apply to (e.g. `PRODUCTION_FAUNADB_ACCESS_TOKEN`).
+### aws-exports.js
 
-Use the files [env/production](env/production) and [env/staging](env/staging) to select which env vars apply in which environment. These files are included in the running environment by the commands `build-production` and `build-staging`, respectively, in [package.json](package.json).
+This file includes access keys for the various connected AWS services and is generated by the Amplify CLI when you run `amplify env checkout <name>`.
 
-### Databases, access keys
+A dummy file is committed to the repository which allows building the source (to pass CI) but throws an error when loaded at run-time.
 
-One database is designated for production and its access key is stored as an environment variable in Netlify.
+### Persistence
 
-For local development, create a new database for yourself or [run a local FaunaDB docker image](https://fauna.com/blog/setting-up-a-new-fauna-cluster-using-docker).
+The GraphQL schema is stored in: [amplify/backend/api/plantfriends/schema.graphql](amplify/backend/api/plantfriends/schema.graphql).
 
-FaunaDB identifies which database you connect to by your access token. Once you've created a database, assign the key to the environment variable `REACT_APP_FAUNADB_ACCESS_TOKEN` (you can put it in [`.env`](web-client/.env) for convenience).
+Update the remote Amplify database with local schema changes using `amplify api push`, or pull the remote schema (overriding any local changes) using `amplify api pull`.
 
-### Schema
+### Code Generation
 
-For now databases need to be set up and migrated manually. The current schema is stored in (schema/schema.gql)[schema/schema.gql]. You can upload it using the FaunaDB dashboard (go to the "GraphQL" tab and there's an "Update Schema" button).
+Regenerate API types, query and mutations from the GraphQL schema using [bin/codegen](bin/codegen).
 
-### Staging, Netlify deploy previews
+Generated code is committed to the repository so that CI can run independently of Amplify. This is unfortunate, hopefully we can find a better solution in the future.
 
-Netlify builds a copy of the app for each open PR. Currently they will all connect to the same FaunaDB staging database. In the future we could add a Netlify hook to provision a new FaunaDB database for each new deploy preview so that they don't conflict. This will be particularly important when we have automated migrations.
+### Authentication / Authorization
+
+User signup and login is provided by [Amplify Auth](https://docs.amplify.aws/start/getting-started/auth/q/integration/react) and the [`withAuthenticator()`](https://aws-amplify.github.io/amplify-js/api/globals.html#withauthenticator) HOC.
+
+User data is stored in Amazon Cognito User Pools.
 
 ## User stories
 
