@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 set -e
-react-scripts start
+
+echo "🏄🏿‍♂️ Start local development server"
+node_modules/.bin/react-scripts start

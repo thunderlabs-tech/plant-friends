@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+set -e
+
+echo "💅 Prettier check"
+node_modules/.bin/prettier -c .
