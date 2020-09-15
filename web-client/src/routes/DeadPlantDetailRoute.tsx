@@ -1,6 +1,8 @@
 import React from "react";
 
-import PlantDetailScreen, { PlantDetailScreenProps } from "./PlantDetailScreen";
+import PlantDetailScreen, {
+  PlantDetailScreenProps,
+} from "src/routes/PlantDetailScreen";
 import { Route, RouteComponentProps } from "react-router-dom";
 
 export type DeadPlantDetailRouteParams = { id: string };

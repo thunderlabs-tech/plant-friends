@@ -1,6 +1,6 @@
 import { pick } from "lodash";
-import dateToString from "./dateToString";
-import { Plant } from "../../data/Plant";
+import dateToString from "src/utilities/graphql/dateToString";
+import { Plant } from "src/data/Plant";
 
 export default function plantToGraphqlPlant(
   input: Plant,

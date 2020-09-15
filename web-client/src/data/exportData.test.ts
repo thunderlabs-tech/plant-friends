@@ -1,6 +1,6 @@
-import exportData from "./exportData";
-import { Plant } from "./Plant";
-import { makePlant, makeWateredEvent } from "../utilities/test/factories";
+import exportData from "src/data/exportData";
+import { Plant } from "src/data/Plant";
+import { makePlant, makeWateredEvent } from "src/utilities/test/factories";
 
 describe("exportData()", () => {
   it("encodes the application data as JSON", () => {

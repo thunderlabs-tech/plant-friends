@@ -1,8 +1,8 @@
 import React from "react";
 
-import PlantListScreen from "./PlantListScreen";
-import { Plant } from "../data/Plant";
-import { Collection } from "../utilities/state/useCollection";
+import PlantListScreen from "src/routes/PlantListScreen";
+import { Plant } from "src/data/Plant";
+import { Collection } from "src/utilities/state/useCollection";
 import { Route, RouteComponentProps } from "react-router-dom";
 
 export type PlantListRouteParams = Record<string, string | undefined>;

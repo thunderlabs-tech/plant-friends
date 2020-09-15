@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import useAppState from "./useAppState";
+import useAppState from "src/utilities/state/useAppState";
 
 describe("useAppState()", () => {
   it("returns the initial state", () => {

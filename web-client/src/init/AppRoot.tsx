@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
 import Amplify from "aws-amplify";
-import awsExports from "../gen/aws-exports";
+import awsExports from "src/gen/aws-exports";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
-import theme from "./theme";
-import useCollection from "../utilities/state/useCollection";
-import { Plant } from "../data/Plant";
-import LoadingState from "../utilities/state/LoadingState";
+import theme from "src/init/theme";
+import useCollection from "src/utilities/state/useCollection";
+import { Plant } from "src/data/Plant";
+import LoadingState from "src/utilities/state/LoadingState";
 import "@rmwc/linear-progress/styles";
 import { LinearProgress } from "@rmwc/linear-progress";
 import "@rmwc/theme/styles";
 import { ThemeProvider } from "@rmwc/theme";
 
-import persistence from "../data/persistence";
-import PlantDetailRoute from "../routes/PlantDetailRoute";
-import PlantListRoute from "../routes/PlantListRoute";
-import RootRoute from "../routes/RootRoute";
-import DeadPlantListRoute from "../routes/DeadPlantListRoute";
-import DeadPlantDetailRoute from "../routes/DeadPlantDetailRoute";
-import DataManagementRoute from "../routes/DataManagementRoute";
+import persistence from "src/data/persistence";
+import PlantDetailRoute from "src/routes/PlantDetailRoute";
+import PlantListRoute from "src/routes/PlantListRoute";
+import RootRoute from "src/routes/RootRoute";
+import DeadPlantListRoute from "src/routes/DeadPlantListRoute";
+import DeadPlantDetailRoute from "src/routes/DeadPlantDetailRoute";
+import DataManagementRoute from "src/routes/DataManagementRoute";
 
 Amplify.configure(awsExports);
 

@@ -1,5 +1,7 @@
-import useAppState, { ActionDispatchers } from "./useAppState";
-import LoadingState from "./LoadingState";
+import useAppState, {
+  ActionDispatchers,
+} from "src/utilities/state/useAppState";
+import LoadingState from "src/utilities/state/LoadingState";
 
 export type Collection<Elem> = {
   data: Elem[];

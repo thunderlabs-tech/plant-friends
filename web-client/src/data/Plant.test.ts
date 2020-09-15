@@ -1,8 +1,8 @@
-import { Plant, waterNextAt, needsWater } from "./Plant";
-import { makePlant } from "../utilities/test/factories";
+import { Plant, waterNextAt, needsWater } from "src/data/Plant";
+import { makePlant } from "src/utilities/test/factories";
 import add from "date-fns/add";
 import sub from "date-fns/sub";
-import fixtures from "../utilities/test/fixtures";
+import fixtures from "src/utilities/test/fixtures";
 
 describe("Plant", () => {
   describe("waterNextAt()", () => {

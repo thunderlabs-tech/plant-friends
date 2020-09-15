@@ -7,9 +7,9 @@ import { useMediaQuery } from "react-responsive";
 import "@rmwc/button/styles";
 import { Button } from "@rmwc/button";
 
-import TextFieldStyles from "../components/TextField.module.css";
+import TextFieldStyles from "src/components/TextField.module.css";
 import { GridCell, Grid } from "@rmwc/grid";
-import { PlantInput } from "../data/Plant";
+import { PlantInput } from "src/data/Plant";
 
 export type NewPlantInputProps = {
   onAddNewPlant: (plant: PlantInput) => void;

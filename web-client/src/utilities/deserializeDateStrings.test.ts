@@ -1,4 +1,4 @@
-import deserializeDateStrings from "./deserializeDateStrings";
+import deserializeDateStrings from "src/utilities//deserializeDateStrings";
 
 describe("deserializeDateStrings()", () => {
   const date = Object.freeze(new Date(2020, 1, 1));

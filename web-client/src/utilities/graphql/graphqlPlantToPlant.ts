@@ -1,9 +1,9 @@
-import { Plant } from "../../data/Plant";
+import { Plant } from "src/data/Plant";
 import { pick } from "lodash";
 
-import { parseDateString } from "./parseDateString";
-import { ListPlantsQuery } from "../../gen/API";
-import { QueryResultItem } from "./QueryTypes";
+import { parseDateString } from "src/utilities/graphql/parseDateString";
+import { ListPlantsQuery } from "src/gen/API";
+import { QueryResultItem } from "src/utilities/graphql/QueryTypes";
 
 const PlantProperties = Object.freeze([
   "id",

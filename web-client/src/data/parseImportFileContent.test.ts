@@ -1,6 +1,6 @@
-import { DataExport } from "./exportData";
-import parseImportFileContent from "./parseImportFileContent";
-import { makePlant, makeWateredEvent } from "../utilities/test/factories";
+import { DataExport } from "src/data/exportData";
+import parseImportFileContent from "src/data/parseImportFileContent";
+import { makePlant, makeWateredEvent } from "src/utilities/test/factories";
 
 describe("importData()", () => {
   it("parses the input string as JSON", () => {

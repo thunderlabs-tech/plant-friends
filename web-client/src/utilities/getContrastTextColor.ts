@@ -1,4 +1,4 @@
-import { Color } from "./Color";
+import { Color } from "src/utilities//Color";
 
 // From https://24ways.org/2010/calculating-color-contrast/
 export default function getContrastTextColor(

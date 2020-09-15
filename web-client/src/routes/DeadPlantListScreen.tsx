@@ -1,6 +1,6 @@
 import React from "react";
-import { Collection } from "../utilities/state/useCollection";
-import { Plant, formatTimeOfDeath } from "../data/Plant";
+import { Collection } from "src/utilities/state/useCollection";
+import { Plant, formatTimeOfDeath } from "src/data/Plant";
 import { Link } from "react-router-dom";
 
 import "@rmwc/list/styles";
@@ -16,16 +16,16 @@ import {
 import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 
-import PlantAvatar from "../components/PlantAvatar";
-import Surface from "../components/Surface";
-import Layout from "../components/Layout";
-import { plantListUrl } from "./PlantListRoute";
+import PlantAvatar from "src/components/PlantAvatar";
+import Surface from "src/components/Surface";
+import Layout from "src/components/Layout";
+import { plantListUrl } from "src/routes/PlantListRoute";
 import { Typography } from "@rmwc/typography";
 
-import css from "./DeadPlantListScreen.module.css";
-import { deadPlantDetailUrl } from "./DeadPlantDetailRoute";
+import css from "src/routes/DeadPlantListScreen.module.css";
+import { deadPlantDetailUrl } from "src/routes/DeadPlantDetailRoute";
 import { IconButton } from "@rmwc/icon-button";
-import { restoreFromGraveyard } from "../data/actions";
+import { restoreFromGraveyard } from "src/data/actions";
 
 export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;

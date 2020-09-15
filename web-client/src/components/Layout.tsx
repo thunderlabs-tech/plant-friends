@@ -7,8 +7,8 @@ import {
 } from "@rmwc/top-app-bar";
 import "@rmwc/grid/styles";
 import { ComponentProps } from "@rmwc/types";
-import { primaryColor } from "../init/theme";
-import styles from "./Layout.module.css";
+import { primaryColor } from "src/init/theme";
+import styles from "src/components/Layout.module.css";
 
 export type LayoutProps = {
   appBar: ComponentProps<

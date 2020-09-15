@@ -2,7 +2,7 @@ import React from "react";
 
 import DeadPlantListScreen, {
   DeadPlantListScreenProps,
-} from "./DeadPlantListScreen";
+} from "src/routes/DeadPlantListScreen";
 import { Route } from "react-router-dom";
 
 export function deadPlantListUrl(): string {

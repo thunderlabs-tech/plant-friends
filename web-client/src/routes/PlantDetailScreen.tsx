@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
-import { Collection } from "../utilities/state/useCollection";
-import { Plant, formatNextWaterDate, formatTimeOfDeath } from "../data/Plant";
+import { Collection } from "src/utilities/state/useCollection";
+import { Plant, formatNextWaterDate, formatTimeOfDeath } from "src/data/Plant";
 
 import { Link, useHistory } from "react-router-dom";
 import {
@@ -8,10 +8,10 @@ import {
   waterPlant,
   moveToGraveyard,
   restoreFromGraveyard,
-} from "../data/actions";
-import { PlantDetailRouteParams } from "./PlantDetailRoute";
-import Layout from "../components/Layout";
-import Surface from "../components/Surface";
+} from "src/data/actions";
+import { PlantDetailRouteParams } from "src/routes/PlantDetailRoute";
+import Layout from "src/components/Layout";
+import Surface from "src/components/Surface";
 import { GridCell, GridRow, Grid } from "@rmwc/grid";
 
 import "@rmwc/typography/styles";
@@ -23,11 +23,11 @@ import { Button } from "@rmwc/button";
 import "@rmwc/list/styles";
 import { List, ListItem } from "@rmwc/list";
 
-import TextFieldStyles from "../components/TextField.module.css";
+import TextFieldStyles from "src/components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
-import { deadPlantListUrl } from "./DeadPlantListRoute";
-import { plantListUrl } from "./PlantListRoute";
-import PlantEvent, { PlantEventType } from "../data/PlantEvent";
+import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
+import { plantListUrl } from "src/routes/PlantListRoute";
+import PlantEvent, { PlantEventType } from "src/data/PlantEvent";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
