@@ -1,13 +1,13 @@
 import React from "react";
-import { Collection } from "../utilities/state/useCollection";
+import { Collection } from "src/utilities/state/useCollection";
 import partition from "lodash/partition";
 import {
   Plant,
   needsWater,
   formatNextWaterDate,
   PlantInput,
-} from "../data/Plant";
-import { waterPlant, createPlant, refreshPlants } from "../data/actions";
+} from "src/data/Plant";
+import { waterPlant, createPlant, refreshPlants } from "src/data/actions";
 import { Link } from "react-router-dom";
 
 import "@rmwc/list/styles";
@@ -25,14 +25,14 @@ import "@rmwc/icon-button/styles";
 import { IconButton } from "@rmwc/icon-button";
 import { GridCell, Grid } from "@rmwc/grid";
 
-import { plantDetailUrl } from "../routes/PlantDetailRoute";
-import NewPlantInput from "../components/NewPlantInput";
-import PlantAvatar from "../components/PlantAvatar";
-import { PlantListRouteParams } from "./PlantListRoute";
-import Surface from "../components/Surface";
-import Layout from "../components/Layout";
-import { deadPlantListUrl } from "./DeadPlantListRoute";
-import { dataManagementUrl } from "./DataManagementRoute";
+import { plantDetailUrl } from "src/routes/PlantDetailRoute";
+import NewPlantInput from "src/components/NewPlantInput";
+import PlantAvatar from "src/components/PlantAvatar";
+import { PlantListRouteParams } from "src/routes/PlantListRoute";
+import Surface from "src/components/Surface";
+import Layout from "src/components/Layout";
+import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
+import { dataManagementUrl } from "src/routes/DataManagementRoute";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;

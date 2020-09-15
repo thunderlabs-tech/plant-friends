@@ -1,10 +1,10 @@
-import { Collection } from "../utilities/state/useCollection";
-import persistence from "./persistence";
-import LoadingState from "../utilities/state/LoadingState";
-import { Plant, PlantInput } from "./Plant";
+import { Collection } from "src/utilities/state/useCollection";
+import persistence from "src/data/persistence";
+import LoadingState from "src/utilities/state/LoadingState";
+import { Plant, PlantInput } from "src/data/Plant";
 import { useHistory } from "react-router-dom";
-import { plantListUrl } from "../routes/PlantListRoute";
-import { DataExport } from "./exportData";
+import { plantListUrl } from "src/routes/PlantListRoute";
+import { DataExport } from "src/data/exportData";
 
 export async function waterPlant(
   plant: Plant,

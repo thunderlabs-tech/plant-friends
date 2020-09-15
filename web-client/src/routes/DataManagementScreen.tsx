@@ -1,26 +1,26 @@
 import React, { useRef, ChangeEvent, useState } from "react";
-import { Collection } from "../utilities/state/useCollection";
-import { Plant } from "../data/Plant";
-import { deleteAllData, persistImportedData } from "../data/actions";
+import { Collection } from "src/utilities/state/useCollection";
+import { Plant } from "src/data/Plant";
+import { deleteAllData, persistImportedData } from "src/data/actions";
 import { saveAs } from "file-saver";
 
 import "@rmwc/list/styles";
 import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
-import { DataManagementRouteParams } from "./DataManagementRoute";
-import Surface from "../components/Surface";
-import assertPresent from "../utilities/lang/assertPresent";
-import Layout from "../components/Layout";
-import parseImportFileContent from "../data/parseImportFileContent";
-import { InvalidImportFormatError } from "../data/parseImportFileContent";
+import { DataManagementRouteParams } from "src/routes/DataManagementRoute";
+import Surface from "src/components/Surface";
+import assertPresent from "src/utilities/lang/assertPresent";
+import Layout from "src/components/Layout";
+import parseImportFileContent from "src/data/parseImportFileContent";
+import { InvalidImportFormatError } from "src/data/parseImportFileContent";
 import { TextField } from "@rmwc/textfield";
 import { Button } from "@rmwc/button";
-import TextFieldStyles from "../components/TextField.module.css";
+import TextFieldStyles from "src/components/TextField.module.css";
 import { Typography } from "@rmwc/typography";
-import { plantListUrl } from "./PlantListRoute";
+import { plantListUrl } from "src/routes/PlantListRoute";
 import { Link, useHistory } from "react-router-dom";
-import persistence, { IncompatibleImportError } from "../data/persistence";
-import exportData from "../data/exportData";
+import persistence, { IncompatibleImportError } from "src/data/persistence";
+import exportData from "src/data/exportData";
 
 export type DataManagementScreenProps = {
   plants: Collection<Plant>;

@@ -1,4 +1,4 @@
-import { Color } from "./Color";
+import { Color } from "src/utilities//Color";
 
 export type ColorPalette = Readonly<{
   50: Color;

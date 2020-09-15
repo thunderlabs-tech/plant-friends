@@ -1,5 +1,5 @@
 import add from "date-fns/add";
-import PlantEvent from "./PlantEvent";
+import PlantEvent from "src/data/PlantEvent";
 
 export type Plant = {
   id: string;

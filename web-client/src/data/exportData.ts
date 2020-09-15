@@ -1,4 +1,4 @@
-import { Plant } from "./Plant";
+import { Plant } from "src/data/Plant";
 
 export type DataExport = {
   nextMigrationIndex: number;

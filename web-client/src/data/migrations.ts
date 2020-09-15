@@ -2,7 +2,7 @@ import {
   setItemType,
   getNextMigrationIndex,
   setNextMigrationIndex,
-} from "./persistence";
+} from "src/data/persistence";
 
 async function removedMigration() {}
 

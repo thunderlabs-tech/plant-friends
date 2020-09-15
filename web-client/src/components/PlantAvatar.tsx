@@ -1,5 +1,5 @@
 import React from "react";
-import { Plant } from "../data/Plant";
+import { Plant } from "src/data/Plant";
 import "@rmwc/avatar/styles";
 import { Avatar } from "@rmwc/avatar";
 import {
@@ -7,11 +7,11 @@ import {
   green,
   lightGreen,
   grey,
-} from "../utilities/ColorPalettes";
-import getValue from "../utilities/lang/getValue";
-import getContrastTextColor from "../utilities/getContrastTextColor";
+} from "src/utilities/ColorPalettes";
+import getValue from "src/utilities/lang/getValue";
+import getContrastTextColor from "src/utilities/getContrastTextColor";
 
-import css from "./PlantAvatar.module.css";
+import css from "src/components/PlantAvatar.module.css";
 
 export type PlantAvatarProps = {
   plant: Plant;

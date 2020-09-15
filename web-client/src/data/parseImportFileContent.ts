@@ -1,5 +1,5 @@
-import { DataExport } from "./exportData";
-import deserializeDateStrings from "../utilities/deserializeDateStrings";
+import { DataExport } from "src/data/exportData";
+import deserializeDateStrings from "src/utilities/deserializeDateStrings";
 
 type Replace<Input, SearchFor, Replacement> = Input extends SearchFor
   ? Exclude<Input, SearchFor> | Replacement

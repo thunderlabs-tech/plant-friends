@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Plant } from "../data/Plant";
-import { Collection } from "../utilities/state/useCollection";
+import { Plant } from "src/data/Plant";
+import { Collection } from "src/utilities/state/useCollection";
 import { Route } from "react-router-dom";
-import PlantListScreen from "./PlantListScreen";
+import PlantListScreen from "src/routes/PlantListScreen";
 
 export type RootRouteProps = {
   plants: Collection<Plant>;

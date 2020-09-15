@@ -1,8 +1,8 @@
 import React from "react";
 
-import DataManagementScreen from "./DataManagementScreen";
-import { Plant } from "../data/Plant";
-import { Collection } from "../utilities/state/useCollection";
+import DataManagementScreen from "src/routes/DataManagementScreen";
+import { Plant } from "src/data/Plant";
+import { Collection } from "src/utilities/state/useCollection";
 import { Route, RouteComponentProps } from "react-router-dom";
 
 export type DataManagementRouteParams = Record<string, string | undefined>;
