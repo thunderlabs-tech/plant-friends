@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
+set -e
 source $(dirname "$0")/.include.sh
 
 echo "🕵🏻‍♀️ Type check"
-tsc .
+tsc ${WEB_CLIENT}
 echo "✅ Done!"
