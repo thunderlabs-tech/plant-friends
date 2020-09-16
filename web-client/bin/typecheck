@@ -3,5 +3,5 @@ set -e
 . $(dirname "$0")/.include.sh
 
 echo "🕵🏻‍♀️ Type check"
-tsc ${WEB_CLIENT}
+tsc
 echo "✅ Done!"
