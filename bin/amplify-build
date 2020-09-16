@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -e
-source $(dirname "$0")/.include.sh
+. $(dirname "$0")/.include.sh
 
 amplify env pull
 mv ${AMPLIFY_OUTPUT_PATH}/aws-exports.js web-client/src/gen
