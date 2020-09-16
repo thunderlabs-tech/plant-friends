@@ -89,7 +89,9 @@ const PlantListScreen: React.FC<
               <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
                 <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                 <ListItemText>
-                  <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                  <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                    {plant.name}
+                  </ListItemPrimaryText>
                   <ListItemSecondaryText>
                     {formatTimeSinceWatered(plant)}
                   </ListItemSecondaryText>
@@ -118,7 +120,9 @@ const PlantListScreen: React.FC<
               <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
                 <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                 <ListItemText>
-                  <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
+                  <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                    {plant.name}
+                  </ListItemPrimaryText>
                   <ListItemSecondaryText>
                     {formatNextWaterDate(plant)}
                   </ListItemSecondaryText>
