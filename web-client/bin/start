@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -e
-source $(dirname "$0")/.include.sh
+. $(dirname "$0")/.include.sh
 
 echo "🏄🏿‍♂️ Start local development server"
 BROWSER=none react-scripts start
