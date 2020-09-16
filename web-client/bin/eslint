@@ -3,5 +3,5 @@ set -e
 . $(dirname "$0")/.include.sh
 
 echo "✨ ESLint"
-eslint .
+eslint src
 echo "✅ Done!"
