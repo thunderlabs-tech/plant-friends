@@ -8,6 +8,7 @@ export type Plant = {
   lastWateredAt: Date | null;
   timeOfDeath: Date | null;
   events: PlantEvent[];
+  createdAt: Date;
 };
 
 export type PlantInput = {
@@ -36,7 +37,7 @@ export function needsWater(plant: Plant, now = Date.now()): boolean {
   return waterNextAtDate.valueOf() <= now;
 }
 
-export function formatNextWaterDate(plant: Plant) {
+export function formatNextWaterDate(plant: Plant): string {
   const lastWateredAtDate = plant.lastWateredAt;
   if (!lastWateredAtDate) return "Needs to be watered";
   const nextWaterDate = add(lastWateredAtDate, {
@@ -45,7 +46,7 @@ export function formatNextWaterDate(plant: Plant) {
   return `Water next on ${nextWaterDate.toLocaleDateString()}`;
 }
 
-export function formatTimeOfDeath(plant: Plant) {
+export function formatTimeOfDeath(plant: Plant): string {
   if (!plant.timeOfDeath) return `Still going strong`;
   // TO DO: add `createdAt` and format epitaph as "June 2020 - July 2020"
   return `Died ${plant.timeOfDeath.toLocaleDateString()}`;
