@@ -10,5 +10,5 @@ export default function dateToString(
   value: Date | undefined | null,
 ): string | undefined | null {
   if (value) return formatISO(value);
-  return undefined;
+  return value;
 }
