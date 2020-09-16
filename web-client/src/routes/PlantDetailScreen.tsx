@@ -11,7 +11,6 @@ import {
 } from "src/data/actions";
 import { PlantDetailRouteParams } from "src/routes/PlantDetailRoute";
 import Layout from "src/components/Layout";
-import Surface from "src/components/Surface";
 import { GridCell, GridRow, Grid } from "@rmwc/grid";
 
 import "@rmwc/typography/styles";
@@ -19,7 +18,8 @@ import { Typography } from "@rmwc/typography";
 import "@rmwc/textfield/styles";
 import { TextField } from "@rmwc/textfield";
 import "@rmwc/button/styles";
-import { Button } from "@rmwc/button";
+import "@rmwc/fab/styles";
+import { Fab } from "@rmwc/fab";
 import "@rmwc/list/styles";
 import { List, ListItem } from "@rmwc/list";
 
@@ -28,6 +28,7 @@ import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import PlantEvent, { PlantEventType } from "src/data/PlantEvent";
+import theme from "src/init/theme";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -127,105 +128,108 @@ const PlantDetailScreen: React.FC<
           title: plant.name,
         }}
       >
-        <Grid theme={["surface"]}>
+        <Grid>
           <GridCell tablet={8} desktop={12}>
-            <Surface>
-              <GridRow>
-                <GridCell tablet={4}>
-                  <TextField
-                    id="plant-name"
-                    name="plant-name"
-                    value={name}
-                    label="Name"
-                    className={TextFieldStyles.fullWidth}
-                    autoFocus={tabletOrHigher}
-                    onChange={(e) => setName(e.currentTarget.value)}
-                    placeholder="Name"
-                  />
-                </GridCell>
+            <GridRow>
+              <GridCell tablet={4}>
+                <TextField
+                  id="plant-name"
+                  name="plant-name"
+                  value={name}
+                  label="Name"
+                  className={TextFieldStyles.fullWidth}
+                  autoFocus={tabletOrHigher}
+                  onChange={(e) => setName(e.currentTarget.value)}
+                  placeholder="Name"
+                />
+              </GridCell>
 
-                <GridCell tablet={4}>
-                  <TextField
-                    id="plant-wateringPeriodInDays"
-                    name="plant-wateringPeriodInDays"
-                    value={wateringPeriodInDays}
-                    className={TextFieldStyles.fullWidth}
-                    type="number"
-                    onChange={(e: FormEvent<HTMLInputElement>) =>
-                      setWateringPeriodInDays(
-                        parseInt(e.currentTarget.value, 10),
-                      )
-                    }
-                    label="Watering Period in Days"
-                  />
-                </GridCell>
+              <GridCell tablet={4}>
+                <TextField
+                  id="plant-wateringPeriodInDays"
+                  name="plant-wateringPeriodInDays"
+                  value={wateringPeriodInDays}
+                  className={TextFieldStyles.fullWidth}
+                  type="number"
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))
+                  }
+                  label="Watering Period in Days"
+                />
+              </GridCell>
 
-                <GridCell tablet={8} style={{ textAlign: "right" }}>
-                  {isPlantAlive ? (
-                    <>
-                      <Button
-                        tag="a"
-                        icon="opacity"
-                        onClick={onWaterNowClick}
-                        theme={["primary"]}
-                      >
-                        Water Now
-                      </Button>
-                      <Button
-                        tag="a"
-                        icon="delete"
-                        onClick={onMoveToGraveyardClick}
-                        theme={["primary"]}
-                      >
-                        Move to Graveyard
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
+              <GridCell
+                tablet={8}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  flexDirection: "row",
+                }}
+              >
+                {isPlantAlive ? (
+                  <>
+                    <Fab
                       tag="a"
-                      icon="restore_from_trash"
-                      onClick={onResurrectClick}
-                      theme={["primary"]}
-                    >
-                      Resurrect
-                    </Button>
-                  )}
-                </GridCell>
+                      icon="opacity"
+                      theme={["textPrimaryOnDark"]}
+                      style={{
+                        background: theme.primary,
+                        marginRight: 16,
+                      }}
+                      onClick={onWaterNowClick}
+                    />
+                    <Fab
+                      tag="a"
+                      icon="delete"
+                      theme={["textPrimaryOnDark"]}
+                      style={{ background: theme.primary }}
+                      onClick={onMoveToGraveyardClick}
+                    />
+                  </>
+                ) : (
+                  <Fab
+                    tag="a"
+                    icon="restore_from_trash"
+                    onClick={onResurrectClick}
+                    theme={["textPrimaryOnDark"]}
+                    style={{ background: theme.primary }}
+                  />
+                )}
+              </GridCell>
 
-                <GridCell tablet={8} desktop={12}>
-                  {isPlantAlive ? (
-                    <Typography use="body1">
-                      {formatNextWaterDate(plant)}
-                    </Typography>
-                  ) : (
-                    <Typography use="body1">
-                      {formatTimeOfDeath(plant)}
-                    </Typography>
-                  )}
-                </GridCell>
+              <GridCell tablet={8} desktop={12}>
+                {isPlantAlive ? (
+                  <Typography use="body1">
+                    {formatNextWaterDate(plant)}
+                  </Typography>
+                ) : (
+                  <Typography use="body1">
+                    {formatTimeOfDeath(plant)}
+                  </Typography>
+                )}
+              </GridCell>
 
-                <GridCell tablet={8} desktop={12}>
-                  {plant.events.length > 0 ? (
-                    <>
-                      <Typography use="body1">Watered at:</Typography>
-                      <List nonInteractive>
-                        {sortEvents(plant.events).map((event) => {
-                          return (
-                            event.type === PlantEventType.WATERED && (
-                              <ListItem key={event.id}>
-                                {formatWateringTime(event.createdAt)}
-                              </ListItem>
-                            )
-                          );
-                        })}
-                      </List>
-                    </>
-                  ) : (
-                    "No watering times recorded"
-                  )}
-                </GridCell>
-              </GridRow>
-            </Surface>
+              <GridCell tablet={8} desktop={12}>
+                {plant.events.length > 0 ? (
+                  <>
+                    <Typography use="body1">Watered at:</Typography>
+                    <List nonInteractive>
+                      {sortEvents(plant.events).map((event) => {
+                        return (
+                          event.type === PlantEventType.WATERED && (
+                            <ListItem key={event.id}>
+                              {formatWateringTime(event.createdAt)}
+                            </ListItem>
+                          )
+                        );
+                      })}
+                    </List>
+                  </>
+                ) : (
+                  "No watering times recorded"
+                )}
+              </GridCell>
+            </GridRow>
           </GridCell>
         </Grid>
       </Layout>
