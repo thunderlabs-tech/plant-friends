@@ -4,7 +4,9 @@ import {
   setNextMigrationIndex,
 } from "src/data/persistence";
 
-async function removedMigration() {}
+async function removedMigration(): Promise<void> {
+  return;
+}
 
 export async function runMigrations({
   setItem,

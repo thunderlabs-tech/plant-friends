@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const baseContextValue = () => {
   throw new Error(
     "You may only call fixture functions during a live test run (i.e. inside an `it()`)",
@@ -54,8 +56,7 @@ export default function fixtures<Fixtures extends { [Key: string]: () => any }>(
       return newValue;
     };
 
-    // @ts-ignore: can't express the relationship between fixtureName and the output value
-    result[fixtureName] = wrapperFn;
+    (result as any)[fixtureName] = wrapperFn;
   });
 
   return result;

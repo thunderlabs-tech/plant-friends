@@ -1,6 +1,8 @@
 import mapValues from "lodash/mapValues";
 import { useState, useReducer } from "react";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type ActionFnType<State> = {
   [Key: string]: (currentState: State, ...X: any) => State;
 };

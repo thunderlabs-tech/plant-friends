@@ -5,6 +5,6 @@ export type DataExport = {
   plants: Plant[];
 };
 
-export default function exportData(data: DataExport) {
+export default function exportData(data: DataExport): string {
   return JSON.stringify(data);
 }

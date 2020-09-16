@@ -1,3 +1,3 @@
-export default function castAs<Type>(value: Type) {
+export default function castAs<Type>(value: Type): Type {
   return value;
 }

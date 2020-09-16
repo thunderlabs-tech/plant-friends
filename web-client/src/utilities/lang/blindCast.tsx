@@ -14,7 +14,7 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function blindCast<TargetType, Reason extends string>(
-  input: any,
+  input: unknown,
 ): TargetType {
-  return input;
+  return input as TargetType;
 }
