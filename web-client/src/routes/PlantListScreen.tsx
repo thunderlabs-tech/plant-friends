@@ -22,7 +22,8 @@ import {
   ListDivider,
 } from "@rmwc/list";
 import "@rmwc/icon-button/styles";
-import { IconButton } from "@rmwc/icon-button";
+import { Fab } from "@rmwc/fab";
+import "@rmwc/fab/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 
 import { plantDetailUrl } from "src/routes/PlantDetailRoute";
@@ -32,6 +33,8 @@ import { PlantListRouteParams } from "src/routes/PlantListRoute";
 import Layout from "src/components/Layout";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
+
+import css from "src/routes/PlantListScreen.module.css";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -92,14 +95,16 @@ const PlantListScreen: React.FC<
                   </ListItemSecondaryText>
                 </ListItemText>
                 <ListItemMeta>
-                  <IconButton
+                  <Fab
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       onWaterPlant(plant);
                     }}
-                    theme={["primary"]}
                     icon="opacity"
+                    theme={["background", "primary", "textPrimaryOnDark"]}
+                    className={css.waterPlantButton}
+                    mini
                   />
                 </ListItemMeta>
               </ListItem>
