@@ -6,20 +6,12 @@ import { grey } from "src/utilities/ColorPalettes";
 import getContrastTextColor from "src/utilities/getContrastTextColor";
 
 import css from "src/components/PlantAvatar.module.css";
-import theme from "src/init/theme";
 
 export type PlantAvatarProps = {
   plant: Plant;
 };
 
-const availableColors: [string, ...string[]] = [
-  theme.primary,
-  "#AAE0EA", // light blue
-  theme.secondary,
-  "#E2DCF7", // light purple
-  "#FFCDAF", // light orange
-  "#FFDCDE", // light pink
-];
+const availableColors: [string, ...string[]] = ["#cef0de"];
 
 const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
   const plant = props.plant;
