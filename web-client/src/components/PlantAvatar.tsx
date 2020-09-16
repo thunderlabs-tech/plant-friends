@@ -2,34 +2,28 @@ import React from "react";
 import { Plant } from "src/data/Plant";
 import "@rmwc/avatar/styles";
 import { Avatar } from "@rmwc/avatar";
-import {
-  ColorPalette,
-  green,
-  lightGreen,
-  grey,
-} from "src/utilities/ColorPalettes";
-import getValue from "src/utilities/lang/getValue";
+import { grey } from "src/utilities/ColorPalettes";
 import getContrastTextColor from "src/utilities/getContrastTextColor";
 
 import css from "src/components/PlantAvatar.module.css";
+import theme from "src/init/theme";
 
 export type PlantAvatarProps = {
   plant: Plant;
 };
 
-function notObsceneShades(color: ColorPalette): string[] {
-  const shades = [100, 200, 300, 400, 500] as const;
-  return shades.map((value) => getValue(color, value));
-}
-
-const availableColors = [
-  ...notObsceneShades(green),
-  ...notObsceneShades(lightGreen),
+const availableColors: [string, ...string[]] = [
+  theme.primary,
+  "#AAE0EA", // light blue
+  theme.secondary,
+  "#E2DCF7", // light purple
+  "#FFCDAF", // light orange
+  "#FFDCDE", // light pink
 ];
 
 const PlantAvatar: React.FC<PlantAvatarProps> = (props) => {
   const plant = props.plant;
-  const colorIndex = parseInt(plant.id, 10) || 0;
+  const colorIndex = plant.createdAt.valueOf();
 
   const backgroundColor = availableColors[colorIndex % availableColors.length];
   const textColor = getContrastTextColor(backgroundColor, grey[800], grey[200]);
