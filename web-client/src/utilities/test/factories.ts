@@ -8,6 +8,7 @@ export function makePlant(attributes: Partial<Plant> = {}): Plant {
     name: "Basil",
     wateringPeriodInDays: 1,
     timeOfDeath: null,
+    createdAt: new Date(),
     events: [],
     lastWateredAt: null,
     ...attributes,
