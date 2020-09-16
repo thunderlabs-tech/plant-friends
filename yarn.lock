@@ -2713,6 +2713,21 @@
     "@material/feature-targeting" "^5.1.0"
     "@material/theme" "^5.1.0"
 
+"@material/fab@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@material/fab/-/fab-5.1.0.tgz#4a38fd4d7579f5b7aea6c8d2b60cb3ded77945d3"
+  integrity sha512-mq9I0l4hnsMS+Ko/W7e5A8epElIp3H0UFGJzMlZX5VJBWBpfnykj7fLYnVWtyJ+zFgdLv6rpO/307Kto7gi5Pg==
+  dependencies:
+    "@material/animation" "^5.1.0"
+    "@material/elevation" "^5.1.0"
+    "@material/feature-targeting" "^5.1.0"
+    "@material/ripple" "^5.1.0"
+    "@material/rtl" "^5.1.0"
+    "@material/shape" "^5.1.0"
+    "@material/theme" "^5.1.0"
+    "@material/touch-target" "^5.1.0"
+    "@material/typography" "^5.1.0"
+
 "@material/feature-targeting@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@material/feature-targeting/-/feature-targeting-5.1.0.tgz#49265bbd4ff59b1cd20a385b5547f7c246cb1955"
@@ -2975,6 +2990,18 @@
   dependencies:
     "@material/elevation" "^5.1.0"
     "@rmwc/base" "^6.1.4"
+    "@rmwc/types" "^6.0.5"
+
+"@rmwc/fab@^6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@rmwc/fab/-/fab-6.1.4.tgz#10f163d13c6a491cf40ffc865d1a1104dfc1865c"
+  integrity sha512-AD0nnoS38rKe/dvNzDmwFfJCK0/ssPfuSt0jin5ZSF0ixsMeQeSeLYmh6xAQVDklf76wlLvtxrujBSNggMq0zQ==
+  dependencies:
+    "@material/fab" "^5.1.0"
+    "@rmwc/base" "^6.1.4"
+    "@rmwc/icon" "^6.1.4"
+    "@rmwc/provider" "^6.1.4"
+    "@rmwc/ripple" "^6.1.4"
     "@rmwc/types" "^6.0.5"
 
 "@rmwc/floating-label@^6.1.4":

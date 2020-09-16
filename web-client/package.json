@@ -8,6 +8,7 @@
     "@rmwc/avatar": "^6.1.4",
     "@rmwc/button": "^6.1.4",
     "@rmwc/elevation": "^6.1.4",
+    "@rmwc/fab": "^6.1.4",
     "@rmwc/grid": "^6.1.4",
     "@rmwc/icon-button": "^6.1.4",
     "@rmwc/linear-progress": "^6.1.4",
