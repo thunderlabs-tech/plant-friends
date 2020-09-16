@@ -1,4 +1,5 @@
 import { formatISO } from "date-fns";
+/* eslint-disable no-redeclare */
 
 export default function dateToString(value: Date): string;
 export default function dateToString(value: Date | null): string | null;

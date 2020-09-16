@@ -12,6 +12,7 @@
  *       "string type enforced in function signature but unavailable here"
  *     >(input[key]);
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function blindCast<TargetType, Reason extends string>(
   input: any,
 ): TargetType {

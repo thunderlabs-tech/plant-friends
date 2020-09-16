@@ -1,4 +1,6 @@
 import { parseISO, isValid } from "date-fns";
+/* eslint-disable no-redeclare */
+
 export function parseDateString(input: string): Date;
 export function parseDateString(input: string | undefined): Date | undefined;
 export function parseDateString(input: string | null): Date | null;
