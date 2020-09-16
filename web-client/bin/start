@@ -2,4 +2,4 @@
 source $(dirname "$0")/.include.sh
 
 echo "🏄🏿‍♂️ Start local development server"
-react-scripts start
+BROWSER=none react-scripts start
