@@ -1,6 +1,6 @@
 export default function getValue<
-  Object extends object,
-  Key extends keyof Object
->(object: Object, key: Key): Object[Key] {
+  TargetObject extends Record<string, unknown>,
+  Key extends keyof TargetObject
+>(object: TargetObject, key: Key): TargetObject[Key] {
   return object[key];
 }

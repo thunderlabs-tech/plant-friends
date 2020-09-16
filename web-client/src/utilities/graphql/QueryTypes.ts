@@ -10,9 +10,9 @@ type Get<
 > = Exclude<Query[Field], null>;
 
 export type QueryResultItems<
-  Result extends { items: (object | null)[] | null } | null
+  Result extends { items: (Record<string, unknown> | null)[] | null } | null
 > = Get<Exclude<Result, null>, "items">;
 
 export type QueryResultItem<
-  Result extends { items: (object | null)[] | null } | null
+  Result extends { items: (Record<string, unknown> | null)[] | null } | null
 > = Exclude<QueryResultItems<Result>[number], null>;

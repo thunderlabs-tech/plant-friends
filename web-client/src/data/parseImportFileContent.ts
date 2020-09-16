@@ -5,12 +5,12 @@ type Replace<Input, SearchFor, Replacement> = Input extends SearchFor
   ? Exclude<Input, SearchFor> | Replacement
   : Input;
 
-type DateValuesAsStrings<Object extends { [Key: string]: any }> = {
-  [Key in keyof Object]: Object[Key] extends Date
+type DateValuesAsStrings<TargetObject extends Record<string, unknown>> = {
+  [Key in keyof TargetObject]: TargetObject[Key] extends Date
     ? string
-    : Object[Key] extends { [Key: string]: any }
-    ? DateValuesAsStrings<Object[Key]>
-    : Replace<Object[Key], Date, string>;
+    : TargetObject[Key] extends Record<string, unknown>
+    ? DateValuesAsStrings<TargetObject[Key]>
+    : Replace<TargetObject[Key], Date, string>;
 };
 
 export class InvalidImportFormatError extends Error {}

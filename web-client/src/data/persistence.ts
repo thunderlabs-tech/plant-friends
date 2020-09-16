@@ -36,14 +36,14 @@ import dateToString from "src/utilities/graphql/dateToString";
 import PlantEvent from "src/data/PlantEvent";
 import { parseDateString } from "src/utilities/graphql/parseDateString";
 
-type GraphqlOptions<Variables extends object> = {
+type GraphqlOptions<Variables extends Record<string, unknown>> = {
   query: string;
   variables?: Variables;
   authMode?: GRAPHQL_AUTH_MODE;
 };
 async function appSyncQuery<
-  Result extends object,
-  Variables extends object = {}
+  Result extends Record<string, unknown>,
+  Variables extends Record<string, unknown> = Record<string, unknown>
 >(
   options: GraphqlOptions<Variables>,
   additionalHeaders?: {
@@ -107,7 +107,7 @@ async function createPlantWithEvents(newPlant: Plant): Promise<void> {
 
   // TODO: batch resolver https://docs.aws.amazon.com/appsync/latest/devguide/tutorial-dynamodb-batch.html
 
-  for (let event of newPlant.events) {
+  for (const event of newPlant.events) {
     const eventResult = await appSyncQuery<
       CreatePlantEventMutation,
       CreatePlantEventMutationVariables
