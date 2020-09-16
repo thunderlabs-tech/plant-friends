@@ -10,6 +10,7 @@ import LoadingState from "src/utilities/state/LoadingState";
 import "@rmwc/linear-progress/styles";
 import { LinearProgress } from "@rmwc/linear-progress";
 import "@rmwc/theme/styles";
+import "../index.css";
 import { ThemeProvider } from "@rmwc/theme";
 
 import persistence from "src/data/persistence";
@@ -58,3 +59,4 @@ const AppRoot: React.FC = () => {
 };
 
 export default withAuthenticator(AppRoot);
+require("../rmwc-overrides.css");
