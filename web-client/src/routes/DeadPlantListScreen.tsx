@@ -17,7 +17,6 @@ import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 
 import PlantAvatar from "src/components/PlantAvatar";
-import Surface from "src/components/Surface";
 import Layout from "src/components/Layout";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import { Typography } from "@rmwc/typography";
@@ -49,46 +48,46 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
     >
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
-          <Surface z={1}>
-            {deadPlants.length > 0 && (
-              <List twoLine avatarList theme={["onSurface"]}>
-                {deadPlants.map((plant) => (
-                  <ListItem
-                    key={plant.id}
-                    tag={Link}
-                    to={deadPlantDetailUrl(plant.id)}
-                  >
-                    <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                    <ListItemText>
-                      <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
-                      <ListItemSecondaryText>
-                        {formatTimeOfDeath(plant)}
-                      </ListItemSecondaryText>
-                    </ListItemText>
-                    <ListItemMeta>
-                      <IconButton
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          onResurrectClick(plant);
-                        }}
-                        theme={["primary"]}
-                        icon="restore_from_trash"
-                      />
-                    </ListItemMeta>
-                  </ListItem>
-                ))}
-              </List>
-            )}
+          {deadPlants.length > 0 && (
+            <List twoLine avatarList theme={["onSurface"]}>
+              {deadPlants.map((plant) => (
+                <ListItem
+                  key={plant.id}
+                  tag={Link}
+                  to={deadPlantDetailUrl(plant.id)}
+                >
+                  <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                  <ListItemText>
+                    <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                      {plant.name}
+                    </ListItemPrimaryText>
+                    <ListItemSecondaryText>
+                      {formatTimeOfDeath(plant)}
+                    </ListItemSecondaryText>
+                  </ListItemText>
+                  <ListItemMeta>
+                    <IconButton
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onResurrectClick(plant);
+                      }}
+                      theme={["primary"]}
+                      icon="restore_from_trash"
+                    />
+                  </ListItemMeta>
+                </ListItem>
+              ))}
+            </List>
+          )}
 
-            {deadPlants.length === 0 && (
-              <Typography tag="div" use="caption" className={css.emptyMessage}>
-                The graveyard is empty.
-                <br />
-                Eerie...
-              </Typography>
-            )}
-          </Surface>
+          {deadPlants.length === 0 && (
+            <Typography tag="div" use="caption" className={css.emptyMessage}>
+              The graveyard is empty.
+              <br />
+              Eerie...
+            </Typography>
+          )}
         </GridCell>
       </Grid>
     </Layout>
