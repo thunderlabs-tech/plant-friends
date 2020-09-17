@@ -20,5 +20,5 @@ rmdir ${AMPLIFY_OUTPUT_PATH}
 echo "\n✨ Run prettier on generated code"
 prettier -w ${DEST_PATH}
 
-echo "✅ Done!"
+echo "✔ Done!"
 echo "\n☝️ Don't forget to run 'web-clients/bin/fetch-aws-exports' to generate aws-exports.js"

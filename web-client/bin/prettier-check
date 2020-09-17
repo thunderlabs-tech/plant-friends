@@ -4,4 +4,4 @@ set -e
 
 echo "💅 Prettier check"
 prettier -c .
-echo "✅ Done!"
+echo "✔ Done!"

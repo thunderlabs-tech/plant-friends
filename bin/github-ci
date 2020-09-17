@@ -15,4 +15,4 @@ cd web-client
 ./bin/typecheck
 ./bin/build
 
-echo "✅ Done!"
+echo "✔ Done!"

@@ -4,4 +4,4 @@ set -e
 
 echo "✨ ESLint"
 eslint src
-echo "✅ Done!"
+echo "✔ Done!"
