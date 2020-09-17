@@ -66,7 +66,14 @@ const PlantListScreen: React.FC<
   return (
     <Layout
       appBar={{
-        title: "Plant Friends",
+        title: (
+          <div>
+            Plant{" "}
+            <span style={{ color: "var(--mdc-theme-secondary-bg)" }}>
+              Friends
+            </span>
+          </div>
+        ),
         actionItems: [
           {
             icon: "delete_outlined",
