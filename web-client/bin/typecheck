@@ -4,4 +4,4 @@ set -e
 
 echo "🕵🏻‍♀️ Type check"
 tsc
-echo "✅ Done!"
+echo "✔ Done!"

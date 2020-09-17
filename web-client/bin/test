@@ -4,4 +4,4 @@ set -e
 
 echo "🚦 Run tests"
 react-scripts test
-echo "✅ Done!"
+echo "✔ Done!"

@@ -4,4 +4,4 @@ set -e
 
 echo "🔨 Build web-client"
 react-scripts build
-echo "✅ Done!"
+echo "✔ Done!"
