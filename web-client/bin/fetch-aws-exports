@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+set -e
+. $(dirname "$0")/.include.sh
+
+echo "⬇ Download Amplify environment and generate aws-exports.js"
+amplify env pull
+
+mv ../src/aws-exports.js src/gen/
+rmdir ../src
+
+echo "✨ Run prettier on generated code"
+prettier -w src/gen/aws-exports.js
+
+echo "✔ Done!"
