@@ -1,9 +1,14 @@
 import React from "react";
 import "@rmwc/top-app-bar/styles";
 import {
-  SimpleTopAppBar,
   TopAppBarFixedAdjust,
   SimpleTopAppBarProps,
+  TopAppBar,
+  TopAppBarActionItem,
+  TopAppBarNavigationIcon,
+  TopAppBarRow,
+  TopAppBarSection,
+  TopAppBarTitle,
 } from "@rmwc/top-app-bar";
 import "@rmwc/grid/styles";
 import { ComponentProps } from "@rmwc/types";
@@ -20,6 +25,15 @@ export type LayoutProps = {
 };
 
 const Layout: React.FC<LayoutProps> = ({ children, appBar }) => {
+  const {
+    title,
+    actionItems,
+    navigationIcon,
+    startContent,
+    endContent,
+    ...rest
+  } = appBar;
+
   return (
     <div className={styles.root}>
       <ThemeProvider
@@ -28,7 +42,32 @@ const Layout: React.FC<LayoutProps> = ({ children, appBar }) => {
           onPrimary: theme.textPrimaryOnLight,
         }}
       >
-        <SimpleTopAppBar {...appBar} />
+        <TopAppBar {...rest}>
+          <TopAppBarRow>
+            <TopAppBarSection alignStart>
+              {!!navigationIcon && (
+                <TopAppBarNavigationIcon
+                  icon="menu"
+                  {...(typeof navigationIcon === "boolean"
+                    ? {}
+                    : navigationIcon)}
+                />
+              )}
+              {!!title && <TopAppBarTitle>{title}</TopAppBarTitle>}
+              {startContent}
+            </TopAppBarSection>
+
+            {(!!actionItems || endContent) && (
+              <TopAppBarSection alignEnd>
+                {endContent}
+                {!!actionItems &&
+                  actionItems.map((actionItemProps, index) => (
+                    <TopAppBarActionItem {...actionItemProps} key={index} />
+                  ))}
+              </TopAppBarSection>
+            )}
+          </TopAppBarRow>
+        </TopAppBar>
       </ThemeProvider>
       <TopAppBarFixedAdjust style={{ backgroundColor: theme.background }} />
 
