@@ -4,7 +4,7 @@ import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "src/data/migrations";
 import { DataExport } from "src/data/exportData";
-import { omit } from "lodash";
+import { omit, pick } from "lodash";
 import * as queries from "src/gen/graphql/queries";
 import * as mutations from "src/gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
@@ -210,7 +210,7 @@ const persistence = {
         ...result,
         ...excludeValue(items, null).map((item) => {
           return {
-            ...item,
+            ...pick(item, ["id", "plantId", "type", "createdAt"]),
             createdAt: parseDateString(item.createdAt),
             updatedAt: parseDateString(item.updatedAt),
           };
