@@ -23,12 +23,14 @@ describe("exportData()", () => {
     const wateringTimeDate = new Date(2020, 1, 1, 0, 0, 0, 0);
     const timeOfDeathDate = new Date(2020, 2, 1, 0, 0, 0, 0);
     const lastWateredAtDate = new Date(2020, 3, 1, 0, 0, 0, 0);
+    const createdAtDate = new Date(2020, 3, 1, 0, 0, 0, 0);
 
     const plants: Plant[] = [
       makePlant({
         events: [makeWateredEvent({ createdAt: wateringTimeDate })],
         timeOfDeath: timeOfDeathDate,
         lastWateredAt: lastWateredAtDate,
+        createdAt: createdAtDate,
       }),
     ];
 
@@ -49,6 +51,7 @@ describe("exportData()", () => {
         ],
         timeOfDeath: timeOfDeathDate.toISOString(),
         lastWateredAt: lastWateredAtDate.toISOString(),
+        createdAt: createdAtDate.toISOString(),
       },
     ]);
   });
