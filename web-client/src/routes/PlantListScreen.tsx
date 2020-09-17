@@ -13,13 +13,15 @@ import { Link } from "react-router-dom";
 import "@rmwc/list/styles";
 import {
   List,
+  ListDivider,
   ListItem,
   ListItemText,
   ListItemPrimaryText,
   ListItemSecondaryText,
   ListItemGraphic,
   ListItemMeta,
-  ListDivider,
+  ListGroup,
+  ListGroupSubheader,
 } from "@rmwc/list";
 import "@rmwc/icon-button/styles";
 import { Fab } from "@rmwc/fab";
@@ -35,6 +37,7 @@ import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
 
 import css from "src/routes/PlantListScreen.module.css";
+import { Typography } from "@rmwc/typography";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -91,52 +94,84 @@ const PlantListScreen: React.FC<
     >
       <Grid style={{ padding: 0 }}>
         <GridCell tablet={8} desktop={12}>
-          <List twoLine avatarList theme={["onSurface"]}>
-            {unwateredPlants.map((plant) => (
-              <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
-                <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                <ListItemText>
-                  <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                    {plant.name}
-                  </ListItemPrimaryText>
-                  <ListItemSecondaryText>
-                    {formatTimeSinceWatered(plant)}
-                  </ListItemSecondaryText>
-                </ListItemText>
-                <ListItemMeta>
-                  <Fab
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onWaterPlant(plant);
-                    }}
-                    icon="opacity"
-                    theme={["background", "primary", "textPrimaryOnDark"]}
-                    className={css.waterPlantButton}
-                    mini
-                  />
-                </ListItemMeta>
-              </ListItem>
-            ))}
+          <ListGroup>
+            {unwateredPlants.length > 0 && (
+              <>
+                <ListGroupSubheader>
+                  <Typography
+                    use="body1"
+                    theme={["textPrimaryOnLight"]}
+                    style={{ fontWeight: 600 }}
+                  >
+                    Water today
+                  </Typography>
+                </ListGroupSubheader>
 
+                <ListDivider />
+
+                <List twoLine avatarList theme={["onSurface"]}>
+                  {unwateredPlants.map((plant) => (
+                    <ListItem
+                      key={plant.id}
+                      tag={Link}
+                      to={plantDetailUrl(plant.id)}
+                    >
+                      <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                      <ListItemText>
+                        <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                          {plant.name}
+                        </ListItemPrimaryText>
+                        <ListItemSecondaryText>
+                          {formatTimeSinceWatered(plant)}
+                        </ListItemSecondaryText>
+                      </ListItemText>
+                      <ListItemMeta>
+                        <Fab
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onWaterPlant(plant);
+                          }}
+                          icon="opacity"
+                          theme={["background", "primary", "textPrimaryOnDark"]}
+                          className={css.waterPlantButton}
+                          mini
+                        />
+                      </ListItemMeta>
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
             {unwateredPlants.length > 0 && wateredPlants.length > 0 && (
               <ListDivider />
             )}
 
-            {wateredPlants.map((plant) => (
-              <ListItem key={plant.id} tag={Link} to={plantDetailUrl(plant.id)}>
-                <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                <ListItemText>
-                  <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                    {plant.name}
-                  </ListItemPrimaryText>
-                  <ListItemSecondaryText>
-                    {formatNextWaterDate(plant)}
-                  </ListItemSecondaryText>
-                </ListItemText>
-              </ListItem>
-            ))}
-          </List>
+            {wateredPlants.length > 0 && (
+              <>
+                <ListDivider />
+                <List twoLine avatarList theme={["onSurface"]}>
+                  {wateredPlants.map((plant) => (
+                    <ListItem
+                      key={plant.id}
+                      tag={Link}
+                      to={plantDetailUrl(plant.id)}
+                    >
+                      <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
+                      <ListItemText>
+                        <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                          {plant.name}
+                        </ListItemPrimaryText>
+                        <ListItemSecondaryText>
+                          {formatNextWaterDate(plant)}
+                        </ListItemSecondaryText>
+                      </ListItemText>
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
+          </ListGroup>
         </GridCell>
 
         <GridCell phone={4} tablet={8} desktop={12}>
