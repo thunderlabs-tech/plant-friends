@@ -43,11 +43,23 @@ export function formatNextWaterDate(plant: Plant): string {
   const nextWaterDate = add(lastWateredAtDate, {
     days: plant.wateringPeriodInDays,
   });
-  return `Water next on ${nextWaterDate.toLocaleDateString()}`;
+  return formatWateringTime(nextWaterDate);
 }
 
 export function formatTimeOfDeath(plant: Plant): string {
   if (!plant.timeOfDeath) return `Still going strong`;
   // TO DO: add `createdAt` and format epitaph as "June 2020 - July 2020"
   return `Died ${plant.timeOfDeath.toLocaleDateString()}`;
+}
+
+export function formatWateringTime(date: Date | null): string {
+  if (date === null) return "Never";
+
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
 }

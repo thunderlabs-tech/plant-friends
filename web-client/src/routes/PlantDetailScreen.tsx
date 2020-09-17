@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import { Collection } from "src/utilities/state/useCollection";
-import { Plant, formatNextWaterDate, formatTimeOfDeath } from "src/data/Plant";
+import { Plant, formatWateringTime, waterNextAt } from "src/data/Plant";
 
 import { Link, useHistory } from "react-router-dom";
 import {
@@ -21,39 +21,26 @@ import "@rmwc/button/styles";
 import "@rmwc/fab/styles";
 import { Fab } from "@rmwc/fab";
 import "@rmwc/list/styles";
-import { List, ListItem } from "@rmwc/list";
+import {
+  List,
+  ListItem,
+  ListItemPrimaryText,
+  ListItemSecondaryText,
+  ListItemText,
+} from "@rmwc/list";
 
 import TextFieldStyles from "src/components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { plantListUrl } from "src/routes/PlantListRoute";
-import PlantEvent, { PlantEventType } from "src/data/PlantEvent";
 import theme from "src/init/theme";
+import { formatDistanceStrict, startOfToday } from "date-fns";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
   deadPlantRoute?: boolean;
 };
 
-function formatWateringTime(date: Date): string {
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
-}
-
-function sortEvents(plantEvents: PlantEvent[]): PlantEvent[] {
-  return plantEvents.sort((d1, d2) =>
-    d1.createdAt.valueOf() > d2.createdAt.valueOf()
-      ? -1
-      : d1.createdAt.valueOf() === d2.createdAt.valueOf()
-      ? 0
-      : 1,
-  );
-}
 
 const PlantDetailScreen: React.FC<
   { params: PlantDetailRouteParams } & PlantDetailScreenProps
@@ -114,6 +101,7 @@ const PlantDetailScreen: React.FC<
   };
 
   const isPlantAlive = !plant.timeOfDeath;
+  const waterNextAtDate = waterNextAt(plant);
 
   return (
     <form onSubmit={onSubmit}>
@@ -196,42 +184,51 @@ const PlantDetailScreen: React.FC<
                   />
                 )}
               </GridCell>
-
-              <GridCell tablet={8} desktop={12}>
-                {isPlantAlive ? (
-                  <Typography use="body1">
-                    {formatNextWaterDate(plant)}
-                  </Typography>
-                ) : (
-                  <Typography use="body1">
-                    {formatTimeOfDeath(plant)}
-                  </Typography>
-                )}
-              </GridCell>
-
-              <GridCell tablet={8} desktop={12}>
-                {plant.events.length > 0 ? (
-                  <>
-                    <Typography use="body1">Watered at:</Typography>
-                    <List nonInteractive>
-                      {sortEvents(plant.events).map((event) => {
-                        return (
-                          event.type === PlantEventType.WATERED && (
-                            <ListItem key={event.id}>
-                              {formatWateringTime(event.createdAt)}
-                            </ListItem>
-                          )
-                        );
-                      })}
-                    </List>
-                  </>
-                ) : (
-                  "No watering times recorded"
-                )}
-              </GridCell>
             </GridRow>
           </GridCell>
         </Grid>
+
+        <List nonInteractive twoLine theme={["onSurface"]}>
+          {plant.timeOfDeath && (
+            <ListItem>
+              <ListItemText>
+                <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                  Died
+                </ListItemPrimaryText>
+                <ListItemSecondaryText>
+                  {formatWateringTime(plant.timeOfDeath)}
+                </ListItemSecondaryText>
+              </ListItemText>
+            </ListItem>
+          )}
+          {isPlantAlive && (
+            <ListItem>
+              <ListItemText>
+                <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                  Water next
+                </ListItemPrimaryText>
+                <ListItemSecondaryText>
+                  {waterNextAtDate
+                    ? `in ${formatDistanceStrict(
+                        startOfToday(),
+                        waterNextAtDate,
+                      )}`
+                    : "Today"}
+                </ListItemSecondaryText>
+              </ListItemText>
+            </ListItem>
+          )}
+          <ListItem>
+            <ListItemText>
+              <ListItemPrimaryText style={{ fontWeight: 500 }}>
+                Last watered on
+              </ListItemPrimaryText>
+              <ListItemSecondaryText>
+                {formatWateringTime(plant.lastWateredAt)}
+              </ListItemSecondaryText>
+            </ListItemText>
+          </ListItem>
+        </List>
       </Layout>
     </form>
   );
