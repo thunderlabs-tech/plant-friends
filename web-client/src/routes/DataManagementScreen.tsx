@@ -8,7 +8,7 @@ import "@rmwc/list/styles";
 import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 import { DataManagementRouteParams } from "src/routes/DataManagementRoute";
-import Surface from "src/components/Surface";
+
 import assertPresent from "src/utilities/lang/assertPresent";
 import Layout from "src/components/Layout";
 import parseImportFileContent from "src/data/parseImportFileContent";
@@ -116,74 +116,74 @@ const DataManagementScreen: React.FC<
         style={{ position: "absolute", left: -10000 }}
         onChange={onUploadInputChange}
       />
-      <Surface z={1}>
-        <Grid>
+
+      <Grid>
+        <GridCell tablet={8} desktop={12}>
+          <Button
+            unelevated
+            onClick={onDownloadExportClick}
+            icon="cloud_download"
+          >
+            Download All Data
+          </Button>
+          <Typography use="caption" tag="p">
+            This will provide all your data in a JSON file
+          </Typography>
+        </GridCell>
+
+        {Object.prototype.hasOwnProperty.call(Blob.prototype, "text") ? (
           <GridCell tablet={8} desktop={12}>
-            <Button onClick={onDownloadExportClick} icon="cloud_download">
-              Download All Data
+            <Button unelevated onClick={requestExportFile} icon="cloud_upload">
+              Import Data
             </Button>
-            <br />
-            <Typography use="caption">
-              This will provide all your data in a JSON file
+            <Typography use="caption" tag="p">
+              Upload a previously exported JSON file (e.g. a backup)
             </Typography>
           </GridCell>
-
-          <GridCell tablet={8} desktop={12}>
-            <hr />
-          </GridCell>
-
-          {Object.prototype.hasOwnProperty.call(Blob.prototype, "text") ? (
+        ) : (
+          <>
             <GridCell tablet={8} desktop={12}>
-              <Button onClick={requestExportFile} icon="cloud_upload">
-                Import Data
+              <TextField
+                id="export-data"
+                name="export-data"
+                textarea
+                outlined
+                value={importDataInputValue}
+                label="Paste export content here"
+                className={TextFieldStyles.fullWidth}
+                onChange={(e) => setImportDataInputValue(e.currentTarget.value)}
+                placeholder="Name"
+              />
+              <Typography use="caption">
+                Unfortunately your device doesn't support file upload. Use this
+                input to paste the content of an exported file instead
+              </Typography>
+              <br />
+              <Button
+                unelevated
+                onClick={onImportTextContentClick}
+                icon="cloud_upload"
+              >
+                Upload
               </Button>
             </GridCell>
-          ) : (
-            <>
-              <GridCell tablet={8} desktop={12}>
-                <TextField
-                  id="export-data"
-                  name="export-data"
-                  textarea
-                  outlined
-                  value={importDataInputValue}
-                  label="Paste export content here"
-                  className={TextFieldStyles.fullWidth}
-                  onChange={(e) =>
-                    setImportDataInputValue(e.currentTarget.value)
-                  }
-                  placeholder="Name"
-                />
-                <Typography use="caption">
-                  Unfortunately your device doesn't support file upload. Use
-                  this input to paste the content of an exported file instead
-                </Typography>
-                <br />
-                <Button onClick={onImportTextContentClick} icon="cloud_upload">
-                  Upload
-                </Button>
-              </GridCell>
-            </>
-          )}
+          </>
+        )}
 
-          <GridCell tablet={8} desktop={12}>
-            <hr />
-          </GridCell>
+        <GridCell tablet={8} desktop={12}>
+          <Button unelevated onClick={onDeleteAllClick} icon="delete_sweep">
+            Delete All Data
+          </Button>
 
-          <GridCell tablet={8} desktop={12}>
-            <Button onClick={onDeleteAllClick} icon="delete_sweep">
-              Delete All Data
-            </Button>
-
-            <Typography use="caption" tag="p">
-              This will delete all Plant Friends data on this device or stored
-              remotely
-              <br />
-              WARNING! You can't undo this!
-            </Typography>
-          </GridCell>
-        </Grid>
-      </Surface>
+          <Typography use="caption" tag="p">
+            This will delete all Plant Friends data on this device or stored
+            remotely
+          </Typography>
+          <Typography use="caption" tag="p">
+            WARNING! You can't undo this!
+          </Typography>
+        </GridCell>
+      </Grid>
     </Layout>
   );
 };
