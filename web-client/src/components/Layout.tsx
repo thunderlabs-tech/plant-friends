@@ -14,7 +14,7 @@ import { ThemeProvider } from "@rmwc/theme";
 export type LayoutProps = {
   appBar: ComponentProps<
     SimpleTopAppBarProps,
-    React.HTMLProps<HTMLElement>,
+    Omit<React.HTMLProps<HTMLElement>, "title">,
     "div"
   >;
 };
