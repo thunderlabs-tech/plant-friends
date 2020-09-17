@@ -2,7 +2,10 @@
 set -e
 . $(dirname "$0")/.include.sh
 
-echo "📦 Installing dependencies"
+echo "🚧 Generate mock aws-exports.js"
+echo "export default {};" > web-client/src/gen/aws-exports.js
+
+echo "\n📦 Install dependencies"
 yarn install --frozen-lockfile
 
 cd web-client
