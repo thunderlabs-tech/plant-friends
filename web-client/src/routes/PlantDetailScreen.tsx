@@ -41,7 +41,6 @@ export type PlantDetailScreenProps = {
   deadPlantRoute?: boolean;
 };
 
-
 const PlantDetailScreen: React.FC<
   { params: PlantDetailRouteParams } & PlantDetailScreenProps
 > = ({ plants, params, deadPlantRoute }) => {
