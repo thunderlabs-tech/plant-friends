@@ -163,7 +163,7 @@ const PlantListScreen: React.FC<
                           {plant.name}
                         </ListItemPrimaryText>
                         <ListItemSecondaryText>
-                          {formatNextWaterDate(plant)}
+                          Water next on {formatNextWaterDate(plant)}
                         </ListItemSecondaryText>
                       </ListItemText>
                     </ListItem>
