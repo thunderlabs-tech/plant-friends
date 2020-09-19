@@ -149,7 +149,6 @@ const PlantListScreen: React.FC<
 
             {wateredPlants.length > 0 && (
               <>
-                <ListDivider />
                 <List twoLine avatarList theme={["onSurface"]}>
                   {wateredPlants.map((plant) => (
                     <ListItem
