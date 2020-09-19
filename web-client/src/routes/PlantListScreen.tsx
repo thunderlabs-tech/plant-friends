@@ -24,8 +24,6 @@ import {
   ListGroupSubheader,
 } from "@rmwc/list";
 import "@rmwc/icon-button/styles";
-import { Fab } from "@rmwc/fab";
-import "@rmwc/fab/styles";
 import { GridCell, Grid } from "@rmwc/grid";
 
 import { plantDetailUrl } from "src/routes/PlantDetailRoute";
@@ -35,7 +33,7 @@ import { PlantListRouteParams } from "src/routes/PlantListRoute";
 import Layout from "src/components/Layout";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
-
+import ListActionFab from "src/components/ListActionFab";
 import css from "src/routes/PlantListScreen.module.css";
 import { Typography } from "@rmwc/typography";
 
@@ -126,16 +124,13 @@ const PlantListScreen: React.FC<
                         </ListItemSecondaryText>
                       </ListItemText>
                       <ListItemMeta>
-                        <Fab
+                        <ListActionFab
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             onWaterPlant(plant);
                           }}
                           icon="opacity"
-                          theme={["background", "primary", "textPrimaryOnDark"]}
-                          className={css.waterPlantButton}
-                          mini
                         />
                       </ListItemMeta>
                     </ListItem>

@@ -23,8 +23,8 @@ import { Typography } from "@rmwc/typography";
 
 import css from "src/routes/DeadPlantListScreen.module.css";
 import { deadPlantDetailUrl } from "src/routes/DeadPlantDetailRoute";
-import { IconButton } from "@rmwc/icon-button";
 import { restoreFromGraveyard } from "src/data/actions";
+import ListActionFab from "src/components/ListActionFab";
 
 export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
@@ -66,13 +66,12 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
                     </ListItemSecondaryText>
                   </ListItemText>
                   <ListItemMeta>
-                    <IconButton
+                    <ListActionFab
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         onResurrectClick(plant);
                       }}
-                      theme={["primary"]}
                       icon="restore_from_trash"
                     />
                   </ListItemMeta>
