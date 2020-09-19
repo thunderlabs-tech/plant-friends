@@ -1,5 +1,6 @@
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
+import { dateFormatters } from "../utilities/i18n";
 
 export type Plant = {
   id: string;
@@ -39,11 +40,11 @@ export function needsWater(plant: Plant, now = Date.now()): boolean {
 
 export function formatNextWaterDate(plant: Plant): string {
   const lastWateredAtDate = plant.lastWateredAt;
-  if (!lastWateredAtDate) return "Needs to be watered";
+  if (!lastWateredAtDate) return "Today";
   const nextWaterDate = add(lastWateredAtDate, {
     days: plant.wateringPeriodInDays,
   });
-  return formatWateringTime(nextWaterDate);
+  return dateFormatters.date.format(nextWaterDate);
 }
 
 export function formatTimeOfDeath(plant: Plant): string {
@@ -54,12 +55,5 @@ export function formatTimeOfDeath(plant: Plant): string {
 
 export function formatWateringTime(date: Date | null): string {
   if (date === null) return "Never";
-
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
+  return dateFormatters.dateTime.format(date);
 }
