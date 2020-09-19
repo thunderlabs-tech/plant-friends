@@ -212,7 +212,6 @@ const persistence = {
           return {
             ...pick(item, ["id", "plantId", "type", "createdAt"]),
             createdAt: parseDateString(item.createdAt),
-            updatedAt: parseDateString(item.updatedAt),
           };
         }),
       ];
