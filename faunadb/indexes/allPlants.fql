@@ -1,6 +1,0 @@
-CreateIndex({
-  name: "allPlants",
-  unique: false,
-  serialized: true,
-  source: "Plant"
-})
