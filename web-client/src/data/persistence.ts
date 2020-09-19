@@ -114,7 +114,11 @@ async function createPlantWithEvents(newPlant: Plant): Promise<void> {
     >({
       query: mutations.createPlantEvent,
       variables: {
-        input: { ...event, plantId, createdAt: dateToString(event.createdAt) },
+        input: {
+          ...omit(event, "id"),
+          plantId,
+          createdAt: dateToString(event.createdAt),
+        },
       },
     });
 
