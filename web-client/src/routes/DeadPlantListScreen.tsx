@@ -24,7 +24,7 @@ import { Typography } from "@rmwc/typography";
 import css from "src/routes/DeadPlantListScreen.module.css";
 import { deadPlantDetailUrl } from "src/routes/DeadPlantDetailRoute";
 import { restoreFromGraveyard } from "src/data/actions";
-import ListActionFab from "src/components/ListActionFab";
+import { Fab } from "@rmwc/fab";
 
 export type DeadPlantListScreenProps = {
   plants: Collection<Plant>;
@@ -64,7 +64,9 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
                     </ListItemSecondaryText>
                   </ListItemText>
                   <ListItemMeta>
-                    <ListActionFab
+                    <Fab
+                      mini
+                      theme={["background", "primary", "textPrimaryOnDark"]}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
