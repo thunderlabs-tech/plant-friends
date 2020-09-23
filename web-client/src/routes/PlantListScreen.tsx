@@ -32,7 +32,7 @@ import { PlantListRouteParams } from "src/routes/PlantListRoute";
 import Layout from "src/components/Layout";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
-import ListActionFab from "src/components/ListActionFab";
+import { Fab } from "@rmwc/fab";
 import css from "src/routes/PlantListScreen.module.css";
 
 export type PlantListScreenProps = {
@@ -107,7 +107,8 @@ const PlantListScreen: React.FC<
                         </ListItemSecondaryText>
                       </ListItemText>
                       <ListItemMeta>
-                        <ListActionFab
+                        <Fab
+                          mini
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();

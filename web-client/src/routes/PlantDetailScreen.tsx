@@ -33,7 +33,6 @@ import TextFieldStyles from "src/components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { plantListUrl } from "src/routes/PlantListRoute";
-import theme from "src/init/theme";
 import { formatDistanceStrict, startOfToday } from "date-fns";
 
 export type PlantDetailScreenProps = {
@@ -158,18 +157,14 @@ const PlantDetailScreen: React.FC<
                     <Fab
                       tag="a"
                       icon="opacity"
-                      theme={["textPrimaryOnDark"]}
-                      style={{
-                        background: theme.primary,
-                        marginRight: 16,
-                      }}
+                      mini
+                      style={{ marginRight: 15 }}
                       onClick={onWaterNowClick}
                     />
                     <Fab
                       tag="a"
                       icon="delete"
-                      theme={["textPrimaryOnDark"]}
-                      style={{ background: theme.primary }}
+                      mini
                       onClick={onMoveToGraveyardClick}
                     />
                   </>
@@ -178,8 +173,7 @@ const PlantDetailScreen: React.FC<
                     tag="a"
                     icon="restore_from_trash"
                     onClick={onResurrectClick}
-                    theme={["textPrimaryOnDark"]}
-                    style={{ background: theme.primary }}
+                    mini
                   />
                 )}
               </GridCell>
