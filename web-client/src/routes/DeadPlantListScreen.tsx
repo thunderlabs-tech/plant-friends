@@ -24,6 +24,7 @@ import { Typography } from "@rmwc/typography";
 import css from "src/routes/DeadPlantListScreen.module.css";
 import { deadPlantDetailUrl } from "src/routes/DeadPlantDetailRoute";
 import { restoreFromGraveyard } from "src/data/actions";
+import "@rmwc/fab/styles";
 import { Fab } from "@rmwc/fab";
 
 export type DeadPlantListScreenProps = {

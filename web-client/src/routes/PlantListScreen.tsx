@@ -32,6 +32,7 @@ import { PlantListRouteParams } from "src/routes/PlantListRoute";
 import Layout from "src/components/Layout";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
+import "@rmwc/fab/styles";
 import { Fab } from "@rmwc/fab";
 import css from "src/routes/PlantListScreen.module.css";
 
