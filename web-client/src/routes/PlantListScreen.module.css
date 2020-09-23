@@ -1,1 +1,7 @@
+.titleHighlight {
+  color: "var(--mdc-theme-secondary-bg)";
+}
+
+.grid {
+  padding: 0;
 }
