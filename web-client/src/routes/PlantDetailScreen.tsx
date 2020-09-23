@@ -185,9 +185,7 @@ const PlantDetailScreen: React.FC<
           {plant.timeOfDeath && (
             <ListItem>
               <ListItemText>
-                <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                  Died
-                </ListItemPrimaryText>
+                <ListItemPrimaryText>Died</ListItemPrimaryText>
                 <ListItemSecondaryText>
                   {formatWateringTime(plant.timeOfDeath)}
                 </ListItemSecondaryText>
@@ -197,9 +195,7 @@ const PlantDetailScreen: React.FC<
           {isPlantAlive && (
             <ListItem>
               <ListItemText>
-                <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                  Water next
-                </ListItemPrimaryText>
+                <ListItemPrimaryText>Water next</ListItemPrimaryText>
                 <ListItemSecondaryText>
                   {waterNextAtDate
                     ? `in ${formatDistanceStrict(
@@ -213,9 +209,7 @@ const PlantDetailScreen: React.FC<
           )}
           <ListItem>
             <ListItemText>
-              <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                Last watered on
-              </ListItemPrimaryText>
+              <ListItemPrimaryText>Last watered on</ListItemPrimaryText>
               <ListItemSecondaryText>
                 {formatWateringTime(plant.lastWateredAt)}
               </ListItemSecondaryText>
