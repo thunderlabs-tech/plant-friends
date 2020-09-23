@@ -58,9 +58,7 @@ const DeadPlantListScreen: React.FC<DeadPlantListScreenProps> = ({
                 >
                   <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                   <ListItemText>
-                    <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                      {plant.name}
-                    </ListItemPrimaryText>
+                    <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
                     <ListItemSecondaryText>
                       {formatTimeOfDeath(plant)}
                     </ListItemSecondaryText>

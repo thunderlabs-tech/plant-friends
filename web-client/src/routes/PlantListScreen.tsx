@@ -25,7 +25,6 @@ import {
 } from "@rmwc/list";
 import "@rmwc/icon-button/styles";
 import { GridCell, Grid } from "@rmwc/grid";
-
 import { plantDetailUrl } from "src/routes/PlantDetailRoute";
 import NewPlantInput from "src/components/NewPlantInput";
 import PlantAvatar from "src/components/PlantAvatar";
@@ -35,7 +34,6 @@ import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { dataManagementUrl } from "src/routes/DataManagementRoute";
 import ListActionFab from "src/components/ListActionFab";
 import css from "src/routes/PlantListScreen.module.css";
-import { Typography } from "@rmwc/typography";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -69,10 +67,7 @@ const PlantListScreen: React.FC<
       appBar={{
         title: (
           <div>
-            Plant{" "}
-            <span style={{ color: "var(--mdc-theme-secondary-bg)" }}>
-              Friends
-            </span>
+            Plant <span className={css.titleHighlight}>Friends</span>
           </div>
         ),
         actionItems: [
@@ -90,24 +85,14 @@ const PlantListScreen: React.FC<
         ],
       }}
     >
-      <Grid style={{ padding: 0 }}>
+      <Grid className={css.grid}>
         <GridCell tablet={8} desktop={12}>
           <ListGroup>
             {unwateredPlants.length > 0 && (
               <>
-                <ListGroupSubheader>
-                  <Typography
-                    use="body1"
-                    theme={["textPrimaryOnLight"]}
-                    style={{ fontWeight: 600 }}
-                  >
-                    Water today
-                  </Typography>
-                </ListGroupSubheader>
+                <ListGroupSubheader>Water today</ListGroupSubheader>
 
-                <ListDivider />
-
-                <List twoLine avatarList theme={["onSurface"]}>
+                <List twoLine avatarList>
                   {unwateredPlants.map((plant) => (
                     <ListItem
                       key={plant.id}
@@ -116,9 +101,7 @@ const PlantListScreen: React.FC<
                     >
                       <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                       <ListItemText>
-                        <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                          {plant.name}
-                        </ListItemPrimaryText>
+                        <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
                         <ListItemSecondaryText>
                           {formatTimeSinceWatered(plant)}
                         </ListItemSecondaryText>
@@ -138,13 +121,14 @@ const PlantListScreen: React.FC<
                 </List>
               </>
             )}
+
             {unwateredPlants.length > 0 && wateredPlants.length > 0 && (
               <ListDivider />
             )}
 
             {wateredPlants.length > 0 && (
               <>
-                <List twoLine avatarList theme={["onSurface"]}>
+                <List twoLine avatarList>
                   {wateredPlants.map((plant) => (
                     <ListItem
                       key={plant.id}
@@ -153,9 +137,7 @@ const PlantListScreen: React.FC<
                     >
                       <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                       <ListItemText>
-                        <ListItemPrimaryText style={{ fontWeight: 500 }}>
-                          {plant.name}
-                        </ListItemPrimaryText>
+                        <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
                         <ListItemSecondaryText>
                           Water next on {formatNextWaterDate(plant)}
                         </ListItemSecondaryText>
