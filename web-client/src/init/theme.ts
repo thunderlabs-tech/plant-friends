@@ -17,20 +17,12 @@ const theme = {
   onPrimary: "white",
   onSecondary: "white",
 
-  // textPrimaryOnBackground: primaryTextColorOnLight,
   textSecondaryOnBackground: secondaryTextColorOnLight,
-  // textHintOnBackground: primaryTextColorOnLight,
-  // textDisabledOnBackground: primaryTextColorOnLight,
-  // textIconOnBackground: primaryTextColorOnLight,
   textPrimaryOnLight: primaryTextColorOnLight,
   textSecondaryOnLight: secondaryTextColorOnLight,
-  // textHintOnLight: primaryTextColorOnLight,
-  // textDisabledOnLight: primaryTextColorOnLight,
-  // textIconOnLight: primaryTextColorOnLight,
 
   onSurface: primaryTextColorOnLight,
   onLight: primaryTextColorOnLight,
-  // onDark: "red",
 };
 
 export default theme;
