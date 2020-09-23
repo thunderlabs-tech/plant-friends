@@ -69,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({ children, appBar }) => {
           </TopAppBarRow>
         </TopAppBar>
       </ThemeProvider>
-      <TopAppBarFixedAdjust style={{ backgroundColor: theme.background }} />
+      <TopAppBarFixedAdjust className={styles.TopAppBarFixedAdjust} />
 
       <div className={styles.childrenContainer}>{children}</div>
     </div>
