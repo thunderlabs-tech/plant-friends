@@ -9,7 +9,12 @@ const primaryTextColorOnLight = "#555a70";
 const secondaryTextColorOnLight = "#7c7f87";
 export const inputBg = "#deecec";
 
-export const plantAvatarColors: NonEmptyArray<Color> = ["#cef0de"];
+export const plantAvatarColors: NonEmptyArray<Color> = [
+  "#cef0de",
+  "#cef0ef",
+  "#cee2f0",
+  "#cef0ce",
+];
 
 const theme = {
   background: backgroundColor,
