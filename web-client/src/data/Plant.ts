@@ -85,6 +85,11 @@ export function nextActionDueDate(args: {
   lastPerformedAt: Date | null;
   plantCreatedAt: Date;
 }): undefined;
+export function nextActionDueDate(args: {
+  periodInDays: number | null;
+  lastPerformedAt: Date | null;
+  plantCreatedAt: Date;
+}): Date | undefined;
 export function nextActionDueDate({
   periodInDays,
   plantCreatedAt,
