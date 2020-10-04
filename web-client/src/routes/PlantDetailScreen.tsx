@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import { Collection } from "src/utilities/state/useCollection";
-import { Plant, formatWateringTime, waterNextAt } from "src/data/Plant";
+import { Plant, formatLastActionTime, waterNextAt } from "src/data/Plant";
 
 import { Link, useHistory } from "react-router-dom";
 import {
@@ -187,7 +187,7 @@ const PlantDetailScreen: React.FC<
               <ListItemText>
                 <ListItemPrimaryText>Died</ListItemPrimaryText>
                 <ListItemSecondaryText>
-                  {formatWateringTime(plant.timeOfDeath)}
+                  {formatLastActionTime(plant.timeOfDeath)}
                 </ListItemSecondaryText>
               </ListItemText>
             </ListItem>
@@ -211,7 +211,7 @@ const PlantDetailScreen: React.FC<
             <ListItemText>
               <ListItemPrimaryText>Last watered on</ListItemPrimaryText>
               <ListItemSecondaryText>
-                {formatWateringTime(plant.lastWateredAt)}
+                {formatLastActionTime(plant.lastWateredAt)}
               </ListItemSecondaryText>
             </ListItemText>
           </ListItem>
