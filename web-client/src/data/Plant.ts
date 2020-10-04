@@ -21,38 +21,24 @@ export type PlantInput = {
   wateringPeriodInDays: number;
 };
 
-export function waterNextAt(plant: Plant): Date | undefined {
-  if (!plant.lastWateredAt) return undefined;
-
-  const lastWateredAtBeginningOfDay = new Date(
-    plant.lastWateredAt.getFullYear(),
-    plant.lastWateredAt.getMonth(),
-    plant.lastWateredAt.getDate(),
-  );
-
-  return add(lastWateredAtBeginningOfDay.valueOf(), {
-    days: plant.wateringPeriodInDays,
+export function waterNextAt(plant: Plant): Date {
+  return nextActionDueDate({
+    lastPerformedAt: plant.lastWateredAt,
+    periodInDays: plant.wateringPeriodInDays,
+    plantCreatedAt: plant.createdAt,
   });
 }
 
 export function fertilizeNextAt(plant: Plant): Date | undefined {
-  if (plant.lastFertilizedAt === null || plant.fertilizingPeriodInDays === null)
-    return undefined;
-
-  const lastFertilizedAtBeginningOfDay = new Date(
-    plant.lastFertilizedAt.getFullYear(),
-    plant.lastFertilizedAt.getMonth(),
-    plant.lastFertilizedAt.getDate(),
-  );
-  return add(lastFertilizedAtBeginningOfDay.valueOf(), {
-    days: plant.fertilizingPeriodInDays,
+  return nextActionDueDate({
+    lastPerformedAt: plant.lastFertilizedAt,
+    periodInDays: plant.fertilizingPeriodInDays,
+    plantCreatedAt: plant.createdAt,
   });
 }
 
 export function needsWater(plant: Plant, now = Date.now()): boolean {
-  const waterNextAtDate = waterNextAt(plant);
-  if (!waterNextAtDate) return true;
-  return waterNextAtDate.valueOf() <= now;
+  return waterNextAt(plant).valueOf() <= now;
 }
 
 export function formatNextWaterDate(plant: Plant): string {
