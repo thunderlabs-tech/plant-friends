@@ -9,7 +9,9 @@ export const onCreatePlant = /* GraphQL */ `
       name
       timeOfDeath
       lastWateredAt
+      lastFertilizedAt
       wateringPeriodInDays
+      fertilizingPeriodInDays
       events {
         nextToken
       }
@@ -26,7 +28,9 @@ export const onUpdatePlant = /* GraphQL */ `
       name
       timeOfDeath
       lastWateredAt
+      lastFertilizedAt
       wateringPeriodInDays
+      fertilizingPeriodInDays
       events {
         nextToken
       }
@@ -43,7 +47,9 @@ export const onDeletePlant = /* GraphQL */ `
       name
       timeOfDeath
       lastWateredAt
+      lastFertilizedAt
       wateringPeriodInDays
+      fertilizingPeriodInDays
       events {
         nextToken
       }
@@ -63,7 +69,9 @@ export const onCreatePlantEvent = /* GraphQL */ `
         name
         timeOfDeath
         lastWateredAt
+        lastFertilizedAt
         wateringPeriodInDays
+        fertilizingPeriodInDays
         createdAt
         updatedAt
         owner
@@ -85,7 +93,9 @@ export const onUpdatePlantEvent = /* GraphQL */ `
         name
         timeOfDeath
         lastWateredAt
+        lastFertilizedAt
         wateringPeriodInDays
+        fertilizingPeriodInDays
         createdAt
         updatedAt
         owner
@@ -107,7 +117,9 @@ export const onDeletePlantEvent = /* GraphQL */ `
         name
         timeOfDeath
         lastWateredAt
+        lastFertilizedAt
         wateringPeriodInDays
+        fertilizingPeriodInDays
         createdAt
         updatedAt
         owner

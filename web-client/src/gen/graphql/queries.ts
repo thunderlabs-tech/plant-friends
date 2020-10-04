@@ -9,7 +9,9 @@ export const getPlant = /* GraphQL */ `
       name
       timeOfDeath
       lastWateredAt
+      lastFertilizedAt
       wateringPeriodInDays
+      fertilizingPeriodInDays
       events {
         nextToken
       }
@@ -31,7 +33,9 @@ export const listPlants = /* GraphQL */ `
         name
         timeOfDeath
         lastWateredAt
+        lastFertilizedAt
         wateringPeriodInDays
+        fertilizingPeriodInDays
         createdAt
         updatedAt
         owner
@@ -50,7 +54,9 @@ export const getPlantEvent = /* GraphQL */ `
         name
         timeOfDeath
         lastWateredAt
+        lastFertilizedAt
         wateringPeriodInDays
+        fertilizingPeriodInDays
         createdAt
         updatedAt
         owner

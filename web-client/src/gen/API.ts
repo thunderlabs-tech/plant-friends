@@ -7,14 +7,18 @@ export type CreatePlantInput = {
   name: string;
   timeOfDeath?: string | null;
   lastWateredAt?: string | null;
+  lastFertilizedAt?: string | null;
   wateringPeriodInDays: number;
+  fertilizingPeriodInDays?: number | null;
 };
 
 export type ModelPlantConditionInput = {
   name?: ModelStringInput | null;
   timeOfDeath?: ModelStringInput | null;
   lastWateredAt?: ModelStringInput | null;
+  lastFertilizedAt?: ModelStringInput | null;
   wateringPeriodInDays?: ModelIntInput | null;
+  fertilizingPeriodInDays?: ModelIntInput | null;
   and?: Array<ModelPlantConditionInput | null> | null;
   or?: Array<ModelPlantConditionInput | null> | null;
   not?: ModelPlantConditionInput | null;
@@ -76,7 +80,9 @@ export type UpdatePlantInput = {
   name?: string | null;
   timeOfDeath?: string | null;
   lastWateredAt?: string | null;
+  lastFertilizedAt?: string | null;
   wateringPeriodInDays?: number | null;
+  fertilizingPeriodInDays?: number | null;
 };
 
 export type DeletePlantInput = {
@@ -92,6 +98,7 @@ export type CreatePlantEventInput = {
 
 export enum PlantEventType {
   WATERED = "WATERED",
+  FERTILIZED = "FERTILIZED",
 }
 
 export type ModelPlantEventConditionInput = {
@@ -140,7 +147,9 @@ export type ModelPlantFilterInput = {
   name?: ModelStringInput | null;
   timeOfDeath?: ModelStringInput | null;
   lastWateredAt?: ModelStringInput | null;
+  lastFertilizedAt?: ModelStringInput | null;
   wateringPeriodInDays?: ModelIntInput | null;
+  fertilizingPeriodInDays?: ModelIntInput | null;
   and?: Array<ModelPlantFilterInput | null> | null;
   or?: Array<ModelPlantFilterInput | null> | null;
   not?: ModelPlantFilterInput | null;
@@ -168,7 +177,9 @@ export type CreatePlantMutation = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -191,7 +202,9 @@ export type UpdatePlantMutation = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -214,7 +227,9 @@ export type DeletePlantMutation = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -241,7 +256,9 @@ export type CreatePlantEventMutation = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -269,7 +286,9 @@ export type UpdatePlantEventMutation = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -297,7 +316,9 @@ export type DeletePlantEventMutation = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -320,7 +341,9 @@ export type GetPlantQuery = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -346,7 +369,9 @@ export type ListPlantsQuery = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -370,7 +395,9 @@ export type GetPlantEventQuery = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -415,7 +442,9 @@ export type OnCreatePlantSubscription = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -437,7 +466,9 @@ export type OnUpdatePlantSubscription = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -459,7 +490,9 @@ export type OnDeletePlantSubscription = {
     name: string;
     timeOfDeath: string | null;
     lastWateredAt: string | null;
+    lastFertilizedAt: string | null;
     wateringPeriodInDays: number;
+    fertilizingPeriodInDays: number | null;
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
@@ -485,7 +518,9 @@ export type OnCreatePlantEventSubscription = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -512,7 +547,9 @@ export type OnUpdatePlantEventSubscription = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -539,7 +576,9 @@ export type OnDeletePlantEventSubscription = {
       name: string;
       timeOfDeath: string | null;
       lastWateredAt: string | null;
+      lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
+      fertilizingPeriodInDays: number | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
