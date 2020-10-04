@@ -1,3 +1,4 @@
+import { differenceInDays, formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
 import { dateFormatters } from "../utilities/i18n";
@@ -72,4 +73,32 @@ export function formatTimeOfDeath(plant: Plant): string {
 export function formatLastActionTime(date: Date | null): string {
   if (date === null) return "Never";
   return dateFormatters.dateTime.format(date);
+}
+
+export function nextActionDueDate(args: {
+  periodInDays: number;
+  lastPerformedAt: Date | null;
+  plantCreatedAt: Date;
+}): Date;
+export function nextActionDueDate(args: {
+  periodInDays: null;
+  lastPerformedAt: Date | null;
+  plantCreatedAt: Date;
+}): undefined;
+export function nextActionDueDate({
+  periodInDays,
+  plantCreatedAt,
+  lastPerformedAt,
+}: {
+  periodInDays: number | null;
+  lastPerformedAt: Date | null;
+  plantCreatedAt: Date;
+}): Date | undefined {
+  if (periodInDays === null) return undefined;
+
+  const endOfPeriod = add(lastPerformedAt ? lastPerformedAt : plantCreatedAt, {
+    days: periodInDays,
+  });
+
+  return startOfDay(endOfPeriod);
 }
