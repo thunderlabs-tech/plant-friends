@@ -53,7 +53,7 @@ export function formatTimeOfDeath(plant: Plant): string {
   return `Died ${plant.timeOfDeath.toLocaleDateString()}`;
 }
 
-export function formatWateringTime(date: Date | null): string {
+export function formatLastActionTime(date: Date | null): string {
   if (date === null) return "Never";
   return dateFormatters.dateTime.format(date);
 }
