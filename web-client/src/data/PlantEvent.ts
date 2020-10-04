@@ -1,6 +1,4 @@
-export enum PlantEventType {
-  WATERED = "WATERED",
-}
+import { PlantEventType } from "src/gen/API";
 
 type PlantEvent = {
   id: string;
