@@ -10,7 +10,9 @@ const PlantProperties = Object.freeze([
   "name",
   "timeOfDeath",
   "lastWateredAt",
+  "lastFertilizedAt",
   "wateringPeriodInDays",
+  "fertilizingPeriodInDays",
   "createdAt",
 ] as const);
 
@@ -21,6 +23,7 @@ export default function graphqlPlantToPlant(item: GraphqlPlant): Plant {
   return {
     ...values,
     lastWateredAt: parseDateString(item.lastWateredAt),
+    lastFertilizedAt: parseDateString(item.lastFertilizedAt),
     timeOfDeath: parseDateString(item.timeOfDeath),
     createdAt: parseDateString(item.createdAt),
     events: [],

@@ -5,9 +5,11 @@ import { dateFormatters } from "../utilities/i18n";
 export type Plant = {
   id: string;
   name: string;
-  wateringPeriodInDays: number;
-  lastWateredAt: Date | null;
   timeOfDeath: Date | null;
+  lastWateredAt: Date | null;
+  lastFertilizedAt: Date | null;
+  wateringPeriodInDays: number;
+  fertilizingPeriodInDays: number | null;
   events: PlantEvent[];
   createdAt: Date;
 };
