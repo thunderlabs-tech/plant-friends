@@ -29,9 +29,16 @@ See the README in individual workspaces for project-specific info.
     - It's phrased as "proposed" so that if the person working on the card comes up with a better solution they can
       implement that instead, as long as it solves the problem described in the issue
 - Naming:
-  - Only (and always) use scream caps for constants set by environment variables, and always use scream caps for environment variables
-  - Use `at` suffix for properties containing a time value (e.g. `createdAt`)
+  - Constants set by environment variables use scream case (e.g. `REACT_APP_API_KEY`), as do the environment variables themselves
+  - All other constants (even when exported) use the same casing as variables, camelCase (e.g. `const enterTheDragon`)
+  - Class and component names use PascalCase (e.g. `PlantAvatar`)
+  - TypeScript type aliases use PascalCase (e.g. `Override<X, Y>`)
   - Only uppercase the first letter in an acronym (e.g. `HttpRequest`)
+  - Use `at` suffix for properties containing a time value (e.g. `createdAt`)
+- Modules:
+  - Name files the same as their default export
+  - Prefer single exports
+  - Only export one component per module (multiple components per module are acceptable if only one is exported)
 - Store scripts in `bin/` instead of `package.json`
   - By convention the commands `npm start` and `npm test` run the corresponding script string from `package.json`. Over time people have started adding all relevant scripts as strings in `package.json`, which is not a good medium for them since it unnecessarily loads an entire NodeJS virtual machine just to read the strings out of `package.json` and forces you to write all your scripts as single lines.
 
