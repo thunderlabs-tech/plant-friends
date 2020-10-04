@@ -7,6 +7,7 @@ type Plant
   lastWateredAt: AWSDateTime
   lastFertilizedAt: AWSDateTime
   wateringPeriodInDays: Int!
+  fertilizingPeriodInDays: Int
   events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
 }
 
