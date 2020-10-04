@@ -6,6 +6,7 @@ import {
 
 export enum PlantEventType {
   WATERED = "WATERED",
+  FERTILIZED = "FERTILIZED",
 }
 
 export declare class Plant {
@@ -13,8 +14,11 @@ export declare class Plant {
   readonly name: string;
   readonly timeOfDeath?: string;
   readonly lastWateredAt?: string;
+  readonly lastFertilizedAt?: string;
   readonly wateringPeriodInDays: number;
+  readonly fertilizingPeriodInDays?: number;
   readonly events: PlantEvent[];
+  readonly owner?: String;
   constructor(init: ModelInit<Plant>);
   static copyOf(
     source: Plant,
@@ -27,6 +31,7 @@ export declare class PlantEvent {
   readonly plant: Plant;
   readonly type: PlantEventType | keyof typeof PlantEventType;
   readonly createdAt: string;
+  readonly owner?: String;
   constructor(init: ModelInit<PlantEvent>);
   static copyOf(
     source: PlantEvent,

@@ -4,6 +4,7 @@ import { schema } from "./schema";
 
 const PlantEventType = {
   WATERED: "WATERED",
+  FERTILIZED: "FERTILIZED",
 };
 
 const { Plant, PlantEvent } = initSchema(schema);

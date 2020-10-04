@@ -31,11 +31,25 @@ export const schema = {
           isRequired: false,
           attributes: [],
         },
+        lastFertilizedAt: {
+          name: "lastFertilizedAt",
+          isArray: false,
+          type: "AWSDateTime",
+          isRequired: false,
+          attributes: [],
+        },
         wateringPeriodInDays: {
           name: "wateringPeriodInDays",
           isArray: false,
           type: "Int",
           isRequired: true,
+          attributes: [],
+        },
+        fertilizingPeriodInDays: {
+          name: "fertilizingPeriodInDays",
+          isArray: false,
+          type: "Int",
+          isRequired: false,
           attributes: [],
         },
         events: {
@@ -46,10 +60,18 @@ export const schema = {
           },
           isRequired: true,
           attributes: [],
+          isArrayNullable: false,
           association: {
             connectionType: "HAS_MANY",
             associatedWith: "plant",
           },
+        },
+        owner: {
+          name: "owner",
+          isArray: false,
+          type: "String",
+          isRequired: false,
+          attributes: [],
         },
       },
       syncable: true,
@@ -114,6 +136,13 @@ export const schema = {
           isRequired: true,
           attributes: [],
         },
+        owner: {
+          name: "owner",
+          isArray: false,
+          type: "String",
+          isRequired: false,
+          attributes: [],
+        },
       },
       syncable: true,
       pluralName: "PlantEvents",
@@ -149,9 +178,9 @@ export const schema = {
   enums: {
     PlantEventType: {
       name: "PlantEventType",
-      values: ["WATERED"],
+      values: ["WATERED", "FERTILIZED"],
     },
   },
   nonModels: {},
-  version: "0064eaa41f661b9736b96dc775470f4e",
+  version: "af099cd45af8db5990beb8c980018c51",
 };
