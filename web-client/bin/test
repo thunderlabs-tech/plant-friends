@@ -3,5 +3,5 @@ set -e
 . $(dirname "$0")/.include.sh
 
 echo "🚦 Run tests"
-react-scripts test
+react-scripts test $*
 echo "✔ Done!"
