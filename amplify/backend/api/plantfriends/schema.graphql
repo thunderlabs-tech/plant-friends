@@ -5,12 +5,14 @@ type Plant
   name: String!
   timeOfDeath: AWSDateTime
   lastWateredAt: AWSDateTime
+  lastFertilizedAt: AWSDateTime
   wateringPeriodInDays: Int!
   events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
 }
 
 enum PlantEventType {
   WATERED
+  FERTILIZED
 }
 
 type PlantEvent
