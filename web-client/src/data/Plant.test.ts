@@ -47,14 +47,16 @@ describe("Plant", () => {
     });
 
     describe("when `lastFertilizedAt` is set", () => {
-      const lastFertilizedAt = Object.freeze(new Date(2020, 1, 2, 16, 55));
+      const { lastFertilizedAt } = fixtures({
+        lastFertilizedAt: () => new Date(2020, 1, 2, 16, 55),
+      });
 
       describe("when `fertilizingPeriodInDays` is not set", () => {
         const fertilizingPeriodInDays = null;
 
         it("is undefined", () => {
           const plant: Plant = makePlant({
-            lastFertilizedAt,
+            lastFertilizedAt: lastFertilizedAt(),
             fertilizingPeriodInDays,
           });
           expect(fertilizeNextAt(plant)).toBe(undefined);
@@ -66,7 +68,7 @@ describe("Plant", () => {
 
         it("returns midnight `fertilizingPeriodInDays` days after the last time it was fertilized", () => {
           const plant: Plant = makePlant({
-            lastFertilizedAt,
+            lastFertilizedAt: lastFertilizedAt(),
             fertilizingPeriodInDays,
           });
 
