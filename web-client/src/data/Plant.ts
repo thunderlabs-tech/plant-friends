@@ -34,6 +34,20 @@ export function waterNextAt(plant: Plant): Date | undefined {
   });
 }
 
+export function fertilizeNextAt(plant: Plant): Date | undefined {
+  if (plant.lastFertilizedAt === null || plant.fertilizingPeriodInDays === null)
+    return undefined;
+
+  const lastFertilizedAtBeginningOfDay = new Date(
+    plant.lastFertilizedAt.getFullYear(),
+    plant.lastFertilizedAt.getMonth(),
+    plant.lastFertilizedAt.getDate(),
+  );
+  return add(lastFertilizedAtBeginningOfDay.valueOf(), {
+    days: plant.fertilizingPeriodInDays,
+  });
+}
+
 export function needsWater(plant: Plant, now = Date.now()): boolean {
   const waterNextAtDate = waterNextAt(plant);
   if (!waterNextAtDate) return true;
