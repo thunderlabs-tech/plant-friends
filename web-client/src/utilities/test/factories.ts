@@ -1,6 +1,7 @@
 import { Plant } from "src/data/Plant";
 import { uniqueId } from "lodash";
-import PlantEvent, { PlantEventType } from "src/data/PlantEvent";
+import PlantEvent from "src/data/PlantEvent";
+import { PlantEventType } from "src/gen/API";
 
 export function makePlant(attributes: Partial<Plant> = {}): Plant {
   return {
