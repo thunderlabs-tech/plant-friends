@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 import { differenceInDays, formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
