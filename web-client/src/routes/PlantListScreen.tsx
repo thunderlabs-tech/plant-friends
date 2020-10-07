@@ -126,7 +126,7 @@ const PlantListScreen: React.FC<
                               e.stopPropagation();
                               onFertilizePlant(plant);
                             }}
-                            icon="colorize"
+                            icon="group_work"
                             style={{ marginLeft: 15 }}
                           />
                         )}

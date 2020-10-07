@@ -200,7 +200,7 @@ const PlantDetailScreen: React.FC<
                     />
                     <Fab
                       tag="a"
-                      icon="colorize"
+                      icon="group_work"
                       mini
                       style={{ marginRight: 15 }}
                       onClick={onFertilizeNowClick}
