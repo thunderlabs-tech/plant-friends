@@ -30,6 +30,11 @@ export function waterNextAt(plant: Plant): Date {
   });
 }
 
+function isPast(date: Date | undefined, now: number): boolean {
+  if (!date) return false;
+  return date.valueOf() <= now;
+}
+
 export function fertilizeNextAt(plant: Plant): Date | undefined {
   return nextActionDueDate({
     lastPerformedAt: plant.lastFertilizedAt,
@@ -39,7 +44,15 @@ export function fertilizeNextAt(plant: Plant): Date | undefined {
 }
 
 export function needsWater(plant: Plant, now = Date.now()): boolean {
-  return waterNextAt(plant).valueOf() <= now;
+  return isPast(waterNextAt(plant), now);
+}
+
+export function needsFertilizer(plant: Plant, now = Date.now()): boolean {
+  return isPast(fertilizeNextAt(plant), now);
+}
+
+export function actionRequired(plant: Plant, now = Date.now()): boolean {
+  return needsWater(plant) || needsFertilizer(plant);
 }
 
 export function formatNextWaterDate(plant: Plant): string {
