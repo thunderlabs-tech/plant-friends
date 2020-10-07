@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { endOfDay, formatDistanceStrict, startOfDay } from "date-fns";
+import { formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
 import { dateFormatters } from "../utilities/i18n";
@@ -53,15 +53,6 @@ export function needsFertilizer(plant: Plant, now = Date.now()): boolean {
 
 export function actionRequired(plant: Plant): boolean {
   return needsWater(plant) || needsFertilizer(plant);
-}
-
-export function formatNextWaterDate(plant: Plant): string {
-  const lastWateredAtDate = plant.lastWateredAt;
-  if (!lastWateredAtDate) return "Today";
-  const nextWaterDate = add(lastWateredAtDate, {
-    days: plant.wateringPeriodInDays,
-  });
-  return dateFormatters.date.format(nextWaterDate);
 }
 
 export function formatTimeUntilAction(
