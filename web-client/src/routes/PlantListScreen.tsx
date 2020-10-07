@@ -3,11 +3,18 @@ import { Collection } from "src/utilities/state/useCollection";
 import partition from "lodash/partition";
 import {
   Plant,
-  needsWater,
   formatNextWaterDate,
   PlantInput,
+  actionRequired,
+  needsWater,
+  needsFertilizer,
 } from "src/data/Plant";
-import { waterPlant, createPlant, refreshPlants } from "src/data/actions";
+import {
+  waterPlant,
+  createPlant,
+  refreshPlants,
+  fertilizePlant,
+} from "src/data/actions";
 import { Link } from "react-router-dom";
 
 import "@rmwc/list/styles";
@@ -40,23 +47,20 @@ export type PlantListScreenProps = {
   plants: Collection<Plant>;
 };
 
-function formatTimeSinceWatered(plant: Plant) {
-  const date = plant.lastWateredAt;
-  if (!date) return `Never watered`;
-  return `Last watered ${date.toLocaleDateString()}`;
-}
-
 const PlantListScreen: React.FC<
   PlantListScreenProps & { params: PlantListRouteParams }
 > = ({ plants }) => {
   const livePlants = plants.data.filter((plant) => !plant.timeOfDeath);
-  const [unwateredPlants, wateredPlants]: [Plant[], Plant[]] = partition<Plant>(
-    livePlants,
-    needsWater,
-  );
+  const [plantsRequiringAction, restPlants]: [Plant[], Plant[]] = partition<
+    Plant
+  >(livePlants, actionRequired);
 
   const onWaterPlant = (plant: Plant) => {
     waterPlant(plant, plants.dispatch);
+  };
+
+  const onFertilizePlant = (plant: Plant) => {
+    fertilizePlant(plant, plants.dispatch);
   };
 
   const onAddNewPlant = (plant: PlantInput) => {
@@ -89,34 +93,43 @@ const PlantListScreen: React.FC<
       <Grid className={css.grid}>
         <GridCell tablet={8} desktop={12}>
           <ListGroup>
-            {unwateredPlants.length > 0 && (
+            {plantsRequiringAction.length > 0 && (
               <>
-                <ListGroupSubheader>Water today</ListGroupSubheader>
+                <ListGroupSubheader>Today</ListGroupSubheader>
 
                 <List twoLine avatarList>
-                  {unwateredPlants.map((plant) => (
+                  {plantsRequiringAction.map((plant) => (
                     <ListItem
                       key={plant.id}
                       tag={Link}
                       to={plantDetailUrl(plant.id)}
                     >
                       <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
-                      <ListItemText>
-                        <ListItemPrimaryText>{plant.name}</ListItemPrimaryText>
-                        <ListItemSecondaryText>
-                          {formatTimeSinceWatered(plant)}
-                        </ListItemSecondaryText>
-                      </ListItemText>
+                      {plant.name}
                       <ListItemMeta>
-                        <Fab
-                          mini
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onWaterPlant(plant);
-                          }}
-                          icon="opacity"
-                        />
+                        {needsWater(plant) && (
+                          <Fab
+                            mini
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onWaterPlant(plant);
+                            }}
+                            icon="opacity"
+                          />
+                        )}
+                        {needsFertilizer(plant) && (
+                          <Fab
+                            mini
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onFertilizePlant(plant);
+                            }}
+                            icon="colorize"
+                            style={{ marginLeft: 15 }}
+                          />
+                        )}
                       </ListItemMeta>
                     </ListItem>
                   ))}
@@ -124,14 +137,14 @@ const PlantListScreen: React.FC<
               </>
             )}
 
-            {unwateredPlants.length > 0 && wateredPlants.length > 0 && (
+            {plantsRequiringAction.length > 0 && restPlants.length > 0 && (
               <ListDivider />
             )}
 
-            {wateredPlants.length > 0 && (
+            {restPlants.length > 0 && (
               <>
                 <List twoLine avatarList>
-                  {wateredPlants.map((plant) => (
+                  {restPlants.map((plant) => (
                     <ListItem
                       key={plant.id}
                       tag={Link}
