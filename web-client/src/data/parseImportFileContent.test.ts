@@ -1,6 +1,7 @@
 import { DataExport } from "src/data/exportData";
 import parseImportFileContent from "src/data/parseImportFileContent";
-import { makePlant, makeWateredEvent } from "src/utilities/test/factories";
+import { PlantEventType } from "src/gen/API";
+import { makePlant, makePlantEvent } from "src/utilities/test/factories";
 
 describe("importData()", () => {
   it("parses the input string as JSON", () => {
@@ -19,8 +20,17 @@ describe("importData()", () => {
       plants: [
         makePlant({
           events: [
-            makeWateredEvent({ createdAt: new Date(2020, 1, 1, 0, 0, 0, 0) }),
+            makePlantEvent({
+              createdAt: new Date(2020, 1, 1, 0, 0, 0, 0),
+              type: PlantEventType.WATERED,
+            }),
+            makePlantEvent({
+              createdAt: new Date(2020, 1, 2, 0, 0, 0, 0),
+              type: PlantEventType.FERTILIZED,
+            }),
           ],
+          lastWateredAt: new Date(2020, 1, 1, 0, 0, 0, 0),
+          lastFertilizedAt: new Date(2020, 1, 2, 0, 0, 0, 0),
         }),
       ],
     };
