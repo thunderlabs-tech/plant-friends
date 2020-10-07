@@ -29,7 +29,9 @@ import {
 } from "src/utilities/graphql/GraphqlResult";
 import { excludeValue } from "src/utilities/excludeValue";
 import graphqlPlantToPlant from "src/utilities/graphql/graphqlPlantToPlant";
-import assertPresent from "src/utilities/lang/assertPresent";
+import assertPresent, {
+  getAssertPresent,
+} from "src/utilities/lang/assertPresent";
 import { QueryResultItems } from "src/utilities/graphql/QueryTypes";
 import plantToGraphqlPlant from "src/utilities/graphql/plantToGraphqlPlant";
 import dateToString from "src/utilities/graphql/dateToString";
@@ -288,6 +290,56 @@ const persistence = {
 
     return {
       ...graphqlPlantToPlant(result.data.updatePlant),
+      events: [
+        // TODO: don't copy events array
+        ...plant.events,
+        {
+          ...plantEvent,
+          createdAt: parseDateString(plantEvent.createdAt),
+        },
+      ],
+    };
+  },
+
+  fertilizePlant: async (plant: Plant): Promise<Plant> => {
+    // TODO: implement as custom resolver for named mutation
+    const lastFertilizedAt = dateToString(new Date());
+
+    const plantEventResult = await appSyncQuery<
+      CreatePlantEventMutation,
+      CreatePlantEventMutationVariables
+    >({
+      query: mutations.createPlantEvent,
+      variables: {
+        input: {
+          plantId: plant.id,
+          createdAt: lastFertilizedAt,
+          type: PlantEventType.FERTILIZED,
+        },
+      },
+    });
+
+    assertGraphqlSuccessResult(plantEventResult);
+    const plantEvent = getAssertPresent(plantEventResult.data.createPlantEvent);
+
+    const updatePlantResult = await appSyncQuery<
+      UpdatePlantMutation,
+      UpdatePlantMutationVariables
+    >({
+      query: mutations.updatePlant,
+      variables: {
+        input: {
+          ...plantToGraphqlPlant(plant),
+          lastFertilizedAt,
+        },
+      },
+    });
+
+    assertGraphqlSuccessResult(updatePlantResult);
+    assertPresent(updatePlantResult.data.updatePlant);
+
+    return {
+      ...graphqlPlantToPlant(updatePlantResult.data.updatePlant),
       events: [
         // TODO: don't copy events array
         ...plant.events,

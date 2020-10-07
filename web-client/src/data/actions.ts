@@ -18,6 +18,18 @@ export async function waterPlant(
   plantDispatch.setLoadingState(LoadingState.ready);
 }
 
+export async function fertilizePlant(
+  plant: Plant,
+  plantDispatch: Collection<Plant>["dispatch"],
+): Promise<void> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  const updatedPlant = await persistence.fertilizePlant(plant);
+  plantDispatch.replace(plant, updatedPlant);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+}
+
 export async function createPlant(
   plant: PlantInput,
   plantDispatch: Collection<Plant>["dispatch"],
