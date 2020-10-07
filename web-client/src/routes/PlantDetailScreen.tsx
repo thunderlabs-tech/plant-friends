@@ -162,7 +162,11 @@ const PlantDetailScreen: React.FC<
                 <TextField
                   id="plant-fertilizingPeriodInDays"
                   name="plant-fertilizingPeriodInDays"
-                  value={fertilizingPeriodInDays || ""}
+                  value={
+                    fertilizingPeriodInDays === null
+                      ? ""
+                      : fertilizingPeriodInDays
+                  }
                   className={TextFieldStyles.fullWidth}
                   type="number"
                   onChange={(e: FormEvent<HTMLInputElement>) =>
