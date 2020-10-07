@@ -87,7 +87,7 @@ export function nextActionDueDate({
 }): Date | undefined {
   if (periodInDays === null) return undefined;
 
-  const endOfPeriod = add(lastPerformedAt ? lastPerformedAt : plantCreatedAt, {
+  const endOfPeriod = add(lastPerformedAt || plantCreatedAt, {
     days: periodInDays,
   });
 
