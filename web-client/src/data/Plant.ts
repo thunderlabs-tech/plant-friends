@@ -69,7 +69,7 @@ export function formatTimeUntilAction(
   now = new Date(Date.now()),
 ): string {
   const timeUntil = differenceInDays(nextActionDate, now);
-  if (timeUntil < 0) {
+  if (timeUntil <= 0) {
     return "today";
   }
   // TODO: tests
