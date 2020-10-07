@@ -1,6 +1,7 @@
 import exportData from "src/data/exportData";
 import { Plant } from "src/data/Plant";
-import { makePlant, makeWateredEvent } from "src/utilities/test/factories";
+import { PlantEventType } from "src/gen/API";
+import { makePlant, makePlantEvent } from "src/utilities/test/factories";
 
 describe("exportData()", () => {
   it("encodes the application data as JSON", () => {
@@ -20,16 +21,26 @@ describe("exportData()", () => {
   });
 
   it("encodes dates as ISO8601 date strings", () => {
-    const wateringTimeDate = new Date(2020, 1, 1, 0, 0, 0, 0);
-    const timeOfDeathDate = new Date(2020, 2, 1, 0, 0, 0, 0);
-    const lastWateredAtDate = new Date(2020, 3, 1, 0, 0, 0, 0);
-    const createdAtDate = new Date(2020, 3, 1, 0, 0, 0, 0);
+    const createdAtDate = new Date(2020, 1, 1, 0, 0, 0, 0);
+    const timeOfDeathDate = new Date(2020, 3, 1, 0, 0, 0, 0);
+    const lastWateredAtDate = new Date(2020, 4, 1, 0, 0, 0, 0);
+    const lastFertilizedAtDate = new Date(2020, 4, 1, 0, 0, 0, 0);
 
     const plants: Plant[] = [
       makePlant({
-        events: [makeWateredEvent({ createdAt: wateringTimeDate })],
+        events: [
+          makePlantEvent({
+            createdAt: lastWateredAtDate,
+            type: PlantEventType.WATERED,
+          }),
+          makePlantEvent({
+            createdAt: lastFertilizedAtDate,
+            type: PlantEventType.FERTILIZED,
+          }),
+        ],
         timeOfDeath: timeOfDeathDate,
         lastWateredAt: lastWateredAtDate,
+        lastFertilizedAt: lastFertilizedAtDate,
         createdAt: createdAtDate,
       }),
     ];
@@ -46,11 +57,16 @@ describe("exportData()", () => {
         events: [
           {
             ...plants[0].events[0],
-            createdAt: wateringTimeDate.toISOString(),
+            createdAt: lastWateredAtDate.toISOString(),
+          },
+          {
+            ...plants[0].events[1],
+            createdAt: lastFertilizedAtDate.toISOString(),
           },
         ],
         timeOfDeath: timeOfDeathDate.toISOString(),
         lastWateredAt: lastWateredAtDate.toISOString(),
+        lastFertilizedAt: lastFertilizedAtDate.toISOString(),
         createdAt: createdAtDate.toISOString(),
       },
     ]);

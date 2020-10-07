@@ -18,7 +18,7 @@ export function makePlant(attributes: Partial<Plant> = {}): Plant {
   };
 }
 
-export function makeWateredEvent(
+export function makePlantEvent(
   attributes: Partial<PlantEvent> = {},
 ): PlantEvent {
   return {
