@@ -51,6 +51,22 @@ export function formatNextWaterDate(plant: Plant): string {
   return dateFormatters.date.format(nextWaterDate);
 }
 
+export function formatTimeUntilAction(
+  nextActionDate: Date,
+  now = new Date(Date.now()),
+): string {
+  const timeUntil = differenceInDays(nextActionDate, now);
+  if (timeUntil < 0) {
+    return "today";
+  }
+  // TODO: tests
+  if (timeUntil <= 1) return "tomorrow";
+
+  return `in ${formatDistanceStrict(now, nextActionDate, {
+    roundingMethod: "ceil",
+  })}`;
+}
+
 export function formatTimeOfDeath(plant: Plant): string {
   if (!plant.timeOfDeath) return `Still going strong`;
   // TO DO: add `createdAt` and format epitaph as "June 2020 - July 2020"
