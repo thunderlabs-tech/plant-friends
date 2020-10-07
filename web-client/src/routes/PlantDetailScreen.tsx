@@ -88,6 +88,10 @@ const PlantDetailScreen: React.FC<
     waterPlant(plant, plants.dispatch);
   };
 
+  const onFertilizeNowClick = () => {
+    fertilizePlant(plant, plants.dispatch);
+  };
+
   const onMoveToGraveyardClick = async () => {
     await moveToGraveyard(plant, plants.dispatch);
   };
@@ -189,6 +193,13 @@ const PlantDetailScreen: React.FC<
                       mini
                       style={{ marginRight: 15 }}
                       onClick={onWaterNowClick}
+                    />
+                    <Fab
+                      tag="a"
+                      icon="colorize"
+                      mini
+                      style={{ marginRight: 15 }}
+                      onClick={onFertilizeNowClick}
                     />
                     <Fab
                       tag="a"
