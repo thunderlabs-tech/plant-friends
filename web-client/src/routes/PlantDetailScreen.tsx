@@ -1,18 +1,24 @@
 import React, { useState, FormEvent } from "react";
 import { Collection } from "src/utilities/state/useCollection";
-import { Plant, formatLastActionTime, waterNextAt } from "src/data/Plant";
+import {
+  Plant,
+  formatLastActionTime,
+  waterNextAt,
+  fertilizeNextAt,
+  formatTimeUntilAction,
+} from "src/data/Plant";
 
 import { Link, useHistory } from "react-router-dom";
 import {
   updatePlant,
   waterPlant,
+  fertilizePlant,
   moveToGraveyard,
   restoreFromGraveyard,
 } from "src/data/actions";
 import { PlantDetailRouteParams } from "src/routes/PlantDetailRoute";
 import Layout from "src/components/Layout";
 import { GridCell, GridRow, Grid } from "@rmwc/grid";
-
 import "@rmwc/typography/styles";
 import { Typography } from "@rmwc/typography";
 import "@rmwc/textfield/styles";
@@ -28,12 +34,11 @@ import {
   ListItemSecondaryText,
   ListItemText,
 } from "@rmwc/list";
-
 import TextFieldStyles from "src/components/TextField.module.css";
 import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { plantListUrl } from "src/routes/PlantListRoute";
-import { formatDistanceStrict, startOfToday } from "date-fns";
+import { dateFormatters } from "src/utilities/i18n";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -51,6 +56,9 @@ const PlantDetailScreen: React.FC<
   const [name, setName] = useState(plant ? plant.name : "");
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(
     plant ? plant.wateringPeriodInDays : 0,
+  );
+  const [fertilizingPeriodInDays, setFertilizingPeriodInDays] = useState(
+    plant ? plant.fertilizingPeriodInDays : null,
   );
 
   const tabletOrHigher = useMediaQuery({ query: "(min-width: 600px)" });
@@ -92,14 +100,16 @@ const PlantDetailScreen: React.FC<
     e.preventDefault();
     updatePlant(
       plant,
-      { ...plant, name, wateringPeriodInDays },
+      { ...plant, name, wateringPeriodInDays, fertilizingPeriodInDays },
       plants.dispatch,
       history,
     );
   };
 
   const isPlantAlive = !plant.timeOfDeath;
-  const waterNextAtDate = waterNextAt(plant);
+  // TODO: this belongs in `waterNextAt`
+  const waterNextAtDate = waterNextAt(plant) || new Date();
+  const fertilizeNextAtDate = fertilizeNextAt(plant);
 
   return (
     <form onSubmit={onSubmit}>
@@ -117,7 +127,7 @@ const PlantDetailScreen: React.FC<
         <Grid>
           <GridCell tablet={8} desktop={12}>
             <GridRow>
-              <GridCell tablet={4}>
+              <GridCell desktop={12} tablet={8}>
                 <TextField
                   id="plant-name"
                   name="plant-name"
@@ -140,11 +150,30 @@ const PlantDetailScreen: React.FC<
                   onChange={(e: FormEvent<HTMLInputElement>) =>
                     setWateringPeriodInDays(parseInt(e.currentTarget.value, 10))
                   }
-                  label="Watering Period in Days"
+                  label="Water every (days)"
+                />
+              </GridCell>
+
+              <GridCell tablet={4}>
+                <TextField
+                  id="plant-fertilizingPeriodInDays"
+                  name="plant-fertilizingPeriodInDays"
+                  value={fertilizingPeriodInDays || ""}
+                  className={TextFieldStyles.fullWidth}
+                  type="number"
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setFertilizingPeriodInDays(
+                      e.currentTarget.value.trim() !== ""
+                        ? parseInt(e.currentTarget.value.trim(), 10)
+                        : null,
+                    )
+                  }
+                  label="Fertilize every (days)"
                 />
               </GridCell>
 
               <GridCell
+                desktop={12}
                 tablet={8}
                 style={{
                   display: "flex",
@@ -197,24 +226,43 @@ const PlantDetailScreen: React.FC<
               <ListItemText>
                 <ListItemPrimaryText>Water next</ListItemPrimaryText>
                 <ListItemSecondaryText>
-                  {waterNextAtDate
-                    ? `in ${formatDistanceStrict(
-                        startOfToday(),
-                        waterNextAtDate,
-                      )}`
-                    : "Today"}
+                  <abbr title={dateFormatters.date.format(waterNextAtDate)}>
+                    {formatTimeUntilAction(waterNextAtDate)}
+                  </abbr>
                 </ListItemSecondaryText>
               </ListItemText>
             </ListItem>
           )}
           <ListItem>
             <ListItemText>
-              <ListItemPrimaryText>Last watered on</ListItemPrimaryText>
+              <ListItemPrimaryText>Last watered</ListItemPrimaryText>
               <ListItemSecondaryText>
                 {formatLastActionTime(plant.lastWateredAt)}
               </ListItemSecondaryText>
             </ListItemText>
           </ListItem>
+          {isPlantAlive && fertilizeNextAtDate && (
+            <ListItem>
+              <ListItemText>
+                <ListItemPrimaryText>Fertilize next</ListItemPrimaryText>
+                <ListItemSecondaryText>
+                  <abbr title={dateFormatters.date.format(fertilizeNextAtDate)}>
+                    {formatTimeUntilAction(fertilizeNextAtDate)}
+                  </abbr>
+                </ListItemSecondaryText>
+              </ListItemText>
+            </ListItem>
+          )}
+          {plant.fertilizingPeriodInDays !== null && (
+            <ListItem>
+              <ListItemText>
+                <ListItemPrimaryText>Last fertilized</ListItemPrimaryText>
+                <ListItemSecondaryText>
+                  {formatLastActionTime(plant.lastFertilizedAt)}
+                </ListItemSecondaryText>
+              </ListItemText>
+            </ListItem>
+          )}
         </List>
       </Layout>
     </form>
