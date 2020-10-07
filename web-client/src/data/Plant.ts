@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { differenceInDays, formatDistanceStrict, startOfDay } from "date-fns";
+import { endOfDay, formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
 import { dateFormatters } from "../utilities/i18n";
@@ -51,7 +51,7 @@ export function needsFertilizer(plant: Plant, now = Date.now()): boolean {
   return isPast(fertilizeNextAt(plant), now);
 }
 
-export function actionRequired(plant: Plant, now = Date.now()): boolean {
+export function actionRequired(plant: Plant): boolean {
   return needsWater(plant) || needsFertilizer(plant);
 }
 
@@ -68,12 +68,12 @@ export function formatTimeUntilAction(
   nextActionDate: Date,
   now = new Date(Date.now()),
 ): string {
-  const timeUntil = differenceInDays(nextActionDate, now);
-  if (timeUntil <= 0) {
-    return "today";
-  }
-  // TODO: tests
-  if (timeUntil <= 1) return "tomorrow";
+  const tomorrow = add(startOfDay(now), { days: 1 });
+
+  if (nextActionDate < tomorrow) return "today";
+
+  const dayAfterTomorrow = add(tomorrow, { days: 1 });
+  if (nextActionDate < dayAfterTomorrow) return "tomorrow";
 
   return `in ${formatDistanceStrict(now, nextActionDate, {
     roundingMethod: "ceil",
