@@ -14,6 +14,8 @@ const PlantProperties = Object.freeze([
   "wateringPeriodInDays",
   "fertilizingPeriodInDays",
   "createdAt",
+  "waterNextAt",
+  "fertilizeNextAt",
 ] as const);
 
 export type GraphqlPlant = QueryResultItem<ListPlantsQuery["listPlants"]>;
@@ -26,6 +28,8 @@ export default function graphqlPlantToPlant(item: GraphqlPlant): Plant {
     lastFertilizedAt: parseDateString(item.lastFertilizedAt),
     timeOfDeath: parseDateString(item.timeOfDeath),
     createdAt: parseDateString(item.createdAt),
+    waterNextAt: parseDateString(item.waterNextAt),
+    fertilizeNextAt: parseDateString(item.fertilizeNextAt),
     events: [],
   };
 }

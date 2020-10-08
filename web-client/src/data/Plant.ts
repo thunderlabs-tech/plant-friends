@@ -14,6 +14,8 @@ export type Plant = {
   fertilizingPeriodInDays: number | null;
   events: PlantEvent[];
   createdAt: Date;
+  waterNextAt: Date;
+  fertilizeNextAt: Date | null;
 };
 
 export type PlantInput = {
