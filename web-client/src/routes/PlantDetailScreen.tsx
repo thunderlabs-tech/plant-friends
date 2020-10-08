@@ -3,8 +3,6 @@ import { Collection } from "src/utilities/state/useCollection";
 import {
   Plant,
   formatLastActionTime,
-  waterNextAt,
-  fertilizeNextAt,
   formatTimeUntilAction,
 } from "src/data/Plant";
 
@@ -112,9 +110,6 @@ const PlantDetailScreen: React.FC<
   };
 
   const isPlantAlive = !plant.timeOfDeath;
-  // TODO: this belongs in `waterNextAt`
-  const waterNextAtDate = waterNextAt(plant) || new Date();
-  const fertilizeNextAtDate = fertilizeNextAt(plant);
 
   return (
     <form onSubmit={onSubmit}>
@@ -244,8 +239,8 @@ const PlantDetailScreen: React.FC<
               <ListItemText>
                 <ListItemPrimaryText>Water next</ListItemPrimaryText>
                 <ListItemSecondaryText>
-                  <abbr title={dateFormatters.date.format(waterNextAtDate)}>
-                    {formatTimeUntilAction(waterNextAtDate)}
+                  <abbr title={dateFormatters.date.format(plant.waterNextAt)}>
+                    {formatTimeUntilAction(plant.waterNextAt)}
                   </abbr>
                 </ListItemSecondaryText>
               </ListItemText>
@@ -259,13 +254,15 @@ const PlantDetailScreen: React.FC<
               </ListItemSecondaryText>
             </ListItemText>
           </ListItem>
-          {isPlantAlive && fertilizeNextAtDate && (
+          {isPlantAlive && plant.fertilizeNextAt && (
             <ListItem>
               <ListItemText>
                 <ListItemPrimaryText>Fertilize next</ListItemPrimaryText>
                 <ListItemSecondaryText>
-                  <abbr title={dateFormatters.date.format(fertilizeNextAtDate)}>
-                    {formatTimeUntilAction(fertilizeNextAtDate)}
+                  <abbr
+                    title={dateFormatters.date.format(plant.fertilizeNextAt)}
+                  >
+                    {formatTimeUntilAction(plant.fertilizeNextAt)}
                   </abbr>
                 </ListItemSecondaryText>
               </ListItemText>
