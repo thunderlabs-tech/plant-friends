@@ -9,6 +9,8 @@ type Plant
   wateringPeriodInDays: Int!
   fertilizingPeriodInDays: Int
   events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
+  waterNextAt: AWSDate!
+  fertilizeNextAt: AWSDate
 }
 
 enum PlantEventType {
