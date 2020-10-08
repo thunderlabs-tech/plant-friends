@@ -14,6 +14,8 @@ export function makePlant(attributes: Partial<Plant> = {}): Plant {
     events: [],
     lastWateredAt: null,
     lastFertilizedAt: null,
+    waterNextAt: new Date(),
+    fertilizeNextAt: null,
     ...attributes,
   };
 }
