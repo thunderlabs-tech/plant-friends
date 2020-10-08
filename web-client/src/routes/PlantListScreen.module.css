@@ -5,3 +5,7 @@
 .grid {
   padding: 0;
 }
+
+.actionButton:not(:first-child) {
+  margin-left: 8px;
+}
