@@ -52,25 +52,34 @@ export type PlantListScreenProps = {
 };
 
 function formatNextActions(plant: Plant): string {
-  const upcomingActions = ([
-    { action: PlantEventType.WATERED, date: waterNextAt(plant) },
-    { action: PlantEventType.FERTILIZED, date: fertilizeNextAt(plant) },
-  ].filter((action) => action.date !== undefined) as {
+  const upcomingActions: {
     action: PlantEventType;
     date: Date;
-  }[]).sort((a1, a2) => (a1.date < a2.date ? -1 : a1.date === a2.date ? 0 : 1));
+  }[] = [{ action: PlantEventType.WATERED, date: waterNextAt(plant) }];
 
-  const nextAction = upcomingActions[0];
-  const actions = upcomingActions.filter((action) =>
-    isEqual(action.date, nextAction.date),
+  const fertilizeNextDate = fertilizeNextAt(plant);
+  if (fertilizeNextDate) {
+    upcomingActions.push({
+      action: PlantEventType.FERTILIZED,
+      date: fertilizeNextDate,
+    });
+  }
+
+  const upcomingActionsByDate = upcomingActions.sort((a1, a2) =>
+    a1.date < a2.date ? -1 : a1.date === a2.date ? 0 : 1,
   );
 
-  return `${actions
+  const nextActionDate = upcomingActionsByDate[0].date;
+  const allActionsOnDate = upcomingActionsByDate.filter((action) =>
+    isEqual(action.date, nextActionDate),
+  );
+
+  return `${allActionsOnDate
     .map((action) => plantEventTypeToAction[action.action])
     .join(", ")} on ${
-    isToday(nextAction.date)
+    isToday(nextActionDate)
       ? "today"
-      : dateFormatters.date.format(nextAction.date)
+      : dateFormatters.date.format(nextActionDate)
   }`;
 }
 
