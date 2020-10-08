@@ -44,18 +44,12 @@ import "@rmwc/fab/styles";
 import { Fab } from "@rmwc/fab";
 import css from "src/routes/PlantListScreen.module.css";
 import { isEqual, isToday } from "date-fns";
-import { dateFormatters } from "src/utilities/i18n";
+import { dateFormatters, plantEventTypeToAction } from "src/utilities/i18n";
 import { PlantEventType } from "src/gen/API";
-import { MapEach } from "../utilities/lang/MapEach";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
 };
-
-const actionToCommand: MapEach<PlantEventType, string> = Object.freeze({
-  [PlantEventType.WATERED]: "water",
-  [PlantEventType.FERTILIZED]: "fertilize",
-} as const);
 
 function formatNextActions(plant: Plant): string {
   const upcomingActions = ([
@@ -72,7 +66,7 @@ function formatNextActions(plant: Plant): string {
   );
 
   return `${actions
-    .map((action) => actionToCommand[action.action])
+    .map((action) => plantEventTypeToAction[action.action])
     .join(", ")} on ${
     isToday(nextAction.date)
       ? "today"
