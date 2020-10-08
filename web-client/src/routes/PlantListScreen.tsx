@@ -6,8 +6,6 @@ import {
   PlantInput,
   actionRequired,
   needsWater,
-  waterNextAt,
-  fertilizeNextAt,
   needsFertilizer,
 } from "src/data/Plant";
 import {
@@ -55,13 +53,12 @@ function formatNextActions(plant: Plant): string {
   const upcomingActions: {
     action: PlantEventType;
     date: Date;
-  }[] = [{ action: PlantEventType.WATERED, date: waterNextAt(plant) }];
+  }[] = [{ action: PlantEventType.WATERED, date: plant.waterNextAt }];
 
-  const fertilizeNextDate = fertilizeNextAt(plant);
-  if (fertilizeNextDate) {
+  if (plant.fertilizeNextAt) {
     upcomingActions.push({
       action: PlantEventType.FERTILIZED,
-      date: fertilizeNextDate,
+      date: plant.fertilizeNextAt,
     });
   }
 

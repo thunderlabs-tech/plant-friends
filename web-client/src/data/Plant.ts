@@ -24,33 +24,18 @@ export type PlantInput = {
   wateringPeriodInDays: number;
 };
 
-export function waterNextAt(plant: Plant): Date {
-  return nextActionDueDate({
-    lastPerformedAt: plant.lastWateredAt,
-    periodInDays: plant.wateringPeriodInDays,
-    plantCreatedAt: plant.createdAt,
-  });
-}
-
 function isPast(date: Date | undefined, now: number): boolean {
   if (!date) return false;
   return date.valueOf() <= now;
 }
 
-export function fertilizeNextAt(plant: Plant): Date | undefined {
-  return nextActionDueDate({
-    lastPerformedAt: plant.lastFertilizedAt,
-    periodInDays: plant.fertilizingPeriodInDays,
-    plantCreatedAt: plant.createdAt,
-  });
-}
-
 export function needsWater(plant: Plant, now = Date.now()): boolean {
-  return isPast(waterNextAt(plant), now);
+  return isPast(plant.waterNextAt, now);
 }
 
 export function needsFertilizer(plant: Plant, now = Date.now()): boolean {
-  return isPast(fertilizeNextAt(plant), now);
+  if (!plant.fertilizeNextAt) return false;
+  return isPast(plant.fertilizeNextAt, now);
 }
 
 export function actionRequired(plant: Plant): boolean {
