@@ -19,7 +19,9 @@
     "services/*",
     "web-client"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "aws-sdk": "^2.769.0"
+  },
   "engines": {
     "node": ">=10.16.0"
   },
