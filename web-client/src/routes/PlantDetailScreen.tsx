@@ -39,6 +39,7 @@ import { useMediaQuery } from "react-responsive";
 import { deadPlantListUrl } from "src/routes/DeadPlantListRoute";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import { dateFormatters } from "src/utilities/i18n";
+import css from "src/routes/PlantDetailScreen.module.css";
 
 export type PlantDetailScreenProps = {
   plants: Collection<Plant>;
@@ -195,20 +196,21 @@ const PlantDetailScreen: React.FC<
                       tag="a"
                       icon="opacity"
                       mini
-                      style={{ marginRight: 15 }}
+                      className={css.actionButton}
                       onClick={onWaterNowClick}
                     />
                     <Fab
                       tag="a"
                       icon="group_work"
                       mini
-                      style={{ marginRight: 15 }}
+                      className={css.actionButton}
                       onClick={onFertilizeNowClick}
                     />
                     <Fab
                       tag="a"
                       icon="delete"
                       mini
+                      className={css.actionButton}
                       onClick={onMoveToGraveyardClick}
                     />
                   </>
@@ -216,6 +218,7 @@ const PlantDetailScreen: React.FC<
                   <Fab
                     tag="a"
                     icon="restore_from_trash"
+                    className={css.actionButton}
                     onClick={onResurrectClick}
                     mini
                   />

@@ -152,6 +152,7 @@ const PlantListScreen: React.FC<
                               onWaterPlant(plant);
                             }}
                             icon="opacity"
+                            className={css.actionButton}
                           />
                         )}
                         {needsFertilizer(plant) && (
@@ -163,7 +164,7 @@ const PlantListScreen: React.FC<
                               onFertilizePlant(plant);
                             }}
                             icon="group_work"
-                            style={{ marginLeft: 15 }}
+                            className={css.actionButton}
                           />
                         )}
                       </ListItemMeta>
