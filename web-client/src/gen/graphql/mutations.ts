@@ -18,6 +18,8 @@ export const createPlant = /* GraphQL */ `
       events {
         nextToken
       }
+      waterNextAt
+      fertilizeNextAt
       createdAt
       updatedAt
       owner
@@ -40,6 +42,8 @@ export const updatePlant = /* GraphQL */ `
       events {
         nextToken
       }
+      waterNextAt
+      fertilizeNextAt
       createdAt
       updatedAt
       owner
@@ -62,6 +66,8 @@ export const deletePlant = /* GraphQL */ `
       events {
         nextToken
       }
+      waterNextAt
+      fertilizeNextAt
       createdAt
       updatedAt
       owner
@@ -84,6 +90,8 @@ export const createPlantEvent = /* GraphQL */ `
         lastFertilizedAt
         wateringPeriodInDays
         fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
         createdAt
         updatedAt
         owner
@@ -111,6 +119,8 @@ export const updatePlantEvent = /* GraphQL */ `
         lastFertilizedAt
         wateringPeriodInDays
         fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
         createdAt
         updatedAt
         owner
@@ -138,6 +148,8 @@ export const deletePlantEvent = /* GraphQL */ `
         lastFertilizedAt
         wateringPeriodInDays
         fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
         createdAt
         updatedAt
         owner

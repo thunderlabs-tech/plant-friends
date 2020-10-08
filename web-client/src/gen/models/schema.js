@@ -66,6 +66,20 @@ export const schema = {
             associatedWith: "plant",
           },
         },
+        waterNextAt: {
+          name: "waterNextAt",
+          isArray: false,
+          type: "AWSDate",
+          isRequired: true,
+          attributes: [],
+        },
+        fertilizeNextAt: {
+          name: "fertilizeNextAt",
+          isArray: false,
+          type: "AWSDate",
+          isRequired: false,
+          attributes: [],
+        },
         owner: {
           name: "owner",
           isArray: false,
@@ -182,5 +196,5 @@ export const schema = {
     },
   },
   nonModels: {},
-  version: "af099cd45af8db5990beb8c980018c51",
+  version: "569fdbf9d086994ee338eaafa1358b19",
 };

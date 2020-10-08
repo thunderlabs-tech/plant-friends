@@ -18,6 +18,8 @@ export declare class Plant {
   readonly wateringPeriodInDays: number;
   readonly fertilizingPeriodInDays?: number;
   readonly events: PlantEvent[];
+  readonly waterNextAt: string;
+  readonly fertilizeNextAt?: string;
   readonly owner?: String;
   constructor(init: ModelInit<Plant>);
   static copyOf(

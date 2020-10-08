@@ -15,6 +15,8 @@ export const getPlant = /* GraphQL */ `
       events {
         nextToken
       }
+      waterNextAt
+      fertilizeNextAt
       createdAt
       updatedAt
       owner
@@ -36,6 +38,8 @@ export const listPlants = /* GraphQL */ `
         lastFertilizedAt
         wateringPeriodInDays
         fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
         createdAt
         updatedAt
         owner
@@ -57,6 +61,8 @@ export const getPlantEvent = /* GraphQL */ `
         lastFertilizedAt
         wateringPeriodInDays
         fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
         createdAt
         updatedAt
         owner

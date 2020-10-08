@@ -10,6 +10,8 @@ export type CreatePlantInput = {
   lastFertilizedAt?: string | null;
   wateringPeriodInDays: number;
   fertilizingPeriodInDays?: number | null;
+  waterNextAt: string;
+  fertilizeNextAt?: string | null;
 };
 
 export type ModelPlantConditionInput = {
@@ -19,6 +21,8 @@ export type ModelPlantConditionInput = {
   lastFertilizedAt?: ModelStringInput | null;
   wateringPeriodInDays?: ModelIntInput | null;
   fertilizingPeriodInDays?: ModelIntInput | null;
+  waterNextAt?: ModelStringInput | null;
+  fertilizeNextAt?: ModelStringInput | null;
   and?: Array<ModelPlantConditionInput | null> | null;
   or?: Array<ModelPlantConditionInput | null> | null;
   not?: ModelPlantConditionInput | null;
@@ -83,6 +87,8 @@ export type UpdatePlantInput = {
   lastFertilizedAt?: string | null;
   wateringPeriodInDays?: number | null;
   fertilizingPeriodInDays?: number | null;
+  waterNextAt?: string | null;
+  fertilizeNextAt?: string | null;
 };
 
 export type DeletePlantInput = {
@@ -150,6 +156,8 @@ export type ModelPlantFilterInput = {
   lastFertilizedAt?: ModelStringInput | null;
   wateringPeriodInDays?: ModelIntInput | null;
   fertilizingPeriodInDays?: ModelIntInput | null;
+  waterNextAt?: ModelStringInput | null;
+  fertilizeNextAt?: ModelStringInput | null;
   and?: Array<ModelPlantFilterInput | null> | null;
   or?: Array<ModelPlantFilterInput | null> | null;
   not?: ModelPlantFilterInput | null;
@@ -184,6 +192,8 @@ export type CreatePlantMutation = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -209,6 +219,8 @@ export type UpdatePlantMutation = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -234,6 +246,8 @@ export type DeletePlantMutation = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -259,6 +273,8 @@ export type CreatePlantEventMutation = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -289,6 +305,8 @@ export type UpdatePlantEventMutation = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -319,6 +337,8 @@ export type DeletePlantEventMutation = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -348,6 +368,8 @@ export type GetPlantQuery = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -372,6 +394,8 @@ export type ListPlantsQuery = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -398,6 +422,8 @@ export type GetPlantEventQuery = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -449,6 +475,8 @@ export type OnCreatePlantSubscription = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -473,6 +501,8 @@ export type OnUpdatePlantSubscription = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -497,6 +527,8 @@ export type OnDeletePlantSubscription = {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
     } | null;
+    waterNextAt: string;
+    fertilizeNextAt: string | null;
     createdAt: string;
     updatedAt: string;
     owner: string | null;
@@ -521,6 +553,8 @@ export type OnCreatePlantEventSubscription = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -550,6 +584,8 @@ export type OnUpdatePlantEventSubscription = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
@@ -579,6 +615,8 @@ export type OnDeletePlantEventSubscription = {
       lastFertilizedAt: string | null;
       wateringPeriodInDays: number;
       fertilizingPeriodInDays: number | null;
+      waterNextAt: string;
+      fertilizeNextAt: string | null;
       createdAt: string;
       updatedAt: string;
       owner: string | null;
