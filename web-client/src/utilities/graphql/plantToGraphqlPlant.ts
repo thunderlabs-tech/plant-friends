@@ -2,14 +2,7 @@
 import { pick } from "lodash";
 import dateToString from "src/utilities/graphql/dateToString";
 import { Plant } from "src/data/Plant";
-import { format } from "date-fns";
-
-function formatAwsDateString(date: Date): string;
-function formatAwsDateString(date: Date | null): string | null;
-function formatAwsDateString(date: Date | null): string | null {
-  if (!date) return null;
-  return format(date, "yyyy-MM-dd");
-}
+import { formatAwsDateString } from "./formatAwsDateString";
 
 export default function plantToGraphqlPlant(
   input: Plant,
