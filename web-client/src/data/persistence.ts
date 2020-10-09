@@ -1,5 +1,5 @@
 import localforage from "localforage";
-import { Plant, PlantInput } from "src/data/Plant";
+import { nextActionDueDate, Plant, PlantInput } from "src/data/Plant";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "src/data/migrations";
@@ -276,6 +276,11 @@ const persistence = {
   waterPlant: async (plant: Plant): Promise<Plant> => {
     // TODO: implement as custom resolver for named mutation
     const lastWateredAt = new Date();
+    const waterNextAt = nextActionDueDate({
+      periodInDays: plant.wateringPeriodInDays,
+      plantCreatedAt: plant.createdAt,
+      lastPerformedAt: plant.lastWateredAt,
+    });
 
     const plantEvent = await createPlantEvent(
       plant.id,
@@ -286,6 +291,7 @@ const persistence = {
     const updatedPlant = await persistence.updatePlant({
       ...plant,
       lastWateredAt,
+      waterNextAt,
     });
 
     updatedPlant.events.push(plantEvent);
@@ -296,6 +302,11 @@ const persistence = {
   fertilizePlant: async (plant: Plant): Promise<Plant> => {
     // TODO: implement as custom resolver for named mutation
     const lastFertilizedAt = new Date();
+    const fertilizeNextAt = nextActionDueDate({
+      periodInDays: plant.fertilizingPeriodInDays,
+      plantCreatedAt: plant.createdAt,
+      lastPerformedAt: plant.lastFertilizedAt,
+    });
 
     const plantEvent = await createPlantEvent(
       plant.id,
@@ -306,6 +317,7 @@ const persistence = {
     const updatedPlant = await persistence.updatePlant({
       ...plant,
       lastFertilizedAt,
+      fertilizeNextAt: fertilizeNextAt || null,
     });
 
     updatedPlant.events.push(plantEvent);
