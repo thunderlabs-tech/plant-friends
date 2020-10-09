@@ -1,10 +1,11 @@
 import { Collection } from "src/utilities/state/useCollection";
 import persistence from "src/data/persistence";
 import LoadingState from "src/utilities/state/LoadingState";
-import { Plant, PlantInput } from "src/data/Plant";
+import { needsFertilizer, needsWater, Plant, PlantInput } from "src/data/Plant";
 import { useHistory } from "react-router-dom";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import { DataExport } from "src/data/exportData";
+import { add, startOfDay } from "date-fns";
 
 export async function waterPlant(
   plant: Plant,
@@ -28,6 +29,34 @@ export async function fertilizePlant(
   plantDispatch.replace(plant, updatedPlant);
 
   plantDispatch.setLoadingState(LoadingState.ready);
+}
+
+export async function snoozeReminders(
+  plant: Plant,
+  plantDispatch: Collection<Plant>["dispatch"],
+): Promise<Plant> {
+  plantDispatch.setLoadingState(LoadingState.updating);
+
+  let waterNextAt = plant.waterNextAt;
+  let fertilizeNextAt = plant.fertilizeNextAt;
+
+  const today = startOfDay(new Date());
+  if (needsWater(plant)) {
+    waterNextAt = add(today, { days: 1 });
+  }
+  if (needsFertilizer(plant)) {
+    fertilizeNextAt = add(today, { days: 1 });
+  }
+
+  const updatedPlant = await persistence.updatePlant({
+    ...plant,
+    waterNextAt,
+    fertilizeNextAt,
+  });
+  plantDispatch.replace(plant, updatedPlant);
+
+  plantDispatch.setLoadingState(LoadingState.ready);
+  return updatedPlant;
 }
 
 export async function createPlant(
