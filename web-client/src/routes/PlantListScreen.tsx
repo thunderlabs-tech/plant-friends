@@ -13,9 +13,10 @@ import {
   createPlant,
   refreshPlants,
   fertilizePlant,
+  snoozeReminders,
 } from "src/data/actions";
 import { Link } from "react-router-dom";
-
+import classNames from "classnames";
 import "@rmwc/list/styles";
 import {
   List,
@@ -100,6 +101,10 @@ const PlantListScreen: React.FC<
     createPlant(plant, plants.dispatch);
   };
 
+  const onSkip = (plant: Plant) => {
+    snoozeReminders(plant, plants.dispatch);
+  };
+
   return (
     <Layout
       appBar={{
@@ -140,6 +145,21 @@ const PlantListScreen: React.FC<
                       <ListItemGraphic icon={<PlantAvatar plant={plant} />} />
                       {plant.name}
                       <ListItemMeta>
+                        {(needsWater(plant) || needsFertilizer(plant)) && (
+                          <Fab
+                            mini
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onSkip(plant);
+                            }}
+                            icon="snooze"
+                            className={classNames(
+                              css.actionButton,
+                              css.snoozeActionButton,
+                            )}
+                          />
+                        )}
                         {needsWater(plant) && (
                           <Fab
                             mini
