@@ -9,3 +9,10 @@
 .actionButton:not(:first-child) {
   margin-left: 8px;
 }
+
+.snoozeActionButton,
+.snoozeActionButton:before {
+  background-color: var(--mdc-theme-background) !important;
+  color: var(--mdc-theme-text-secondary-on-light) !important;
+  box-shadow: none !important;
+}
