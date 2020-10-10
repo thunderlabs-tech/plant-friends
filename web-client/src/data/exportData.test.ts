@@ -25,6 +25,8 @@ describe("exportData()", () => {
     const timeOfDeathDate = new Date(2020, 3, 1, 0, 0, 0, 0);
     const lastWateredAtDate = new Date(2020, 4, 1, 0, 0, 0, 0);
     const lastFertilizedAtDate = new Date(2020, 4, 1, 0, 0, 0, 0);
+    const waterNextAtDate = new Date(2020, 5, 1, 0, 0, 0, 0);
+    const fertilizeNextAtDate = new Date(2020, 6, 1, 0, 0, 0, 0);
 
     const plants: Plant[] = [
       makePlant({
@@ -42,6 +44,8 @@ describe("exportData()", () => {
         lastWateredAt: lastWateredAtDate,
         lastFertilizedAt: lastFertilizedAtDate,
         createdAt: createdAtDate,
+        waterNextAt: waterNextAtDate,
+        fertilizeNextAt: fertilizeNextAtDate,
       }),
     ];
 
@@ -68,6 +72,8 @@ describe("exportData()", () => {
         lastWateredAt: lastWateredAtDate.toISOString(),
         lastFertilizedAt: lastFertilizedAtDate.toISOString(),
         createdAt: createdAtDate.toISOString(),
+        waterNextAt: waterNextAtDate.toISOString(),
+        fertilizeNextAt: fertilizeNextAtDate.toISOString(),
       },
     ]);
   });
