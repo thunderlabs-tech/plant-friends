@@ -1,7 +1,13 @@
 import { Collection } from "src/utilities/state/useCollection";
 import persistence from "src/data/persistence";
 import LoadingState from "src/utilities/state/LoadingState";
-import { needsFertilizer, needsWater, Plant, PlantInput } from "src/data/Plant";
+import {
+  needsFertilizer,
+  needsWater,
+  nextActionDueDate,
+  Plant,
+  PlantInput,
+} from "src/data/Plant";
 import { useHistory } from "react-router-dom";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import { DataExport } from "src/data/exportData";
@@ -80,6 +86,29 @@ export async function updatePlant(
   plantDispatch.setLoadingState(LoadingState.updating);
 
   plantDispatch.replace(originalPlant, updatedPlant);
+
+  if (
+    originalPlant.wateringPeriodInDays !== updatedPlant.wateringPeriodInDays
+  ) {
+    updatedPlant.waterNextAt = nextActionDueDate({
+      periodInDays: updatedPlant.wateringPeriodInDays,
+      lastPerformedAt: updatedPlant.lastWateredAt,
+      plantCreatedAt: updatedPlant.createdAt,
+    });
+  }
+
+  if (
+    originalPlant.fertilizingPeriodInDays !==
+    updatedPlant.fertilizingPeriodInDays
+  ) {
+    updatedPlant.fertilizeNextAt =
+      nextActionDueDate({
+        periodInDays: updatedPlant.fertilizingPeriodInDays,
+        lastPerformedAt: updatedPlant.lastFertilizedAt,
+        plantCreatedAt: updatedPlant.createdAt,
+      }) || null;
+  }
+
   const persistedPlant = await persistence.updatePlant(updatedPlant);
   plantDispatch.replace(updatedPlant, persistedPlant);
 
