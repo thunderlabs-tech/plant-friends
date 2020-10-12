@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const AWS = require("aws-sdk");
 const dateFns = require("date-fns");
 
@@ -90,12 +92,18 @@ function getFertilizeNextAt(plant) {
   });
 }
 
-async function main() {
+async function main(plantTableName) {
+  if (!plantTableName) {
+    console.log("Please provide the name of the Plant table");
+    console.log(
+      "You can find it in the Amplify web console (run `amplify api console`)"
+    );
+    process.exit(1);
+  }
+
   AWS.config.update({ region: "eu-central-1" });
 
   var docClient = new AWS.DynamoDB.DocumentClient();
-
-  const plantTableName = "Plant-h3ngh5kpofcmlhuukxvi6nk6qa-dev";
 
   await scanAllPlants(docClient, plantTableName, (plant) => {
     const waterNextAt = getWaterNextAt(plant);
@@ -111,4 +119,4 @@ async function main() {
   });
 }
 
-main();
+main(...process.argv.slice(2));
