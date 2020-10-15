@@ -252,7 +252,7 @@ const persistence = {
 
   waterPlant: async (plant: Plant): Promise<Plant> => {
     // TODO: implement as custom resolver for named mutation
-    const lastWateredAt = dateToString(new Date());
+    const lastWateredAt = new Date();
 
     const plantEventResult = await appSyncQuery<
       CreatePlantEventMutation,
@@ -262,7 +262,7 @@ const persistence = {
       variables: {
         input: {
           plantId: plant.id,
-          createdAt: lastWateredAt,
+          createdAt: dateToString(lastWateredAt),
           type: PlantEventType.WATERED,
         },
       },
@@ -272,27 +272,16 @@ const persistence = {
     assertPresent(plantEventResult.data.createPlantEvent);
     const plantEvent = plantEventResult.data.createPlantEvent;
 
-    const result = await appSyncQuery<
-      UpdatePlantMutation,
-      UpdatePlantMutationVariables
-    >({
-      query: mutations.updatePlant,
-      variables: {
-        input: {
-          ...plantToGraphqlPlant(plant),
-          lastWateredAt,
-        },
-      },
+    const updatedPlant = await persistence.updatePlant({
+      ...plant,
+      lastWateredAt,
     });
 
-    assertGraphqlSuccessResult(result);
-    assertPresent(result.data.updatePlant);
-
     return {
-      ...graphqlPlantToPlant(result.data.updatePlant),
+      ...updatedPlant,
       events: [
         // TODO: don't copy events array
-        ...plant.events,
+        ...updatedPlant.events,
         {
           ...plantEvent,
           createdAt: parseDateString(plantEvent.createdAt),
@@ -303,7 +292,7 @@ const persistence = {
 
   fertilizePlant: async (plant: Plant): Promise<Plant> => {
     // TODO: implement as custom resolver for named mutation
-    const lastFertilizedAt = dateToString(new Date());
+    const lastFertilizedAt = new Date();
 
     const plantEventResult = await appSyncQuery<
       CreatePlantEventMutation,
@@ -313,7 +302,7 @@ const persistence = {
       variables: {
         input: {
           plantId: plant.id,
-          createdAt: lastFertilizedAt,
+          createdAt: dateToString(lastFertilizedAt),
           type: PlantEventType.FERTILIZED,
         },
       },
@@ -322,27 +311,16 @@ const persistence = {
     assertGraphqlSuccessResult(plantEventResult);
     const plantEvent = getAssertPresent(plantEventResult.data.createPlantEvent);
 
-    const updatePlantResult = await appSyncQuery<
-      UpdatePlantMutation,
-      UpdatePlantMutationVariables
-    >({
-      query: mutations.updatePlant,
-      variables: {
-        input: {
-          ...plantToGraphqlPlant(plant),
-          lastFertilizedAt,
-        },
-      },
+    const updatedPlant = await persistence.updatePlant({
+      ...plant,
+      lastFertilizedAt,
     });
 
-    assertGraphqlSuccessResult(updatePlantResult);
-    assertPresent(updatePlantResult.data.updatePlant);
-
     return {
-      ...graphqlPlantToPlant(updatePlantResult.data.updatePlant),
+      ...updatedPlant,
       events: [
         // TODO: don't copy events array
-        ...plant.events,
+        ...updatedPlant.events,
         {
           ...plantEvent,
           createdAt: parseDateString(plantEvent.createdAt),
