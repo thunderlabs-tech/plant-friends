@@ -3,7 +3,6 @@ import { Collection } from "src/utilities/state/useCollection";
 import partition from "lodash/partition";
 import {
   Plant,
-  PlantInput,
   actionRequired,
   needsWater,
   needsFertilizer,
@@ -45,6 +44,7 @@ import css from "src/routes/PlantListScreen.module.css";
 import { isEqual, isToday } from "date-fns";
 import { dateFormatters, plantEventTypeToAction } from "src/utilities/i18n";
 import { PlantEventType } from "src/gen/API";
+import { NewPlant } from "src/utilities/graphql/plantToPlantInput";
 
 export type PlantListScreenProps = {
   plants: Collection<Plant>;
@@ -97,7 +97,7 @@ const PlantListScreen: React.FC<
     fertilizePlant(plant, plants.dispatch);
   };
 
-  const onAddNewPlant = (plant: PlantInput) => {
+  const onAddNewPlant = (plant: NewPlant) => {
     createPlant(plant, plants.dispatch);
   };
 

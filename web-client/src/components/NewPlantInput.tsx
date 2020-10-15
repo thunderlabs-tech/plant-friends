@@ -9,13 +9,14 @@ import { Button } from "@rmwc/button";
 
 import TextFieldStyles from "src/components/TextField.module.css";
 import { GridCell, Grid } from "@rmwc/grid";
-import { PlantInput } from "src/data/Plant";
+import { NewPlant } from "src/utilities/graphql/plantToPlantInput";
+import { nextActionDueDate } from "src/data/Plant";
 
 export type NewPlantInputProps = {
-  onAddNewPlant: (plant: PlantInput) => void;
+  onAddNewPlant: (plant: NewPlant) => void;
 };
 
-const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
+const NewPlantInput: React.FC<NewPlantInputProps> = ({ onAddNewPlant }) => {
   const [name, setName] = useState("");
   const [wateringPeriodInDays, setWateringPeriodInDays] = useState(7);
   const isPhone = useMediaQuery({ query: "(max-width: 599px)" });
@@ -25,7 +26,16 @@ const NewPlantInput: React.SFC<NewPlantInputProps> = ({ onAddNewPlant }) => {
     onAddNewPlant({
       name,
       wateringPeriodInDays,
+      waterNextAt: nextActionDueDate({
+        periodInDays: wateringPeriodInDays,
+        lastPerformedAt: null,
+        plantCreatedAt: new Date(),
+      }),
       timeOfDeath: null,
+      fertilizingPeriodInDays: null,
+      lastFertilizedAt: null,
+      fertilizeNextAt: null,
+      lastWateredAt: null,
     });
     setName("");
   };

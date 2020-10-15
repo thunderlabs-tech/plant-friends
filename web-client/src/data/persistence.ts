@@ -1,5 +1,5 @@
 import localforage from "localforage";
-import { nextActionDueDate, Plant, PlantInput } from "src/data/Plant";
+import { nextActionDueDate, Plant } from "src/data/Plant";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "src/data/migrations";
@@ -31,7 +31,11 @@ import { excludeValue } from "src/utilities/excludeValue";
 import graphqlPlantToPlant from "src/utilities/graphql/graphqlPlantToPlant";
 import assertPresent from "src/utilities/lang/assertPresent";
 import { QueryResultItems } from "src/utilities/graphql/QueryTypes";
-import plantToGraphqlPlant from "src/utilities/graphql/plantToGraphqlPlant";
+import {
+  NewPlant,
+  plantToCreatePlantInput,
+  plantToUpdatePlantInput,
+} from "src/utilities/graphql/plantToPlantInput";
 import dateToString from "src/utilities/graphql/dateToString";
 import PlantEvent from "src/data/PlantEvent";
 import { parseDateString } from "src/utilities/graphql/parseDateString";
@@ -98,7 +102,7 @@ async function createPlantWithEvents(newPlant: Plant): Promise<void> {
   >({
     query: mutations.createPlant,
     variables: {
-      input: omit(plantToGraphqlPlant(newPlant), ["id"]),
+      input: omit(plantToCreatePlantInput(newPlant), ["id"]),
     },
   });
 
@@ -260,7 +264,7 @@ const persistence = {
     >({
       query: mutations.updatePlant,
       variables: {
-        input: plantToGraphqlPlant(plant),
+        input: plantToUpdatePlantInput(plant),
       },
     });
 
@@ -276,11 +280,13 @@ const persistence = {
   waterPlant: async (plant: Plant): Promise<Plant> => {
     // TODO: implement as custom resolver for named mutation
     const lastWateredAt = new Date();
+
     const waterNextAt = nextActionDueDate({
       periodInDays: plant.wateringPeriodInDays,
       plantCreatedAt: plant.createdAt,
       lastPerformedAt: plant.lastWateredAt,
     });
+    console.log({ lastWateredAt, waterNextAt, plant });
 
     const plantEvent = await createPlantEvent(
       plant.id,
@@ -325,11 +331,14 @@ const persistence = {
     return updatedPlant;
   },
 
-  createPlant: async (newPlant: PlantInput): Promise<Plant[]> => {
-    await API.graphql(
-      graphqlOperation(mutations.createPlant, {
-        input: newPlant,
-      }),
+  createPlant: async (newPlant: NewPlant): Promise<Plant[]> => {
+    await await appSyncQuery<CreatePlantMutation, CreatePlantMutationVariables>(
+      {
+        query: mutations.createPlant,
+        variables: {
+          input: plantToCreatePlantInput(newPlant),
+        },
+      },
     );
 
     return persistence.loadPlantsAndEvents();
