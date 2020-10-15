@@ -332,14 +332,12 @@ const persistence = {
   },
 
   createPlant: async (newPlant: NewPlant): Promise<Plant[]> => {
-    await await appSyncQuery<CreatePlantMutation, CreatePlantMutationVariables>(
-      {
-        query: mutations.createPlant,
-        variables: {
-          input: plantToCreatePlantInput(newPlant),
-        },
+    await appSyncQuery<CreatePlantMutation, CreatePlantMutationVariables>({
+      query: mutations.createPlant,
+      variables: {
+        input: plantToCreatePlantInput(newPlant),
       },
-    );
+    });
 
     return persistence.loadPlantsAndEvents();
   },
