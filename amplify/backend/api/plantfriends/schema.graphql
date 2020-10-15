@@ -25,7 +25,6 @@ type PlantEvent
 @auth(rules: [{ allow: owner, operations: [create, read, update] }]) {
   id: ID!
   plantId: ID!
-  plant: Plant! @connection(fields: ["plantId"])
   type: PlantEventType!
   createdAt: AWSDateTime!
   owner: String
