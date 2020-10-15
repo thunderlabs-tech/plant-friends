@@ -6,12 +6,12 @@ import {
   needsWater,
   nextActionDueDate,
   Plant,
-  PlantInput,
 } from "src/data/Plant";
 import { useHistory } from "react-router-dom";
 import { plantListUrl } from "src/routes/PlantListRoute";
 import { DataExport } from "src/data/exportData";
 import { add, startOfDay } from "date-fns";
+import { NewPlant } from "src/utilities/graphql/plantToPlantInput";
 
 export async function waterPlant(
   plant: Plant,
@@ -66,7 +66,7 @@ export async function snoozeReminders(
 }
 
 export async function createPlant(
-  plant: PlantInput,
+  plant: NewPlant,
   plantDispatch: Collection<Plant>["dispatch"],
 ): Promise<void> {
   plantDispatch.setLoadingState(LoadingState.updating);

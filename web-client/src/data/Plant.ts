@@ -18,12 +18,6 @@ export type Plant = {
   fertilizeNextAt: Date | null;
 };
 
-export type PlantInput = {
-  name: string;
-  timeOfDeath: Date | null;
-  wateringPeriodInDays: number;
-};
-
 function isPast(date: Date | undefined, now: number): boolean {
   if (!date) return false;
   return date.valueOf() <= now;
