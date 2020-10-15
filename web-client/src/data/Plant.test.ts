@@ -2,7 +2,7 @@ import { formatTimeUntilAction, nextActionDueDate } from "src/data/Plant";
 import fixtures from "src/utilities/test/fixtures";
 
 describe("Plant", () => {
-  describe("nextActionDueDate", () => {
+  describe("nextActionDueDate()", () => {
     const { plantCreatedAt } = fixtures({
       plantCreatedAt: () => new Date(2020, 1, 1, 16, 55),
     });
@@ -54,12 +54,12 @@ describe("Plant", () => {
     });
   });
 
-  describe("formatTimeUntilAction", () => {
+  describe("formatTimeUntilAction()", () => {
     const { now } = fixtures({
       now: () => new Date(2020, 1, 1, 12, 0, 0),
     });
 
-    describe.only("when the next action is 1 day in the future", () => {
+    describe("when the next action is 1 day in the future", () => {
       const { nextActionDate } = fixtures({
         nextActionDate: () => new Date(2020, 1, 2),
       });
