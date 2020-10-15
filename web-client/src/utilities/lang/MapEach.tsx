@@ -23,11 +23,10 @@
  *   train: 'ride',
  * };
  *
- *
  * const vehicleToVerb3: MapEach<VehicleType, string> = {
  *   car: "drive",
  *   train: "ride",
- *   plane: "ride",
+ *   plane: "fly",
  *   bus: "ride",
  *   // ^^^^^^^^^
  *   // Object literal may only specify known properties, and 'bus' does not exist in type 'MapEach<VehicleType, string>'.
