@@ -36,7 +36,7 @@ import {
   plantToCreatePlantInput,
   plantToUpdatePlantInput,
 } from "src/utilities/graphql/plantToPlantInput";
-import dateToString from "src/utilities/graphql/dateToString";
+import formatAwsDateTimeString from "src/utilities/graphql/formatAwsDateTimeString";
 import PlantEvent from "src/data/PlantEvent";
 import { parseDateString } from "src/utilities/graphql/parseDateString";
 import graphqlPlantEventToPlantEvent from "src/utilities/graphql/graphqlPlantEventToPlantEvent";
@@ -122,7 +122,7 @@ async function createPlantWithEvents(newPlant: Plant): Promise<void> {
         input: {
           ...omit(event, "id"),
           plantId,
-          createdAt: dateToString(event.createdAt),
+          createdAt: formatAwsDateTimeString(event.createdAt),
         },
       },
     });
@@ -162,7 +162,7 @@ async function createPlantEvent(
       input: {
         plantId,
         type,
-        createdAt: dateToString(createdAt),
+        createdAt: formatAwsDateTimeString(createdAt),
       },
     },
   });

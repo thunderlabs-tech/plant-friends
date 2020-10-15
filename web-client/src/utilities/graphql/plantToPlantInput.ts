@@ -1,5 +1,5 @@
 import { pick } from "lodash";
-import dateToString from "src/utilities/graphql/dateToString";
+import formatAwsDateTimeString from "src/utilities/graphql/formatAwsDateTimeString";
 import { Plant } from "src/data/Plant";
 import { formatAwsDateString } from "./formatAwsDateString";
 import { CreatePlantInput, UpdatePlantInput } from "src/gen/API";
@@ -23,10 +23,10 @@ function transformDates(
   | "timeOfDeath"
 > {
   return {
-    timeOfDeath: dateToString(input.timeOfDeath),
-    lastWateredAt: dateToString(input.lastWateredAt),
+    timeOfDeath: formatAwsDateTimeString(input.timeOfDeath),
+    lastWateredAt: formatAwsDateTimeString(input.lastWateredAt),
     waterNextAt: formatAwsDateString(input.waterNextAt),
-    lastFertilizedAt: dateToString(input.lastFertilizedAt),
+    lastFertilizedAt: formatAwsDateTimeString(input.lastFertilizedAt),
     fertilizeNextAt: formatAwsDateString(input.fertilizeNextAt),
   };
 }
