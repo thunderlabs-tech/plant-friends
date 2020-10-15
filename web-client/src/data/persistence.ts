@@ -284,7 +284,7 @@ const persistence = {
     const waterNextAt = nextActionDueDate({
       periodInDays: plant.wateringPeriodInDays,
       plantCreatedAt: plant.createdAt,
-      lastPerformedAt: plant.lastWateredAt,
+      lastPerformedAt: lastWateredAt,
     });
     console.log({ lastWateredAt, waterNextAt, plant });
 
@@ -311,7 +311,7 @@ const persistence = {
     const fertilizeNextAt = nextActionDueDate({
       periodInDays: plant.fertilizingPeriodInDays,
       plantCreatedAt: plant.createdAt,
-      lastPerformedAt: plant.lastFertilizedAt,
+      lastPerformedAt: lastFertilizedAt,
     });
 
     const plantEvent = await createPlantEvent(
