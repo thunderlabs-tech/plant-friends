@@ -4,7 +4,7 @@ import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 
 import { runMigrations } from "src/data/migrations";
 import { DataExport } from "src/data/exportData";
-import { omit, pick } from "lodash";
+import { cloneDeep, omit, pick } from "lodash";
 import * as queries from "src/gen/graphql/queries";
 import * as mutations from "src/gen/graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
@@ -246,7 +246,7 @@ const persistence = {
 
     return {
       ...graphqlPlantToPlant(result.data.updatePlant),
-      events: plant.events, // TODO: don't copy events array
+      events: cloneDeep(plant.events),
     };
   },
 
