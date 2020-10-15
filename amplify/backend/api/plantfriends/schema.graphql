@@ -11,6 +11,7 @@ type Plant
   events: [PlantEvent!]! @connection(keyName: "byPlant", fields: ["id"])
   waterNextAt: AWSDate!
   fertilizeNextAt: AWSDate
+  owner: String
 }
 
 enum PlantEventType {
@@ -27,4 +28,5 @@ type PlantEvent
   plant: Plant! @connection(fields: ["plantId"])
   type: PlantEventType!
   createdAt: AWSDateTime!
+  owner: String
 }
