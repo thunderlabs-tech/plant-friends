@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@aws-amplify/datastore": "^2.6.0",
     "@aws-amplify/ui-react": "^0.2.20",
     "@rmwc/avatar": "^6.1.4",
     "@rmwc/button": "^6.1.4",
