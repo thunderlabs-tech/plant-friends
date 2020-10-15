@@ -35,4 +35,4 @@ export const plantEventTypeToAction: MapEach<
 > = Object.freeze({
   [PlantEventType.WATERED]: "water",
   [PlantEventType.FERTILIZED]: "fertilize",
-} as const);
+});
