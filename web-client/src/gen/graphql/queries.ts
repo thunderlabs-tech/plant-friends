@@ -2,6 +2,41 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const syncPlants = /* GraphQL */ `
+  query SyncPlants(
+    $filter: ModelPlantFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPlants(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        timeOfDeath
+        lastWateredAt
+        lastFertilizedAt
+        wateringPeriodInDays
+        fertilizingPeriodInDays
+        waterNextAt
+        fertilizeNextAt
+        owner
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getPlant = /* GraphQL */ `
   query GetPlant($id: ID!) {
     getPlant(id: $id) {
@@ -14,12 +49,16 @@ export const getPlant = /* GraphQL */ `
       fertilizingPeriodInDays
       events {
         nextToken
+        startedAt
       }
       waterNextAt
       fertilizeNextAt
+      owner
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -40,11 +79,44 @@ export const listPlants = /* GraphQL */ `
         fertilizingPeriodInDays
         waterNextAt
         fertilizeNextAt
+        owner
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
-        owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPlantEvents = /* GraphQL */ `
+  query SyncPlantEvents(
+    $filter: ModelPlantEventFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPlantEvents(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        plantId
+        type
+        createdAt
+        owner
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -53,24 +125,13 @@ export const getPlantEvent = /* GraphQL */ `
     getPlantEvent(id: $id) {
       id
       plantId
-      plant {
-        id
-        name
-        timeOfDeath
-        lastWateredAt
-        lastFertilizedAt
-        wateringPeriodInDays
-        fertilizingPeriodInDays
-        waterNextAt
-        fertilizeNextAt
-        createdAt
-        updatedAt
-        owner
-      }
       type
       createdAt
-      updatedAt
       owner
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
     }
   }
 `;
@@ -86,10 +147,14 @@ export const listPlantEvents = /* GraphQL */ `
         plantId
         type
         createdAt
-        updatedAt
         owner
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;

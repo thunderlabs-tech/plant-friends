@@ -63,7 +63,7 @@ export const schema = {
           isArrayNullable: false,
           association: {
             connectionType: "HAS_MANY",
-            associatedWith: "plant",
+            associatedWith: "plantId",
           },
         },
         waterNextAt: {
@@ -84,7 +84,7 @@ export const schema = {
           name: "owner",
           isArray: false,
           type: "String",
-          isRequired: false,
+          isRequired: true,
           attributes: [],
         },
       },
@@ -121,18 +121,12 @@ export const schema = {
           isRequired: true,
           attributes: [],
         },
-        plant: {
-          name: "plant",
+        plantId: {
+          name: "plantId",
           isArray: false,
-          type: {
-            model: "Plant",
-          },
+          type: "ID",
           isRequired: true,
           attributes: [],
-          association: {
-            connectionType: "BELONGS_TO",
-            targetName: "plantId",
-          },
         },
         type: {
           name: "type",
@@ -154,7 +148,7 @@ export const schema = {
           name: "owner",
           isArray: false,
           type: "String",
-          isRequired: false,
+          isRequired: true,
           attributes: [],
         },
       },
@@ -196,5 +190,5 @@ export const schema = {
     },
   },
   nonModels: {},
-  version: "569fdbf9d086994ee338eaafa1358b19",
+  version: "66890bff1024f8b8d6b837ea14ce7f9f",
 };
