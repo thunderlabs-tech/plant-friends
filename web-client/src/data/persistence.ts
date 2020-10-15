@@ -277,17 +277,12 @@ const persistence = {
       lastWateredAt,
     });
 
-    return {
-      ...updatedPlant,
-      events: [
-        // TODO: don't copy events array
-        ...updatedPlant.events,
-        {
-          ...plantEvent,
-          createdAt: parseDateString(plantEvent.createdAt),
-        },
-      ],
-    };
+    updatedPlant.events.push({
+      ...plantEvent,
+      createdAt: parseDateString(plantEvent.createdAt),
+    });
+
+    return updatedPlant;
   },
 
   fertilizePlant: async (plant: Plant): Promise<Plant> => {
@@ -316,17 +311,12 @@ const persistence = {
       lastFertilizedAt,
     });
 
-    return {
-      ...updatedPlant,
-      events: [
-        // TODO: don't copy events array
-        ...updatedPlant.events,
-        {
-          ...plantEvent,
-          createdAt: parseDateString(plantEvent.createdAt),
-        },
-      ],
-    };
+    updatedPlant.events.push({
+      ...plantEvent,
+      createdAt: parseDateString(plantEvent.createdAt),
+    });
+
+    return updatedPlant;
   },
 
   createPlant: async (newPlant: PlantInput): Promise<Plant[]> => {
