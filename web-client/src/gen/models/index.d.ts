@@ -20,7 +20,7 @@ export declare class Plant {
   readonly events: PlantEvent[];
   readonly waterNextAt: string;
   readonly fertilizeNextAt?: string;
-  readonly owner?: String;
+  readonly owner: string;
   constructor(init: ModelInit<Plant>);
   static copyOf(
     source: Plant,
@@ -30,10 +30,10 @@ export declare class Plant {
 
 export declare class PlantEvent {
   readonly id: string;
-  readonly plant: Plant;
+  readonly plantId: string;
   readonly type: PlantEventType | keyof typeof PlantEventType;
   readonly createdAt: string;
-  readonly owner?: String;
+  readonly owner: string;
   constructor(init: ModelInit<PlantEvent>);
   static copyOf(
     source: PlantEvent,

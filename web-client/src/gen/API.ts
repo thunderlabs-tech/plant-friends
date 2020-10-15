@@ -12,6 +12,8 @@ export type CreatePlantInput = {
   fertilizingPeriodInDays?: number | null;
   waterNextAt: string;
   fertilizeNextAt?: string | null;
+  owner: string;
+  _version?: number | null;
 };
 
 export type ModelPlantConditionInput = {
@@ -89,10 +91,13 @@ export type UpdatePlantInput = {
   fertilizingPeriodInDays?: number | null;
   waterNextAt?: string | null;
   fertilizeNextAt?: string | null;
+  owner?: string | null;
+  _version?: number | null;
 };
 
 export type DeletePlantInput = {
   id?: string | null;
+  _version?: number | null;
 };
 
 export type CreatePlantEventInput = {
@@ -100,6 +105,8 @@ export type CreatePlantEventInput = {
   plantId: string;
   type: PlantEventType;
   createdAt?: string | null;
+  owner: string;
+  _version?: number | null;
 };
 
 export enum PlantEventType {
@@ -142,10 +149,13 @@ export type UpdatePlantEventInput = {
   plantId?: string | null;
   type?: PlantEventType | null;
   createdAt?: string | null;
+  owner?: string | null;
+  _version?: number | null;
 };
 
 export type DeletePlantEventInput = {
   id?: string | null;
+  _version?: number | null;
 };
 
 export type ModelPlantFilterInput = {
@@ -158,6 +168,7 @@ export type ModelPlantFilterInput = {
   fertilizingPeriodInDays?: ModelIntInput | null;
   waterNextAt?: ModelStringInput | null;
   fertilizeNextAt?: ModelStringInput | null;
+  owner?: ModelStringInput | null;
   and?: Array<ModelPlantFilterInput | null> | null;
   or?: Array<ModelPlantFilterInput | null> | null;
   not?: ModelPlantFilterInput | null;
@@ -168,6 +179,7 @@ export type ModelPlantEventFilterInput = {
   plantId?: ModelIDInput | null;
   type?: ModelPlantEventTypeInput | null;
   createdAt?: ModelStringInput | null;
+  owner?: ModelStringInput | null;
   and?: Array<ModelPlantEventFilterInput | null> | null;
   or?: Array<ModelPlantEventFilterInput | null> | null;
   not?: ModelPlantEventFilterInput | null;
@@ -191,12 +203,16 @@ export type CreatePlantMutation = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -218,12 +234,16 @@ export type UpdatePlantMutation = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -245,12 +265,16 @@ export type DeletePlantMutation = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -264,25 +288,13 @@ export type CreatePlantEventMutation = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -296,25 +308,13 @@ export type UpdatePlantEventMutation = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -328,7 +328,27 @@ export type DeletePlantEventMutation = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
+    type: PlantEventType;
+    createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    updatedAt: string;
+  } | null;
+};
+
+export type SyncPlantsQueryVariables = {
+  filter?: ModelPlantFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
+  lastSync?: number | null;
+};
+
+export type SyncPlantsQuery = {
+  syncPlants: {
+    __typename: "ModelPlantConnection";
+    items: Array<{
       __typename: "Plant";
       id: string;
       name: string;
@@ -339,14 +359,15 @@ export type DeletePlantEventMutation = {
       fertilizingPeriodInDays: number | null;
       waterNextAt: string;
       fertilizeNextAt: string | null;
+      owner: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
       createdAt: string;
       updatedAt: string;
-      owner: string | null;
-    };
-    type: PlantEventType;
-    createdAt: string;
-    updatedAt: string;
-    owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
   } | null;
 };
 
@@ -367,12 +388,16 @@ export type GetPlantQuery = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -396,11 +421,42 @@ export type ListPlantsQuery = {
       fertilizingPeriodInDays: number | null;
       waterNextAt: string;
       fertilizeNextAt: string | null;
+      owner: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
       createdAt: string;
       updatedAt: string;
-      owner: string | null;
     } | null> | null;
     nextToken: string | null;
+    startedAt: number | null;
+  } | null;
+};
+
+export type SyncPlantEventsQueryVariables = {
+  filter?: ModelPlantEventFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
+  lastSync?: number | null;
+};
+
+export type SyncPlantEventsQuery = {
+  syncPlantEvents: {
+    __typename: "ModelPlantEventConnection";
+    items: Array<{
+      __typename: "PlantEvent";
+      id: string;
+      plantId: string;
+      type: PlantEventType;
+      createdAt: string;
+      owner: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
   } | null;
 };
 
@@ -413,25 +469,13 @@ export type GetPlantEventQuery = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -450,10 +494,14 @@ export type ListPlantEventsQuery = {
       plantId: string;
       type: PlantEventType;
       createdAt: string;
+      owner: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
       updatedAt: string;
-      owner: string | null;
     } | null> | null;
     nextToken: string | null;
+    startedAt: number | null;
   } | null;
 };
 
@@ -474,12 +522,16 @@ export type OnCreatePlantSubscription = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -500,12 +552,16 @@ export type OnUpdatePlantSubscription = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -526,12 +582,16 @@ export type OnDeletePlantSubscription = {
     events: {
       __typename: "ModelPlantEventConnection";
       nextToken: string | null;
+      startedAt: number | null;
     } | null;
     waterNextAt: string;
     fertilizeNextAt: string | null;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     createdAt: string;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -544,25 +604,13 @@ export type OnCreatePlantEventSubscription = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -575,25 +623,13 @@ export type OnUpdatePlantEventSubscription = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };
 
@@ -606,24 +642,12 @@ export type OnDeletePlantEventSubscription = {
     __typename: "PlantEvent";
     id: string;
     plantId: string;
-    plant: {
-      __typename: "Plant";
-      id: string;
-      name: string;
-      timeOfDeath: string | null;
-      lastWateredAt: string | null;
-      lastFertilizedAt: string | null;
-      wateringPeriodInDays: number;
-      fertilizingPeriodInDays: number | null;
-      waterNextAt: string;
-      fertilizeNextAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      owner: string | null;
-    };
     type: PlantEventType;
     createdAt: string;
+    owner: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
     updatedAt: string;
-    owner: string | null;
   } | null;
 };

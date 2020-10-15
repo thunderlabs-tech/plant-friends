@@ -17,12 +17,16 @@ export const createPlant = /* GraphQL */ `
       fertilizingPeriodInDays
       events {
         nextToken
+        startedAt
       }
       waterNextAt
       fertilizeNextAt
+      owner
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -41,12 +45,16 @@ export const updatePlant = /* GraphQL */ `
       fertilizingPeriodInDays
       events {
         nextToken
+        startedAt
       }
       waterNextAt
       fertilizeNextAt
+      owner
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -65,12 +73,16 @@ export const deletePlant = /* GraphQL */ `
       fertilizingPeriodInDays
       events {
         nextToken
+        startedAt
       }
       waterNextAt
       fertilizeNextAt
+      owner
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -82,24 +94,13 @@ export const createPlantEvent = /* GraphQL */ `
     createPlantEvent(input: $input, condition: $condition) {
       id
       plantId
-      plant {
-        id
-        name
-        timeOfDeath
-        lastWateredAt
-        lastFertilizedAt
-        wateringPeriodInDays
-        fertilizingPeriodInDays
-        waterNextAt
-        fertilizeNextAt
-        createdAt
-        updatedAt
-        owner
-      }
       type
       createdAt
-      updatedAt
       owner
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
     }
   }
 `;
@@ -111,24 +112,13 @@ export const updatePlantEvent = /* GraphQL */ `
     updatePlantEvent(input: $input, condition: $condition) {
       id
       plantId
-      plant {
-        id
-        name
-        timeOfDeath
-        lastWateredAt
-        lastFertilizedAt
-        wateringPeriodInDays
-        fertilizingPeriodInDays
-        waterNextAt
-        fertilizeNextAt
-        createdAt
-        updatedAt
-        owner
-      }
       type
       createdAt
-      updatedAt
       owner
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
     }
   }
 `;
@@ -140,24 +130,13 @@ export const deletePlantEvent = /* GraphQL */ `
     deletePlantEvent(input: $input, condition: $condition) {
       id
       plantId
-      plant {
-        id
-        name
-        timeOfDeath
-        lastWateredAt
-        lastFertilizedAt
-        wateringPeriodInDays
-        fertilizingPeriodInDays
-        waterNextAt
-        fertilizeNextAt
-        createdAt
-        updatedAt
-        owner
-      }
       type
       createdAt
-      updatedAt
       owner
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
     }
   }
 `;
