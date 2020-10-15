@@ -29,14 +29,13 @@ import {
 } from "src/utilities/graphql/GraphqlResult";
 import { excludeValue } from "src/utilities/excludeValue";
 import graphqlPlantToPlant from "src/utilities/graphql/graphqlPlantToPlant";
-import assertPresent, {
-  getAssertPresent,
-} from "src/utilities/lang/assertPresent";
+import assertPresent from "src/utilities/lang/assertPresent";
 import { QueryResultItems } from "src/utilities/graphql/QueryTypes";
 import plantToGraphqlPlant from "src/utilities/graphql/plantToGraphqlPlant";
 import dateToString from "src/utilities/graphql/dateToString";
 import PlantEvent from "src/data/PlantEvent";
 import { parseDateString } from "src/utilities/graphql/parseDateString";
+import graphqlPlantEventToPlantEvent from "src/utilities/graphql/graphqlPlantEventToPlantEvent";
 
 type GraphqlOptions<Variables extends Record<string, unknown>> = {
   query: string;
@@ -143,6 +142,30 @@ function assignPlantEventsToPlants(
     plant.events.push(event);
   });
   return excludeValue(Object.values(idToPlantDict), undefined);
+}
+
+async function createPlantEvent(
+  plantId: string,
+  type: PlantEventType,
+  createdAt: Date,
+): Promise<PlantEvent> {
+  const plantEventResult = await appSyncQuery<
+    CreatePlantEventMutation,
+    CreatePlantEventMutationVariables
+  >({
+    query: mutations.createPlantEvent,
+    variables: {
+      input: {
+        plantId,
+        type,
+        createdAt: dateToString(createdAt),
+      },
+    },
+  });
+
+  assertGraphqlSuccessResult(plantEventResult);
+  assertPresent(plantEventResult.data.createPlantEvent);
+  return graphqlPlantEventToPlantEvent(plantEventResult.data.createPlantEvent);
 }
 
 const persistence = {
@@ -254,33 +277,18 @@ const persistence = {
     // TODO: implement as custom resolver for named mutation
     const lastWateredAt = new Date();
 
-    const plantEventResult = await appSyncQuery<
-      CreatePlantEventMutation,
-      CreatePlantEventMutationVariables
-    >({
-      query: mutations.createPlantEvent,
-      variables: {
-        input: {
-          plantId: plant.id,
-          createdAt: dateToString(lastWateredAt),
-          type: PlantEventType.WATERED,
-        },
-      },
-    });
-
-    assertGraphqlSuccessResult(plantEventResult);
-    assertPresent(plantEventResult.data.createPlantEvent);
-    const plantEvent = plantEventResult.data.createPlantEvent;
+    const plantEvent = await createPlantEvent(
+      plant.id,
+      PlantEventType.WATERED,
+      lastWateredAt,
+    );
 
     const updatedPlant = await persistence.updatePlant({
       ...plant,
       lastWateredAt,
     });
 
-    updatedPlant.events.push({
-      ...plantEvent,
-      createdAt: parseDateString(plantEvent.createdAt),
-    });
+    updatedPlant.events.push(plantEvent);
 
     return updatedPlant;
   },
@@ -289,32 +297,18 @@ const persistence = {
     // TODO: implement as custom resolver for named mutation
     const lastFertilizedAt = new Date();
 
-    const plantEventResult = await appSyncQuery<
-      CreatePlantEventMutation,
-      CreatePlantEventMutationVariables
-    >({
-      query: mutations.createPlantEvent,
-      variables: {
-        input: {
-          plantId: plant.id,
-          createdAt: dateToString(lastFertilizedAt),
-          type: PlantEventType.FERTILIZED,
-        },
-      },
-    });
-
-    assertGraphqlSuccessResult(plantEventResult);
-    const plantEvent = getAssertPresent(plantEventResult.data.createPlantEvent);
+    const plantEvent = await createPlantEvent(
+      plant.id,
+      PlantEventType.FERTILIZED,
+      lastFertilizedAt,
+    );
 
     const updatedPlant = await persistence.updatePlant({
       ...plant,
       lastFertilizedAt,
     });
 
-    updatedPlant.events.push({
-      ...plantEvent,
-      createdAt: parseDateString(plantEvent.createdAt),
-    });
+    updatedPlant.events.push(plantEvent);
 
     return updatedPlant;
   },
