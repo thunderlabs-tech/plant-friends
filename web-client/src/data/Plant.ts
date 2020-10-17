@@ -3,6 +3,7 @@ import { formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
 import { dateFormatters } from "../utilities/i18n";
+import { isPast } from "../utilities/isPast";
 
 export type Plant = {
   id: string;
@@ -17,11 +18,6 @@ export type Plant = {
   waterNextAt: Date;
   fertilizeNextAt: Date | null;
 };
-
-function isPast(date: Date | undefined, now: number): boolean {
-  if (!date) return false;
-  return date.valueOf() <= now;
-}
 
 export function needsWater(plant: Plant, now = Date.now()): boolean {
   return isPast(plant.waterNextAt, now);
