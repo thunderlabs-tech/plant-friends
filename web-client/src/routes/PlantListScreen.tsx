@@ -105,7 +105,9 @@ const sortByNextReminderThenName = (plant1: Plant, plant2: Plant): number => {
 const PlantListScreen: React.FC<
   PlantListScreenProps & { params: PlantListRouteParams }
 > = ({ plants }) => {
-  const sortedLivePlants = plants.data.filter((plant) => !plant.timeOfDeath).sort(sortByNextReminderThenName);
+  const sortedLivePlants = plants.data
+    .filter((plant) => !plant.timeOfDeath)
+    .sort(sortByNextReminderThenName);
   const [plantsRequiringAction, restPlants]: [Plant[], Plant[]] = partition<
     Plant
   >(sortedLivePlants, actionRequired);
