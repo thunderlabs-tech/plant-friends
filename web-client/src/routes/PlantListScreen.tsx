@@ -6,6 +6,7 @@ import {
   actionRequired,
   needsWater,
   needsFertilizer,
+  getNextReminderDate,
 } from "src/data/Plant";
 import {
   waterPlant,
@@ -81,13 +82,33 @@ function formatNextActions(plant: Plant): string {
   }`;
 }
 
+function compareDates(
+  date1: Date | undefined,
+  date2: Date | undefined,
+): number {
+  if (!date1) {
+    if (!date2) return 0;
+    return 1;
+  } else if (!date2) {
+    return -1;
+  }
+  return date1.valueOf() - date2.valueOf();
+}
+
+const sortByNextReminderThenName = (plant1: Plant, plant2: Plant): number => {
+  return (
+    compareDates(getNextReminderDate(plant1), getNextReminderDate(plant2)) ||
+    plant1.name.localeCompare(plant2.name)
+  );
+};
+
 const PlantListScreen: React.FC<
   PlantListScreenProps & { params: PlantListRouteParams }
 > = ({ plants }) => {
-  const livePlants = plants.data.filter((plant) => !plant.timeOfDeath);
+  const sortedLivePlants = plants.data.filter((plant) => !plant.timeOfDeath).sort(sortByNextReminderThenName);
   const [plantsRequiringAction, restPlants]: [Plant[], Plant[]] = partition<
     Plant
-  >(livePlants, actionRequired);
+  >(sortedLivePlants, actionRequired);
 
   const onWaterPlant = (plant: Plant) => {
     waterPlant(plant, plants.dispatch);
