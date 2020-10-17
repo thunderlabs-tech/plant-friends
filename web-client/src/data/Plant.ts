@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { formatDistanceStrict, startOfDay, startOfToday } from "date-fns";
+import { formatDistanceStrict, startOfDay } from "date-fns";
 import add from "date-fns/add";
 import PlantEvent from "src/data/PlantEvent";
 import { dateFormatters } from "../utilities/i18n";
@@ -33,14 +33,17 @@ export function actionRequired(plant: Plant): boolean {
   return needsWater(plant) || needsFertilizer(plant);
 }
 
-export function getNextReminderDate({
-  waterNextAt,
-  fertilizeNextAt,
-}: Plant): Date | undefined {
+export function getNextReminderDate(
+  {
+    waterNextAt,
+    fertilizeNextAt,
+  }: Pick<Plant, "waterNextAt" | "fertilizeNextAt">,
+  now: number = Date.now(),
+): Date | undefined {
   const nextReminderDate = minDate(waterNextAt, fertilizeNextAt);
   if (!nextReminderDate) return undefined;
 
-  return isPast(nextReminderDate) ? startOfToday() : nextReminderDate;
+  return isPast(nextReminderDate, now) ? startOfDay(now) : nextReminderDate;
 }
 
 export function formatTimeUntilAction(

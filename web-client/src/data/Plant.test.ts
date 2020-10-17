@@ -1,4 +1,9 @@
-import { formatTimeUntilAction, nextActionDueDate } from "src/data/Plant";
+import { sub, startOfDay } from "date-fns";
+import {
+  formatTimeUntilAction,
+  getNextReminderDate,
+  nextActionDueDate,
+} from "src/data/Plant";
 import fixtures from "src/utilities/test/fixtures";
 
 describe("Plant", () => {
@@ -100,6 +105,53 @@ describe("Plant", () => {
         expect(formatTimeUntilAction(nextActionDate(), now())).toMatch(
           /in \d+ days/,
         );
+      });
+    });
+  });
+
+  describe("getNextReminderDate()", () => {
+    const { now } = fixtures({ now: () => new Date(2020, 1, 1).valueOf() });
+
+    describe("when `fertilizeNextAt` is null", () => {
+      it("returns `waterNextAt`", () => {
+        const waterNextAt = new Date(2020, 1, 2);
+        expect(
+          getNextReminderDate({ waterNextAt, fertilizeNextAt: null }, now()),
+        ).toEqual(waterNextAt);
+      });
+    });
+
+    describe("when `fertilizeNextAt` is earlier than `waterNextAt`", () => {
+      it("returns `fertilizeNextAt`", () => {
+        const fertilizeNextAt = new Date(2020, 1, 2);
+        const waterNextAt = new Date(2020, 1, 3);
+        expect(
+          getNextReminderDate({ waterNextAt, fertilizeNextAt }, now()),
+        ).toEqual(fertilizeNextAt);
+      });
+    });
+
+    describe("when `waterNextAt` is earlier than `fertilizeNextAt`", () => {
+      it("returns `waterNextAt`", () => {
+        const waterNextAt = new Date(2020, 1, 2);
+        const fertilizeNextAt = new Date(2020, 1, 3);
+        expect(
+          getNextReminderDate({ fertilizeNextAt, waterNextAt }, now()),
+        ).toEqual(waterNextAt);
+      });
+    });
+
+    describe("when the date is in the past", () => {
+      it("returns today's date", () => {
+        expect(
+          getNextReminderDate(
+            {
+              fertilizeNextAt: null,
+              waterNextAt: sub(now(), { days: 1 }),
+            },
+            now(),
+          ),
+        ).toEqual(startOfDay(now()));
       });
     });
   });
