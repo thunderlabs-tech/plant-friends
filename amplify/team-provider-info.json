@@ -70,5 +70,23 @@
         "plantfriends63010d5c": {}
       }
     }
+  },
+  "reyna": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantfriends-reyna-124639-authRole",
+      "UnauthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-reyna-124639-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::866741672071:role/amplify-plantfriends-reyna-124639-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-plantfriends-reyna-124639-deployment",
+      "UnauthRoleName": "amplify-plantfriends-reyna-124639-unauthRole",
+      "StackName": "amplify-plantfriends-reyna-124639",
+      "StackId": "arn:aws:cloudformation:eu-central-1:866741672071:stack/amplify-plantfriends-reyna-124639/09d4ed30-1066-11eb-ae4b-0a24e2904074",
+      "AmplifyAppId": "d1rae0x5ejtmb6"
+    },
+    "categories": {
+      "auth": {
+        "plantfriends63010d5c": {}
+      }
+    }
   }
 }
