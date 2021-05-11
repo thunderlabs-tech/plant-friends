@@ -44,7 +44,7 @@
     "file-saver": "^2.0.2",
     "graphql-tag": "^2.11.0",
     "localforage": "^1.7.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "prettier": "^2.1.2",
     "react": "^16.9.49",
     "react-dom": "^16.13.1",
